@@ -4,6 +4,7 @@
 모던 OpenGL RTS 프로젝트
 
 
+카메라 : wasd, 방향키, 마우스 휠로 조정
 
 ![rtsimage](https://github.com/rlatkddn212/rts-project/blob/master/RTS.png)
 
