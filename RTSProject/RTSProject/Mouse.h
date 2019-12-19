@@ -27,20 +27,21 @@ enum WheelState
 class Mouse
 {
 public:
-	Mouse(GLFWwindow* window);
-	~Mouse();
+											Mouse(GLFWwindow* window);
+										   ~Mouse();
 
-	void InitMouse(GLFWwindow* window);
-	void Update(GLfloat x, GLfloat y, double wheel);
+	void									InitMouse(GLFWwindow* window);
+	void									Update(GLfloat x, GLfloat y, double wheel);
 	
-	int mW;
-	int mH;
-	GLfloat mX;
-	GLfloat mY;
+	int										mW;
+	int										mH;
 
-	double mWheel;
-	double lastWheel;
+	GLfloat									mX;
+	GLfloat									mY;
 
-	GLFWcursor* cursor;
+	double									mWheel;
+	double									lastWheel;
+
+	GLFWcursor*								cursor;
 };
 

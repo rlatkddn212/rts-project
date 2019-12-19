@@ -4,7 +4,7 @@
 class GameStage : public WindowGroup
 {
 public:
-	GameStage();
-	~GameStage();
+											GameStage();
+										   ~GameStage();
 };
 

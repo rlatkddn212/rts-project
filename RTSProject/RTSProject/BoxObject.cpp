@@ -19,7 +19,7 @@ BoxObject::~BoxObject()
 // 모델 생성
 void BoxObject::MakeModel(glm::vec3 minV, glm::vec3 maxV)
 {
-	float* vert = new float[64];
+	float vert[64];
 	unsigned int indices[36] =
 	{
 		0, 1, 2,
@@ -59,13 +59,14 @@ void BoxObject::MakeModel(glm::vec3 minV, glm::vec3 maxV)
 		vert[i * 8 + 2] = v[i].z;
 	}
 
-	mesh = new VertexArray(vert, numVerts, indices, numIndices);
+	mMesh = std::make_shared<VertexArray>(vert, numVerts, indices, numIndices);
 
 	std::vector<std::pair<std::string, int> > shaderCodies;
 	shaderCodies.push_back(make_pair(ReadShaderFile("mesh.vert"), GL_VERTEX_SHADER));
 	shaderCodies.push_back(make_pair(ReadShaderFile("image.glsl"), GL_FRAGMENT_SHADER));
-	mMeshShader = new Shader();
+	mMeshShader = std::make_shared<Shader>();
 	mMeshShader->BuildShader(shaderCodies);
+
 }
 
 // 랜더링
@@ -76,8 +77,8 @@ void BoxObject::Render(std::shared_ptr<Camera> camera)
 	mMeshShader->SetActive();
 	mMeshShader->SetMatrixUniform("mvp_matrix", mat);
 
-	mesh->SetActive();
-	glDrawElements(GL_TRIANGLES, mesh->GetNumIndices(), GL_UNSIGNED_INT, nullptr);
+	mMesh->SetActive();
+	glDrawElements(GL_TRIANGLES, mMesh->GetNumIndices(), GL_UNSIGNED_INT, nullptr);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 

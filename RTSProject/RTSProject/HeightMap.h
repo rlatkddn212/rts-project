@@ -7,37 +7,38 @@
 class HeightMap
 {
 public:
-	HeightMap(glm::ivec2 size);
-	~HeightMap();
+											HeightMap(glm::ivec2 size);
+										   ~HeightMap();
 
-	bool LoadFromFile(const std::string& fileName);
-	bool CreateRandomHeightMap(int seed, float noiseSize, float persistence, int octaves);
+	bool									LoadFromFile(const std::string& fileName);
+	bool									CreateRandomHeightMap(int seed, float noiseSize, float persistence, int octaves);
 	
-	void CreateParticles();
+	void									CreateParticles();
 
-	void Update(float deltaTime);
-	void Render();
+	void									Update(float deltaTime);
+	void									Render();
 	
-	float GetHeight(glm::ivec2 pos) { return mHeightMap[pos.y * mSize.x + pos.x]; }
-	glm::ivec2 GetCentre() { return glm::ivec2(mSize.x / 2.0f, mSize.y / 2.0f); }
+	float									GetHeight(glm::ivec2 pos) { return mHeightMap[pos.y * mSize.x + pos.x]; }
+	glm::ivec2								GetCentre() { return glm::ivec2(mSize.x / 2.0f, mSize.y / 2.0f); }
 
-	glm::ivec2 mSize;
-	float mMaxHeight;
-	float* mHeightMap;
+	glm::ivec2								mSize;
+	float									mMaxHeight;
+	float*									mHeightMap;
 	
-	float m_angle;
-	GLuint VertexArrayID;
-	glm::mat4 perspect;
-	glm::mat4 view;
+	float									mAngle;
+	GLuint									mVertexArrayID;
+	
+	glm::mat4								mPerspect;
+	glm::mat4								mView;
 
-	unsigned int texture;
-	GLuint vertexbuffer;
-	GLuint uvBuffer;
+	unsigned int							mTexture;
+	GLuint									mColorTexture;
 
-	GLuint color_texture;
+	GLuint									mVertexbuffer;
+	GLuint									mUvBuffer;
 
-	std::shared_ptr<VertexArray> mVertexArray;
-	std::shared_ptr<Texture> mHeightMapTexture;
-	std::shared_ptr<Shader> shader;
+	std::shared_ptr<VertexArray>			mVertexArray;
+	std::shared_ptr<Texture>				mHeightMapTexture;
+	std::shared_ptr<Shader>					mShader;
 };
 

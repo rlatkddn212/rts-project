@@ -5,28 +5,28 @@
 class Camera
 {
 public:
-	Camera();
-	~Camera();
+											Camera();
+										   ~Camera();
 
-	void Initialize();
+	void									Initialize();
 
-	void Scroll(glm::vec3 vec);
-	void Pitch(float f);
-	void Yaw(float f);
-	void Zoom(float f);
-	void ChangeRadius(float f);
+	void									Scroll(glm::vec3 vec);
+	void									Pitch(float f);
+	void									Yaw(float f);
+	void									Zoom(float f);
+	void									ChangeRadius(float f);
 
-	void Update(float timeDelta);
-	void ProcessInput(bool* state, std::shared_ptr<Mouse> mouse);
+	void									Update(float timeDelta);
+	void									ProcessInput(bool* state, std::shared_ptr<Mouse> mouse);
 	
-	glm::mat4 GetViewMatrix();
-	glm::mat4 GetProjectionMatrix();
+	glm::mat4								GetViewMatrix();
+	glm::mat4								GetProjectionMatrix();
 
-	float mAlpha, mBeta, mRadius, mFov;
-	glm::vec3 mEye, mFocus, mRight, mLook;
+	float									mAlpha, mBeta, mRadius, mFov;
+	glm::vec3								mEye, mFocus, mRight, mLook;
 
-	glm::mat4 matView;
-	glm::mat4 matProj;
-	float mTimeDelta;
+	glm::mat4								mMatView;
+	glm::mat4								mMatProj;
+	float									mTimeDelta;
 };
 

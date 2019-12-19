@@ -15,7 +15,7 @@ void WindowGroup::Initialize()
 {
 	mFont = std::make_shared<Font>();
 	mFont->Initialize();
-	t = mFont->RenderText("hello");
+	mTexture = mFont->RenderText("hello");
 
 	float vertices[] = {
 		-0.5f, 0.5f, 0.f, 0.f, 0.f, 0.0f, 0.f, 0.f, // top left
@@ -113,7 +113,7 @@ void WindowGroup::Draw()
 	mSpriteShader->SetActive();
 	
 	const glm::vec2 cRadarPos(100.0f, 0.0f);
-	DrawTexture(t, cRadarPos, 1.0f);
+	DrawTexture(mTexture, cRadarPos, 1.0f);
 }
 
 void WindowGroup::DrawTexture(std::shared_ptr<Texture> texture, const glm::vec2& offset, float scale)

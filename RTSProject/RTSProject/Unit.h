@@ -3,7 +3,7 @@
 class Unit
 {
 public:
-	Unit();
-	~Unit();
+											Unit();
+										   ~Unit();
 };
 

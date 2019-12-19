@@ -17,7 +17,7 @@ float CosInterpolate(float v1, float v2, float a)
 
 HeightMap::HeightMap(glm::ivec2 size)
 {
-	m_angle = 0.0f;
+	mAngle = 0.0f;
 	mSize = size;
 	//Reset the heightMap to 0
 	mMaxHeight = 20.0f;
@@ -66,8 +66,8 @@ bool HeightMap::LoadFromFile(const std::string& fileName)
 	glGenVertexArrays(1, &vertexArray2);
 	glBindVertexArray(vertexArray2);
 	// 버퍼를 생성
-	glGenBuffers(1, &vertexbuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+	glGenBuffers(1, &mVertexbuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, mVertexbuffer);
 	// 버텍스들을 OpenGL로
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
@@ -80,8 +80,8 @@ bool HeightMap::LoadFromFile(const std::string& fileName)
 		(void*)0            // 배열 버퍼의 오프셋(offset; 옮기는 값)
 	);
 
-	glGenBuffers(1, &uvBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, uvBuffer);
+	glGenBuffers(1, &mUvBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, mUvBuffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(uv_buffer_data), uv_buffer_data, GL_STATIC_DRAW);
 	
 	glEnableVertexAttribArray(1);
@@ -102,8 +102,8 @@ bool HeightMap::LoadFromFile(const std::string& fileName)
 		&mWidth, &mHeight, &channels, SOIL_LOAD_AUTO);
 
 	
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
+	glGenTextures(1, &mTexture);
+	glBindTexture(GL_TEXTURE_2D, mTexture);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -143,7 +143,7 @@ bool HeightMap::LoadFromFile(const std::string& fileName)
 	glClearBufferfv(GL_COLOR, 0, green);
 	glBindVertexArray(vertexArray2);
 	shader2.SetActive();
-	glBindTexture(GL_TEXTURE_2D, texture);
+	glBindTexture(GL_TEXTURE_2D, mTexture);
 
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	
@@ -253,8 +253,8 @@ void HeightMap::CreateParticles()
 		}
 	}
 
-	glGenVertexArrays(1, &VertexArrayID);
-	glBindVertexArray(VertexArrayID);
+	glGenVertexArrays(1, &mVertexArrayID);
+	glBindVertexArray(mVertexArrayID);
 	// 버퍼를 생성
 	GLuint vertexbuffer;
 	glGenBuffers(1, &vertexbuffer);
@@ -277,38 +277,38 @@ void HeightMap::CreateParticles()
 	glVertexAttrib4fv(1, color);
 
 	std::vector<std::pair<std::string, int> > shaderCodies;
-	shader = std::make_shared<Shader>();
+	mShader = std::make_shared<Shader>();
 
 	shaderCodies.clear();
 	shaderCodies.push_back(make_pair(ReadShaderFile("height.vert"), GL_VERTEX_SHADER));
 	shaderCodies.push_back(make_pair(ReadShaderFile("height.frag"), GL_FRAGMENT_SHADER));
-	shader->BuildShader(shaderCodies);
+	mShader->BuildShader(shaderCodies);
 
 	delete[] vertices;
 }
 
 void HeightMap::Update(float deltaTime)
 {
-	m_angle += deltaTime * 0.5f;
+	mAngle += deltaTime * 0.5f;
 
 	float aspect = (float)1024 / (float)768;
-	perspect = glm::perspective(glm::radians(45.0f), aspect, 0.1f, 1000.0f);
+	mPerspect = glm::perspective(glm::radians(45.0f), aspect, 0.1f, 1000.0f);
 	glm::vec2 centre = GetCentre();
-	view = glm::lookAt(glm::vec3(centre.x + cos(m_angle) * centre.x * 1.5f, mMaxHeight * 5.0f, -centre.y + sin(m_angle) * centre.y * 1.5f),
+	mView = glm::lookAt(glm::vec3(centre.x + cos(mAngle) * centre.x * 1.5f, mMaxHeight * 5.0f, -centre.y + sin(mAngle) * centre.y * 1.5f),
 		glm::vec3(centre.x, 0.0f, -centre.y),
 		glm::vec3(0.0, 1.0, 0.0));
 }
 
 void HeightMap::Render()
 {
-	glBindVertexArray(VertexArrayID);
+	glBindVertexArray(mVertexArrayID);
 
 	glPointSize(2);
-	shader->SetActive();
+	mShader->SetActive();
 
 	glm::mat4 mvpMat = glm::mat4(1.0f);
-	mvpMat = perspect * view * mvpMat;
-	shader->SetMatrixUniform("mvp_matrix", mvpMat);
+	mvpMat = mPerspect * mView * mvpMat;
+	mShader->SetMatrixUniform("mvp_matrix", mvpMat);
 
 	glDrawArrays(GL_POINTS, 0, mSize.x * mSize.y);
 }

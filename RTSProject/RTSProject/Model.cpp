@@ -3,7 +3,7 @@
 
 Model::Model()
 {
-	m_angle = 0.0f;
+	mAngle = 0.0f;
 	SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 	SetRotation(glm::vec3(0.0f, 0.0f, 0.0f));
 	SetScale(glm::vec3(1.0f, 1.0f, 1.0f));
@@ -42,11 +42,11 @@ void Model::LoadModel(const std::string & fileName)
 
 void Model::Update(float deltaTime)
 {
-	m_angle += deltaTime * 0.5f;
+	mAngle += deltaTime * 0.5f;
 
 	float aspect = (float)1024 / (float)768;
-	perspect = glm::perspective(glm::radians(45.0f), aspect, 0.1f, 1000.0f);
-	view = glm::lookAt(glm::vec3(cos(m_angle) * 2.0f, 1.5f, sin(m_angle) * 2.0f),
+	mPerspect = glm::perspective(glm::radians(45.0f), aspect, 0.1f, 1000.0f);
+	mView = glm::lookAt(glm::vec3(cos(mAngle) * 2.0f, 1.5f, sin(mAngle) * 2.0f),
 		glm::vec3(0.0f, 0.5f, 0.0f),
 		glm::vec3(0.0, 1.0, 0.0));
 }
@@ -57,17 +57,17 @@ void Model::RenderModel(std::shared_ptr<Camera> camera)
 	mMeshShader->SetMatrixUniform("mvp_matrix", mat);
 	mMeshShader->SetActive();
 
-	for (size_t i = 0; i < meshList.size(); i++)
+	for (size_t i = 0; i < mMeshList.size(); i++)
 	{
-		unsigned int materialIndex = meshToTex[i];
-		if (materialIndex < textureList.size() && textureList[materialIndex])
+		unsigned int materialIndex = mMeshToTex[i];
+		if (materialIndex < mTextureList.size() && mTextureList[materialIndex])
 		{
 			glActiveTexture(GL_TEXTURE0);
-			textureList[materialIndex]->SetActive();
+			mTextureList[materialIndex]->SetActive();
 		}
 
-		meshList[i]->SetActive();
-		glDrawElements(GL_TRIANGLES, meshList[i]->GetNumIndices(), GL_UNSIGNED_INT, nullptr);
+		mMeshList[i]->SetActive();
+		glDrawElements(GL_TRIANGLES, mMeshList[i]->GetNumIndices(), GL_UNSIGNED_INT, nullptr);
 	}
 }
 
@@ -124,18 +124,18 @@ void Model::LoadMesh(aiMatrix4x4 mat, aiMesh* mesh, const aiScene * scene)
 	std::shared_ptr<VertexArray> vertex 
 		= std::make_shared<VertexArray>(&vertices[0], mesh->mNumVertices, &indices[0], indices.size());
 	
-	meshList.push_back(vertex);
-	meshToTex.push_back(mesh->mMaterialIndex);
+	mMeshList.push_back(vertex);
+	mMeshToTex.push_back(mesh->mMaterialIndex);
 }
 
 void Model::LoadMaterials(const aiScene * scene)
 {
-	textureList.resize(scene->mNumMaterials);
+	mTextureList.resize(scene->mNumMaterials);
 
 	for (size_t i = 0; i < scene->mNumMaterials; ++i)
 	{
 		aiMaterial* material = scene->mMaterials[i];
-		textureList[i] = nullptr;
+		mTextureList[i] = nullptr;
 
 		if (material->GetTextureCount(aiTextureType_DIFFUSE))
 		{
@@ -147,8 +147,8 @@ void Model::LoadMaterials(const aiScene * scene)
 
 				std::string texPath = filename;
 
-				textureList[i] = std::make_shared<Texture>();
-				textureList[i]->Load(texPath.c_str());
+				mTextureList[i] = std::make_shared<Texture>();
+				mTextureList[i]->Load(texPath.c_str());
 			}
 		}
 	}
