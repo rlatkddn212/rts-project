@@ -5,6 +5,10 @@
 
 
 
+![rtsimage](https://github.com/rlatkddn212/rts-project/blob/master/RTS.png)
+
+
+
 프로젝트 진행
 
 | 아이템               | 진척도 | 우선 순위 |
