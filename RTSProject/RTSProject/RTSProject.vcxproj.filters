@@ -72,6 +72,9 @@
     <ClInclude Include="WindowGroup.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
+    <ClInclude Include="GameStage.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AxisObject.cpp">
@@ -129,6 +132,9 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="WindowGroup.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStage.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

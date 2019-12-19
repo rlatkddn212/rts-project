@@ -14,17 +14,17 @@ public:
 	void Terminate();
 	void Update();
 	void Draw();
-	void DrawTexture(class Texture* texture, const glm::vec2& offset, float scale);
+	void DrawTexture(std::shared_ptr<Texture> texture, const glm::vec2& offset, float scale);
 
 	void DrawBackGround();
 
-	Font* mFont;
+	std::shared_ptr<Font> mFont;
 	GLuint VertexArrayID;
 	GLuint vertexbuffer;
 	GLuint uvBuffer;
-	Texture* t;
-	VertexArray* mBackgroundVerts;
-	Shader* mBackgroundShader;
-	VertexArray* mSpriteVerts;
-	Shader* mSpriteShader;
+	std::shared_ptr<Texture> t;
+	std::shared_ptr<VertexArray> mBackgroundVerts;
+	std::shared_ptr<Shader> mBackgroundShader;
+	std::shared_ptr<VertexArray> mSpriteVerts;
+	std::shared_ptr<Shader> mSpriteShader;
 };

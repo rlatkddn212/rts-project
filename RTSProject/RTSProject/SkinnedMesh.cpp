@@ -41,13 +41,13 @@ void SkinnedMesh::LoadModel(const std::string & fileName)
 	// 오브젝트 중심
 	printf("%f %f %f", mX / mSize, mY / mSize, mZ / mSize);
 
-	mBoxObject = new BoxObject(mMinPos, mMaxPos);
+	mBoxObject = std::make_shared<BoxObject>(mMinPos, mMaxPos);
 
 
 	std::vector<std::pair<std::string, int> > shaderCodies;
 	shaderCodies.push_back(make_pair(ReadShaderFile("skinned.vert"), GL_VERTEX_SHADER));
 	shaderCodies.push_back(make_pair(ReadShaderFile("skinned.frag"), GL_FRAGMENT_SHADER));
-	mMeshShader = new Shader();
+	mMeshShader = std::make_shared<Shader>();
 	mMeshShader->BuildShader(shaderCodies);
 }
 
@@ -63,7 +63,7 @@ void SkinnedMesh::Update(float deltaTime)
 		glm::vec3(0.0, 1.0, 0.0));
 }
 
-void SkinnedMesh::RenderModel(Camera* camera)
+void SkinnedMesh::RenderModel(std::shared_ptr<Camera> camera)
 {
 	mBoxObject->Render(camera);
 
@@ -221,7 +221,8 @@ void SkinnedMesh::LoadMesh(aiMatrix4x4 mat, aiMesh * mesh, const aiScene * scene
 		}
 	}
 
-	SkinnedVertexArray* vertex = new SkinnedVertexArray(&vertices[0], mesh->mNumVertices, &indices[0], indices.size());
+	std::shared_ptr<SkinnedVertexArray> vertex = 
+		std::make_shared<SkinnedVertexArray>(&vertices[0], mesh->mNumVertices, &indices[0], indices.size());
 	meshList.push_back(vertex);
 	meshToTex.push_back(mesh->mMaterialIndex);
 }
@@ -245,7 +246,7 @@ void SkinnedMesh::LoadMaterials(const aiScene * scene)
 
 				std::string texPath = filename;
 
-				textureList[i] = new Texture();
+				textureList[i] = std::make_shared<Texture>();
 				textureList[i]->Load(texPath.c_str());
 			}
 		}

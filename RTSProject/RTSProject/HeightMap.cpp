@@ -30,6 +30,11 @@ HeightMap::HeightMap(glm::ivec2 size)
 
 HeightMap::~HeightMap()
 {
+	if (mHeightMap != nullptr)
+	{
+		delete[] mHeightMap;
+		mHeightMap = 0;
+	}
 }
 
 bool HeightMap::LoadFromFile(const std::string& fileName)
@@ -106,7 +111,7 @@ bool HeightMap::LoadFromFile(const std::string& fileName)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, mWidth, mHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
 
-	unsigned char *bytes = new unsigned char[1024 * 768 * 3];
+	unsigned char* bytes = new unsigned char[1024 * 768 * 3];
 	
 	unsigned int framebuffer;
 	glGenFramebuffers(1, &framebuffer);
@@ -127,17 +132,17 @@ bool HeightMap::LoadFromFile(const std::string& fileName)
 
 	//·£´õ¸µ
 	std::vector<std::pair<std::string, int> > shaderCodies2;
-	Shader* shader2 = new Shader();
+	Shader shader2;
 
 	shaderCodies2.clear();
 	shaderCodies2.push_back(make_pair(ReadShaderFile("st.vert"), GL_VERTEX_SHADER));
 	shaderCodies2.push_back(make_pair(ReadShaderFile("st.frag"), GL_FRAGMENT_SHADER));
-	shader2->BuildShader(shaderCodies2);
+	shader2.BuildShader(shaderCodies2);
 
 	static const GLfloat green[] = { 1.0f, 0.25f, 1.0f, 1.0f };
 	glClearBufferfv(GL_COLOR, 0, green);
 	glBindVertexArray(vertexArray2);
-	shader2->SetActive();
+	shader2.SetActive();
 	glBindTexture(GL_TEXTURE_2D, texture);
 
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
@@ -145,6 +150,7 @@ bool HeightMap::LoadFromFile(const std::string& fileName)
 	unsigned int framebuffer2;
 	glGenFramebuffers(1, &framebuffer2);
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer2);
+
 	// create a color attachment texture
 	unsigned int textureColorbuffer2;
 	glGenTextures(1, &textureColorbuffer2);
@@ -175,6 +181,8 @@ bool HeightMap::LoadFromFile(const std::string& fileName)
 			mHeightMap[j + i * mSize.x] = ((float)*b / 255.0f) * 15.0f;
 		}
 	}
+
+	delete[] bytes;
 
 	return true;
 }
@@ -269,12 +277,14 @@ void HeightMap::CreateParticles()
 	glVertexAttrib4fv(1, color);
 
 	std::vector<std::pair<std::string, int> > shaderCodies;
-	shader = new Shader();
+	shader = std::make_shared<Shader>();
 
 	shaderCodies.clear();
 	shaderCodies.push_back(make_pair(ReadShaderFile("height.vert"), GL_VERTEX_SHADER));
 	shaderCodies.push_back(make_pair(ReadShaderFile("height.frag"), GL_FRAGMENT_SHADER));
 	shader->BuildShader(shaderCodies);
+
+	delete[] vertices;
 }
 
 void HeightMap::Update(float deltaTime)

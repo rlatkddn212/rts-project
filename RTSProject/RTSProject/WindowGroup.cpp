@@ -13,7 +13,7 @@ WindowGroup::~WindowGroup()
 
 void WindowGroup::Initialize()
 {
-	mFont = new Font();
+	mFont = std::make_shared<Font>();
 	mFont->Initialize();
 	t = mFont->RenderText("hello");
 
@@ -29,7 +29,7 @@ void WindowGroup::Initialize()
 		2, 3, 0
 	};
 
-	mSpriteVerts = new VertexArray(vertices, 4, indices, 6);
+	mSpriteVerts = std::make_shared<VertexArray>(vertices, 4, indices, 6);
 	
 	glGenVertexArrays(1, &VertexArrayID);
 	glBindVertexArray(VertexArrayID);
@@ -85,8 +85,8 @@ void WindowGroup::Initialize()
 	shaderCodies.push_back(make_pair(ReadShaderFile("vertex.glsl"), GL_VERTEX_SHADER));
 	shaderCodies.push_back(make_pair(ReadShaderFile("Image.glsl"), GL_FRAGMENT_SHADER));
 	
-	mBackgroundShader = new Shader();
-	mSpriteShader = new Shader();
+	mBackgroundShader = std::make_shared<Shader>();
+	mSpriteShader = std::make_shared<Shader>();
 
 	mBackgroundShader->BuildShader(shaderCodies);
 	shaderCodies.clear();
@@ -116,7 +116,7 @@ void WindowGroup::Draw()
 	DrawTexture(t, cRadarPos, 1.0f);
 }
 
-void WindowGroup::DrawTexture(class Texture* texture, const glm::vec2& offset, float scale)
+void WindowGroup::DrawTexture(std::shared_ptr<Texture> texture, const glm::vec2& offset, float scale)
 {
 	// Scale the quad by the width/height of texture
 	glm::mat4 scaleMat = glm::scale(glm::mat4(1.f),

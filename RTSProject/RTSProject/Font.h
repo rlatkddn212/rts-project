@@ -17,7 +17,7 @@ public:
 	bool Load(const std::string& fileName);
 	void Unload();
 
-	Texture* RenderText(const std::string& textKey,
+	std::shared_ptr<Texture> RenderText(const std::string& textKey,
 		const glm::vec4 color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
 		int pointSize = 30);
 private:

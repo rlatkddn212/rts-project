@@ -17,7 +17,7 @@ public:
 	void ChangeRadius(float f);
 
 	void Update(float timeDelta);
-	void ProcessInput(bool* state, Mouse* mouse);
+	void ProcessInput(bool* state, std::shared_ptr<Mouse> mouse);
 	
 	glm::mat4 GetViewMatrix();
 	glm::mat4 GetProjectionMatrix();

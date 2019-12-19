@@ -83,7 +83,7 @@ void Camera::Update(float timeDelta)
 	mTimeDelta = timeDelta;
 }
 
-void Camera::ProcessInput(bool* state, Mouse* mouse)
+void Camera::ProcessInput(bool* state, std::shared_ptr<Mouse> mouse)
 {
 	mRight.y = mLook.y = 0.0f;
 	mRight = glm::normalize(mRight);

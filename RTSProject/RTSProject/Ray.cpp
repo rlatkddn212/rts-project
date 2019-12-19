@@ -1,7 +1,7 @@
 #include "Precompiled.h"
 #include "Ray.h"
 
-Ray::Ray(Camera* camera, Mouse* mouse)
+Ray::Ray(std::shared_ptr<Camera> camera, std::shared_ptr<Mouse> mouse)
 {
 	glm::mat4 proj = camera->GetProjectionMatrix();
 	glm::mat4 view = camera->GetViewMatrix();
@@ -19,7 +19,6 @@ Ray::Ray(Camera* camera, Mouse* mouse)
 
 	org = glm::vec3(0.0f, 0.0f, 0.0f);
 	dir = glm::inverse(proj) * glm::vec4(angleX, angleY, 0.0f, 1.0f);
-
 
 	glm::mat4 viewInv = glm::inverse(view);
 	

@@ -16,7 +16,12 @@ Model::~Model()
 void Model::LoadModel(const std::string & fileName)
 {
 	Assimp::Importer importer;
-	const aiScene *scene = importer.ReadFile(fileName, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals | aiProcess_JoinIdenticalVertices);
+	const aiScene *scene = importer.ReadFile(fileName, 
+		aiProcess_Triangulate |
+		aiProcess_FlipUVs | 
+		aiProcess_GenSmoothNormals | 
+		aiProcess_JoinIdenticalVertices
+	);
 
 	if (!scene)
 	{
@@ -31,7 +36,7 @@ void Model::LoadModel(const std::string & fileName)
 	std::vector<std::pair<std::string, int> > shaderCodies;
 	shaderCodies.push_back(make_pair(ReadShaderFile("mesh.vert"), GL_VERTEX_SHADER));
 	shaderCodies.push_back(make_pair(ReadShaderFile("mesh.frag"), GL_FRAGMENT_SHADER));
-	mMeshShader = new Shader();
+	mMeshShader = std::make_shared<Shader>();
 	mMeshShader->BuildShader(shaderCodies);
 }
 
@@ -46,7 +51,7 @@ void Model::Update(float deltaTime)
 		glm::vec3(0.0, 1.0, 0.0));
 }
 
-void Model::RenderModel(Camera* camera)
+void Model::RenderModel(std::shared_ptr<Camera> camera)
 {
 	glm::mat4 mat = camera->GetProjectionMatrix() * camera->GetViewMatrix() * mPos * mRot * mSca;
 	mMeshShader->SetMatrixUniform("mvp_matrix", mat);
@@ -70,7 +75,7 @@ void Model::ClearModel()
 {
 }
 
-void Model::LoadNode(aiNode * node, const aiScene * scene, aiMatrix4x4 mat)
+void Model::LoadNode(aiNode* node, const aiScene* scene, const aiMatrix4x4& mat)
 {
 	aiMatrix4x4 localMat = mat * node->mTransformation;
 	for (size_t i = 0; i < node->mNumMeshes; i++)
@@ -84,12 +89,12 @@ void Model::LoadNode(aiNode * node, const aiScene * scene, aiMatrix4x4 mat)
 	}
 }
 
-void Model::LoadMesh(aiMatrix4x4 mat, aiMesh * mesh, const aiScene * scene)
+void Model::LoadMesh(aiMatrix4x4 mat, aiMesh* mesh, const aiScene * scene)
 {
 	std::vector<GLfloat> vertices;
 	std::vector<unsigned int> indices;
 
-	for (size_t i = 0; i < mesh->mNumVertices; i++)
+	for (size_t i = 0; i < mesh->mNumVertices; ++i)
 	{
 		mesh->mVertices[i] = mat * mesh->mVertices[i];
 		mesh->mNormals[i] = mat * mesh->mNormals[i];
@@ -107,16 +112,18 @@ void Model::LoadMesh(aiMatrix4x4 mat, aiMesh * mesh, const aiScene * scene)
 		}
 	}
 
-	for (size_t i = 0; i < mesh->mNumFaces; i++)
+	for (size_t i = 0; i < mesh->mNumFaces; ++i)
 	{
 		aiFace face = mesh->mFaces[i];
-		for (size_t j = 0; j < face.mNumIndices; j++)
+		for (size_t j = 0; j < face.mNumIndices; ++j)
 		{
 			indices.push_back(face.mIndices[j]);
 		}
 	}
 	
-	VertexArray* vertex = new VertexArray(&vertices[0], mesh->mNumVertices, &indices[0], indices.size());
+	std::shared_ptr<VertexArray> vertex 
+		= std::make_shared<VertexArray>(&vertices[0], mesh->mNumVertices, &indices[0], indices.size());
+	
 	meshList.push_back(vertex);
 	meshToTex.push_back(mesh->mMaterialIndex);
 }
@@ -125,7 +132,7 @@ void Model::LoadMaterials(const aiScene * scene)
 {
 	textureList.resize(scene->mNumMaterials);
 
-	for (size_t i = 0; i < scene->mNumMaterials; i++)
+	for (size_t i = 0; i < scene->mNumMaterials; ++i)
 	{
 		aiMaterial* material = scene->mMaterials[i];
 		textureList[i] = nullptr;
@@ -140,7 +147,7 @@ void Model::LoadMaterials(const aiScene * scene)
 
 				std::string texPath = filename;
 
-				textureList[i] = new Texture();
+				textureList[i] = std::make_shared<Texture>();
 				textureList[i]->Load(texPath.c_str());
 			}
 		}

@@ -69,7 +69,7 @@ void BoxObject::MakeModel(glm::vec3 minV, glm::vec3 maxV)
 }
 
 // ·£´õ¸µ
-void BoxObject::Render(Camera* camera)
+void BoxObject::Render(std::shared_ptr<Camera> camera)
 {
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glm::mat4 mat = camera->GetProjectionMatrix() * camera->GetViewMatrix() * mPos * mRot * mSca;

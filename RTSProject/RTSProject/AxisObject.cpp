@@ -55,11 +55,11 @@ void AxisObject::MakeModel()
 	std::vector<std::pair<std::string, int> > shaderCodies;
 	shaderCodies.push_back(make_pair(ReadShaderFile("color.vert"), GL_VERTEX_SHADER));
 	shaderCodies.push_back(make_pair(ReadShaderFile("color.frag"), GL_FRAGMENT_SHADER));
-	mMeshShader = new Shader();
+	mMeshShader = std::make_shared<Shader>();
 	mMeshShader->BuildShader(shaderCodies);
 }
 
-void AxisObject::Render(Camera * camera)
+void AxisObject::Render(std::shared_ptr<Camera> camera)
 {
 	mMeshShader->SetActive();
 	glm::mat4 mat = camera->GetProjectionMatrix() * camera->GetViewMatrix();

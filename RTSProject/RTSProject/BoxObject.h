@@ -11,7 +11,7 @@ public:
 	~BoxObject();
 
 	void MakeModel(glm::vec3 minV, glm::vec3 maxV);
-	void Render(Camera* camera);
+	void Render(std::shared_ptr<Camera> camera);
 
 	void SetPosition(glm::vec3 p) { mPos = glm::translate(glm::mat4(1.0f), p);}
 	void SetRotation(glm::vec3 r) { mRot = glm::yawPitchRoll(r.x, r.y, r.z); }

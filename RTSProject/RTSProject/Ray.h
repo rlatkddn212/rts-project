@@ -6,7 +6,7 @@
 class Ray
 {
 public:
-	Ray(Camera * camera, Mouse* mouse);
+	Ray(std::shared_ptr<Camera> camera, std::shared_ptr<Mouse> mouse);
 	Ray(glm::vec3 o, glm::vec3 d);
 	~Ray();
 

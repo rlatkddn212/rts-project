@@ -23,16 +23,18 @@ class Game
 	};
 
 	GLFWwindow* window;
+
 	Uint32 mTicksCount;
 	GameState mGameState;
 	
-	WindowGroup* group;
-	HeightMap* heightMap;
-	Terrain* terrain;
-	Camera* camera;
+	std::shared_ptr<WindowGroup> group;
+	std::shared_ptr<HeightMap> heightMap;
+	std::shared_ptr<Terrain> terrain;
+	std::shared_ptr<SkinnedMesh> mesh;
+	std::shared_ptr<AxisObject> axis;
 
-	SkinnedMesh* mesh;
-	AxisObject* axis;
+	std::shared_ptr<Camera> camera;
+	std::shared_ptr<Mouse> mouse;
 
 	bool keys[1024];
 
@@ -44,10 +46,7 @@ class Game
 	bool mouseFirstMoved;
 	float mDeltaTime;
 
-	Mouse* mouse;
-
 public:
-
 	void Initialize()
 	{
 		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0)
@@ -70,7 +69,7 @@ public:
 			SDL_Log("Failed to initialize SDL_ttf");
 		}
 
-		group = new WindowGroup();
+		group = make_shared<WindowGroup>();
 		group->Initialize();
 
 		glEnable(GL_DEPTH_TEST);
@@ -78,16 +77,16 @@ public:
 		glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
 		glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ZERO);
 
-		mouse = new Mouse(window);
+		mouse = make_shared<Mouse>(window);
 		
-		terrain = new Terrain();
+		terrain = make_shared<Terrain>();
 		terrain->Initialize(glm::ivec2(100,100));
-		camera = new Camera();
+		camera = make_shared<Camera>();
 		camera->Initialize();
 
-		axis = new AxisObject();
+		axis = make_shared<AxisObject>();
 		
-		mesh = new SkinnedMesh();
+		mesh = make_shared<SkinnedMesh>();
 		mesh->LoadModel("magician.X");
 		
 	}
@@ -254,7 +253,7 @@ public:
 
 int main(int argc, char* argv[])
 {
-	Game* game = new Game();
+	shared_ptr<Game> game = make_shared<Game>();
 	game->Initialize();
 
 	game->RunLoop();

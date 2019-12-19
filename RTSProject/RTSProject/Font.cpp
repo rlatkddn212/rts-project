@@ -59,9 +59,9 @@ void Font::Unload()
 	}
 }
 
-Texture* Font::RenderText(const std::string & textKey, const glm::vec4 color, int pointSize)
+std::shared_ptr<Texture> Font::RenderText(const std::string& textKey, const glm::vec4 color, int pointSize)
 {
-	Texture* texture = nullptr;
+	std::shared_ptr<Texture> texture = nullptr;
 
 	SDL_Color sdlColor;
 	sdlColor.r = static_cast<Uint8>(color.x * 255);
@@ -79,7 +79,7 @@ Texture* Font::RenderText(const std::string & textKey, const glm::vec4 color, in
 
 		if (surf != nullptr)
 		{
-			texture = new Texture();
+			texture = std::make_shared<Texture>();
 			texture->CreateFromSurface(surf);
 			SDL_FreeSurface(surf);
 		}

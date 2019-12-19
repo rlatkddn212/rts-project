@@ -18,8 +18,8 @@ struct Patch
 
 	glm::mat4 perspect;
 	glm::mat4 view;
-	VertexArrayAlpha* mVertexArray;
-	Shader* mMeshShader;
+	std::shared_ptr<VertexArrayAlpha> mVertexArray;
+	std::shared_ptr<Shader> mMeshShader;
 };
 
 class Terrain
@@ -35,19 +35,19 @@ public:
 	void CreateAlphaMaps();
 
 	void Update(float deltaTime);
-	void Render(Camera* camera);
+	void Render(std::shared_ptr<Camera> camera);
 
 	void AddObject(int type, glm::ivec2 p);
 
 private:
-	Texture* alpha;
-	Texture* mountain;
-	Texture* snow;
-	Texture* grass;
+	std::shared_ptr<Texture> alpha;
+	std::shared_ptr<Texture> mountain;
+	std::shared_ptr<Texture> snow;
+	std::shared_ptr<Texture> grass;
 
 	glm::vec2 mSize;
-	HeightMap* mHeightMap;
-	std::vector<Patch*> mPatches;
-	std::vector<Model*> mModelList;
+	std::shared_ptr<HeightMap> mHeightMap;
+	std::vector<std::shared_ptr<Patch> > mPatches;
+	std::vector<std::shared_ptr<Model> > mModelList;
 };
 

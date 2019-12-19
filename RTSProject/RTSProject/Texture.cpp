@@ -91,8 +91,6 @@ void Texture::CreateFromSurface(SDL_Surface* surface)
 		GL_UNSIGNED_BYTE, surface->pixels);
 
 	SOIL_save_image("image.TGA", SOIL_SAVE_TYPE_TGA, mWidth, mHeight, 4, (const unsigned char*)(surface->pixels));
-	// Use linear filtering
-	
 }
 
 void Texture::SetActive()

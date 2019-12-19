@@ -52,7 +52,7 @@ public:
 
 	// Render Loop
 	void Update(float deltaTime);
-	void RenderModel(Camera* camera);
+	void RenderModel(std::shared_ptr<Camera> camera);
 	
 	void ClearModel();
 
@@ -80,14 +80,14 @@ public:
 	// box Object
 	glm::vec3 mMinPos;
 	glm::vec3 mMaxPos;
-	BoxObject* mBoxObject;
+	std::shared_ptr<BoxObject> mBoxObject;
 
 	std::vector<glm::mat4> Transforms;
 	glm::mat4 mPos, mRot, mSca;
 
-	Shader* mMeshShader;
-	std::vector<SkinnedVertexArray*> meshList;
-	std::vector<Texture*> textureList;
+	std::shared_ptr<Shader> mMeshShader;
+	std::vector<std::shared_ptr<SkinnedVertexArray> > meshList;
+	std::vector< std::shared_ptr<Texture> > textureList;
 	std::vector<unsigned int> meshToTex;
 
 	std::vector<Bone> mBoneInfo;

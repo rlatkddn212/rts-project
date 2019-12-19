@@ -9,11 +9,6 @@ Patch::Patch()
 
 Patch::~Patch()
 {
-	if (mVertexArray != nullptr)
-	{
-		delete mVertexArray;
-		mVertexArray = nullptr;
-	}
 }
 
 void Patch::CreateMesh(HeightMap & hm, SDL_FRect source, int index)
@@ -42,7 +37,7 @@ void Patch::CreateMesh(HeightMap & hm, SDL_FRect source, int index)
 			glm::vec2 auv = glm::vec2(x / (float)hm.mSize.x, z / (float)hm.mSize.y);
 			glm::vec3 normal = glm::vec3(0.0, 1.0, 0.0);
 			
-			//Set new vertex
+			//Set make_shared<vertex
 			if ((z0 * (width + 1) + x0)  > nrVert)
 			{
 				printf("over");
@@ -83,13 +78,16 @@ void Patch::CreateMesh(HeightMap & hm, SDL_FRect source, int index)
 		}
 	}
 
-	mVertexArray = new VertexArrayAlpha(verts, numVerts, indices, numIndices);
+	mVertexArray = std::make_shared<VertexArrayAlpha>(verts, numVerts, indices, numIndices);
 
 	std::vector<std::pair<std::string, int> > shaderCodies;
 	shaderCodies.push_back(make_pair(ReadShaderFile("terrain.vert"), GL_VERTEX_SHADER));
 	shaderCodies.push_back(make_pair(ReadShaderFile("terrain.frag"), GL_FRAGMENT_SHADER));
-	mMeshShader = new Shader();
+	mMeshShader = std::make_shared<Shader>();
 	mMeshShader->BuildShader(shaderCodies);
+
+	delete[] verts;
+	delete[] indices;
 }
 
 void Patch::Render(glm::mat4& mvpMat)
@@ -107,9 +105,9 @@ void Patch::Update(float deltaTime)
 
 Terrain::Terrain()
 {
-	mountain = new Texture();
-	snow = new Texture();
-	grass = new Texture();
+	mountain = std::make_shared<Texture>();
+	snow = std::make_shared<Texture>();
+	grass = std::make_shared<Texture>();
 
 	grass->Load("Assets/grass.jpg");
 	mountain->Load("Assets/mountain.jpg");
@@ -118,30 +116,6 @@ Terrain::Terrain()
 
 Terrain::~Terrain()
 {
-	if (mHeightMap != nullptr)
-	{
-		//mHeightMap->Release();
-		delete mHeightMap;
-		mHeightMap = nullptr;
-	}
-
-	if (mountain != nullptr)
-	{
-		mountain->Unload();
-		delete mountain;
-	}
-
-	if (snow != nullptr)
-	{
-		snow->Unload();
-		delete snow;
-	}
-
-	if (grass != nullptr)
-	{
-		grass->Unload();
-		delete grass;
-	}
 }
 
 void Terrain::Initialize(glm::vec2 size)
@@ -157,13 +131,13 @@ void Terrain::Release()
 
 void Terrain::GenerateRandomTerrain(int numPatches)
 {
-	mHeightMap = new HeightMap(mSize);
+	mHeightMap = std::make_shared<HeightMap>(mSize);
 	mHeightMap->CreateRandomHeightMap(rand() % 2000, 2.5f, 0.5f, 8);
 	//mHeightMap->LoadFromFile("smiley.bmp");
 	CreatePatches(numPatches);
 	CreateAlphaMaps();
 
-	HeightMap* hm = new HeightMap(mSize);
+	std::shared_ptr<HeightMap> hm = std::make_shared<HeightMap>(mSize);
 	
 	hm->CreateRandomHeightMap(rand() % 2000, 5.5f, 0.9f, 7);
 
@@ -188,7 +162,7 @@ void Terrain::AddObject(int type, glm::ivec2 p)
 	float sca_y = (rand() % 1000 / 1000.0f) * 1.0f + 0.5f;
 	glm::vec3 sca = glm::vec3(sca_xz, sca_y, sca_xz);
 
-	Model* obj = new Model();
+	std::shared_ptr<Model> obj = std::make_shared<Model>();
 
 	if (type == 0)
 	{
@@ -211,7 +185,7 @@ void Terrain::CreatePatches(int numPatches)
 
 	if (mHeightMap == NULL)return;
 
-	//Create new patches
+	//Create make_shared<patches
 	for (int y = 0; y < numPatches; y++)
 	{
 		for (int x = 0; x < numPatches; x++)
@@ -221,7 +195,7 @@ void Terrain::CreatePatches(int numPatches)
 					(int)((x + 1) * (mSize.x - 1) / (float)numPatches) - (int)(x * (mSize.x - 1) / (float)numPatches),
 					(int)((y + 1) * (mSize.y - 1) / (float)numPatches) - (int)(y * (mSize.y - 1) / (float)numPatches) };
 
-			Patch *p = new Patch();
+			std::shared_ptr<Patch> p = std::make_shared<Patch>();
 			p->CreateMesh(*mHeightMap, r, x + y);
 			mPatches.push_back(p);
 		}
@@ -258,8 +232,10 @@ void Terrain::CreateAlphaMaps()
 		}
 	}
 
-	alpha = new Texture();
+	alpha = std::make_shared<Texture>();
 	alpha->LoadRawData(bytes, 128, 128, 4);
+
+	delete[] bytes;
 }
 
 void Terrain::Update(float deltaTime)
@@ -268,7 +244,7 @@ void Terrain::Update(float deltaTime)
 		mPatches[i]->Update(deltaTime);
 }
 
-void Terrain::Render(Camera* camera)
+void Terrain::Render(std::shared_ptr<Camera> camera)
 {
 	float aspect = (float)1024 / (float)768;
 	

@@ -24,6 +24,7 @@ public:
 	glm::ivec2 mSize;
 	float mMaxHeight;
 	float* mHeightMap;
+	
 	float m_angle;
 	GLuint VertexArrayID;
 	glm::mat4 perspect;
@@ -35,8 +36,8 @@ public:
 
 	GLuint color_texture;
 
-	VertexArray* mVertexArray;
-	Texture* mHeightMapTexture;
-	Shader* shader;
+	std::shared_ptr<VertexArray> mVertexArray;
+	std::shared_ptr<Texture> mHeightMapTexture;
+	std::shared_ptr<Shader> shader;
 };
 
