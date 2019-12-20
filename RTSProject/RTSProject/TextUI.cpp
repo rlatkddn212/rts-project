@@ -57,7 +57,10 @@ void TextUI::Render(std::shared_ptr<Camera> camera)
 			static_cast<float>(mTexture->GetHeight()) * mScale,
 			1.0f));
 
-	glm::mat4 transMat = glm::translate(glm::mat4(1.f), glm::vec3(mPosX, mPosY, 0.0f));
+	glm::mat4 transMat = glm::translate(glm::mat4(1.f), 
+		glm::vec3(mPosX + (-camera->mWidth + static_cast<float>(mTexture->GetWidth()) * mScale) / 2,
+			mPosY + (camera->mHeight - static_cast<float>(mTexture->GetHeight()) * mScale) / 2,
+			0.0f));
 	
 	glm::mat4 m = {
 		{ 2.0f / (float)camera->mWidth, 0.0f, 0.0f, 0.0f },

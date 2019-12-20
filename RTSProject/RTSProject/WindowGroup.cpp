@@ -14,8 +14,7 @@ WindowGroup::~WindowGroup()
 void WindowGroup::Initialize()
 {
 	mText = std::make_shared<TextUI>();
-	setlocale(LC_ALL, "");
-	const char* str = "ÀÌ°ÍÀÌ Font";
+	const char* str = "wasd";
 	mText->SetText(str);
 	
 	glGenVertexArrays(1, &VertexArrayID);
