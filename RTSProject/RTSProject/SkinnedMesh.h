@@ -58,7 +58,10 @@ public:
 	void									LoadMaterials(const aiScene *scene);
 
 	// 변환 행렬
-	void									SetPosition(glm::vec3 p) { mPos = glm::translate(glm::mat4(1.0f), p);  }
+	void									SetPosition(glm::vec3 p) { 
+												mBoxObject->SetPosition(p);
+												mPos = glm::translate(glm::mat4(1.0f), p);  
+											}
 	void									SetRotation(glm::vec3 r) { mRot = glm::yawPitchRoll(r.x, r.y, r.z); }
 	void									SetScale(glm::vec3 s) { mSca = glm::scale(glm::mat4(1.0f), s); }
 
@@ -70,7 +73,11 @@ public:
 	void									ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, const glm::mat4& ParentTransform);
 	void									BoneTransform();
 
+	void									Select();
+	void									UnSelect();
+
 	bool									Intersect(Ray ray);
+	glm::vec2								GetScreenPos(std::shared_ptr<Camera> camera);
 
 	// box Object
 	glm::vec3								mMinPos;
@@ -88,7 +95,7 @@ public:
 	std::vector<Bone>						mBoneInfo;
 	glm::mat4								mGlobalInvBindPoses;
 	
-	const static int MAX_BONES = 100;
+	const static int						MAX_BONES = 100;
 	GLuint									mBoneLocation[MAX_BONES];
 
 	std::map<std::string, int>				mBoneMapping;

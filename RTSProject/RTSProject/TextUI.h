@@ -18,8 +18,10 @@ public:
 	void								Update();
 	void								Render(std::shared_ptr<Camera> camera);
 	
+private:
 	float								mScale;
 	int									mPosX, mPosY;
+
 	std::shared_ptr<Texture>			mTexture;
 	std::shared_ptr<Font>				mFont;
 	std::shared_ptr<VertexArray>		mSpriteVerts;

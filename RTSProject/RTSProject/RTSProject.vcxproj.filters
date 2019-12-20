@@ -193,12 +193,6 @@
     <None Include="terrain.frag">
       <Filter>소스 파일\Shader</Filter>
     </None>
-    <None Include="Image.glsl">
-      <Filter>소스 파일\Shader</Filter>
-    </None>
-    <None Include="vertex.glsl">
-      <Filter>소스 파일\Shader</Filter>
-    </None>
     <None Include="color.vert">
       <Filter>소스 파일\Shader</Filter>
     </None>
@@ -218,6 +212,12 @@
       <Filter>소스 파일\Shader</Filter>
     </None>
     <None Include="skinned.vert">
+      <Filter>소스 파일\Shader</Filter>
+    </None>
+    <None Include="line.vert">
+      <Filter>소스 파일\Shader</Filter>
+    </None>
+    <None Include="line.frag">
       <Filter>소스 파일\Shader</Filter>
     </None>
   </ItemGroup>

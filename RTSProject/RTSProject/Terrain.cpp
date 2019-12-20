@@ -141,9 +141,9 @@ void Terrain::GenerateRandomTerrain(int numPatches)
 	
 	hm->CreateRandomHeightMap(rand() % 2000, 5.5f, 0.9f, 7);
 
-	for (int y = 0; y < mSize.y; y++)
+	for (int y = 0; y < mSize.y; ++y)
 	{
-		for (int x = 0; x < mSize.x; x++)
+		for (int x = 0; x < mSize.x; ++x)
 		{
 			if (mHeightMap->GetHeight(glm::ivec2(x, y)) == 0.0f && hm->GetHeight(glm::ivec2(x, y)) > 0.7f && rand() % 6 == 0)
 				AddObject(0, glm::ivec2(x, y));	//Tree
@@ -177,6 +177,12 @@ void Terrain::AddObject(int type, glm::ivec2 p)
 	obj->SetRotation(rot);
 	obj->SetScale(sca);
 	mModelList.push_back(obj);
+}
+
+float Terrain::GetHeight(float x, float y)
+{
+	
+	return mHeightMap->GetHeight(glm::ivec2(x, y));
 }
 
 void Terrain::CreatePatches(int numPatches)

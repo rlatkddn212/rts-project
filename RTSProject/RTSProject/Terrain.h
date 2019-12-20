@@ -38,6 +38,7 @@ public:
 	void									Render(std::shared_ptr<Camera> camera);
 
 	void									AddObject(int type, glm::ivec2 p);
+	float									GetHeight(float x, float y);
 
 private:
 	std::shared_ptr<Texture>				alpha;

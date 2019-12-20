@@ -5,26 +5,38 @@
 #include "VertexArray.h"
 #include "TextUI.h"
 #include "Camera.h"
+#include "Ray.h"
+#include "Mouse.h"
 
 class WindowGroup
 {
 public:
 											WindowGroup();
-										   ~WindowGroup();
+	virtual								   ~WindowGroup();
 
-	void									Initialize();
-	void									Terminate();
-	void									Update();
-	void									Render(std::shared_ptr<Camera> camera);
+	virtual void							Initialize(GLFWwindow* window, int w, int h);
+	virtual void							Terminate();
+	virtual void							Update(float deltaTime);
+	virtual void							Render();
 
-	void									DrawBackGround();
-	
+	virtual void							PressKey(bool* keys);
+	virtual void							CursorPos(double xPos, double yPos);
+	virtual void							MouseButton(int button, int action);
+	virtual void							MouseWheel(double yPos);
+
+	GLFWwindow*								win;
 	GLuint									VertexArrayID;
 	GLuint									vertexbuffer;
 	GLuint									uvBuffer;
+	
+	int										mWidth;
+	int										mHeight;
 
+	std::shared_ptr<Camera>					camera;
 	std::shared_ptr<TextUI>					mText;
-	std::shared_ptr<Texture>				mTexture;
-	std::shared_ptr<VertexArray>			mBackgroundVerts;
-	std::shared_ptr<Shader>					mBackgroundShader;
+	std::shared_ptr<Mouse>					mMouse;
+
+	Ray										ray;
+	int										mMouseX;
+	int										mMouseY;
 };

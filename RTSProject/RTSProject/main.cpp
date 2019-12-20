@@ -2,11 +2,7 @@
 #include "Shader.h"
 #include "WindowGroup.h"
 #include "Font.h"
-#include "HeightMap.h"
-#include "Terrain.h"
-#include "StaticMesh.h"
-#include "Camera.h"
-#include "Mouse.h"
+#include "GameStage.h"
 #include "SkinnedMesh.h"
 #include "AxisObject.h"
 #include "Ray.h"
@@ -28,13 +24,6 @@ class Game
 	GameState mGameState;
 	
 	std::shared_ptr<WindowGroup> group;
-	std::shared_ptr<HeightMap> heightMap;
-	std::shared_ptr<Terrain> terrain;
-	std::shared_ptr<SkinnedMesh> mesh;
-	std::shared_ptr<AxisObject> axis;
-
-	std::shared_ptr<Camera> camera;
-	std::shared_ptr<Mouse> mouse;
 
 	bool keys[1024];
 
@@ -52,6 +41,8 @@ class Game
 public:
 	void Initialize()
 	{
+		srand(time(0));
+
 		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0)
 		{
 			SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
@@ -72,27 +63,14 @@ public:
 			SDL_Log("Failed to initialize SDL_ttf");
 		}
 
-
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_BLEND);
 		glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
 		glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ZERO);
 
-		group = make_shared<WindowGroup>();
-		group->Initialize();
+		group = make_shared<GameStage>();
+		group->Initialize(window, screenW, screenH);
 
-		mouse = make_shared<Mouse>(window);
-		
-		terrain = make_shared<Terrain>();
-		terrain->Initialize(glm::ivec2(100,100));
-		camera = make_shared<Camera>();
-		camera->Initialize(screenW, screenH);
-
-		axis = make_shared<AxisObject>();
-		
-		mesh = make_shared<SkinnedMesh>();
-		mesh->LoadModel("Assets/Model/magician.X");
-		
 	}
 
 	void InitGLFW()
@@ -163,6 +141,8 @@ public:
 				theWindow->keys[key] = false;
 			}
 		}
+
+		theWindow->group->PressKey(theWindow->keys);
 	}
 
 	static void handleMouse(GLFWwindow* window, double xPos, double yPos)
@@ -180,24 +160,22 @@ public:
 
 		theWindow->lastX = xPos;
 		theWindow->lastY = yPos;
+
+		theWindow->group->CursorPos(xPos, yPos);
 	}
 
 	static void handleMouseButton(GLFWwindow* window, int button, int action, int mods)
 	{
-		if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
-		{
-			
-		}
-		else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
-		{
-
-		}
+		Game* theWindow = static_cast<Game*>(glfwGetWindowUserPointer(window));
+		theWindow->group->MouseButton(button, action);
 	}
 
 	static void handleScrollWheel(GLFWwindow* window, double xPos, double yPos)
 	{
 		Game* theWindow = static_cast<Game*>(glfwGetWindowUserPointer(window));
 		theWindow->wheel = yPos;
+
+		theWindow->group->MouseWheel(yPos);
 	}
 
 	void RunLoop()
@@ -216,12 +194,7 @@ public:
 
 	void ProcessInput()
 	{
-		mouse->Update(lastX, lastY, wheel);
-		camera->ProcessInput(keys, mouse);
 
-		Ray ray(camera, mouse);
-		mesh->Intersect(ray);
-		wheel = 0.0;
 	}
 
 	void UpdateGame()
@@ -235,10 +208,7 @@ public:
 			deltaTime = 0.05f;
 		}
 
-		mDeltaTime = deltaTime;
-		camera->Update(deltaTime);
-		mesh->Update(deltaTime);
-
+		group->Update(deltaTime);
 	}
 
 	void GenerateOutput()
@@ -248,12 +218,7 @@ public:
 		glClearBufferfv(GL_COLOR, 0, black);
 		glClearBufferfv(GL_DEPTH, 0, &one);
 
-		terrain->Render(camera);
-		axis->Render(camera);
-		mesh->BoneTransform();
-		mesh->RenderModel(camera);
-
-		group->Render(camera);
+		group->Render();
 	}
 };
 

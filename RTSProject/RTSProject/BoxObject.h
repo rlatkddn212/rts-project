@@ -13,6 +13,8 @@ public:
 	void									MakeModel(glm::vec3 minV, glm::vec3 maxV);
 	void									Render(std::shared_ptr<Camera> camera);
 
+	void									SetVisiable(bool t);
+	
 	void									SetPosition(glm::vec3 p) { mPos = glm::translate(glm::mat4(1.0f), p);}
 	void									SetRotation(glm::vec3 r) { mRot = glm::yawPitchRoll(r.x, r.y, r.z); }
 	void									SetScale(glm::vec3 s) { mSca = glm::scale(glm::mat4(1.0f), s); }
@@ -21,6 +23,7 @@ public:
 	bool									RayTriangleIntersect(const glm::vec3& orig, const glm::vec3& dir,
 												const glm::vec3& v0, const glm::vec3& v1, const glm::vec3& v2);
 
+	bool									isVisiable;
 	glm::mat4								mPos, mRot, mSca;
 
 	std::shared_ptr<Shader>					mMeshShader;

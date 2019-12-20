@@ -180,7 +180,7 @@
     <None Include="color.vert" />
     <None Include="height.frag" />
     <None Include="height.vert" />
-    <None Include="Image.glsl" />
+    <None Include="line.frag" />
     <None Include="mesh.frag" />
     <None Include="mesh.vert" />
     <None Include="skinned.frag" />
@@ -191,7 +191,7 @@
     <None Include="st.vert" />
     <None Include="terrain.frag" />
     <None Include="terrain.vert" />
-    <None Include="vertex.glsl" />
+    <None Include="line.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

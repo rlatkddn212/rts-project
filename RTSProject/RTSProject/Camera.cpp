@@ -3,7 +3,6 @@
 
 Camera::Camera()
 {
-
 }
 
 Camera::~Camera()
@@ -12,6 +11,7 @@ Camera::~Camera()
 
 void Camera::Initialize(int w, int h)
 {
+	state = NULL;
 	mWidth = w;
 	mHeight = h;
 
@@ -23,6 +23,10 @@ void Camera::Initialize(int w, int h)
 	mEye = glm::vec3(50.0f, 50.0f, 50.0f);
 	// 눈이 가르키는 위치
 	mFocus = glm::vec3(0.0f, 0.0f, 0.0f);
+
+	mX = w/2;
+	mY = h/2;
+	mWheel = 0;
 }
 
 void Camera::Scroll(glm::vec3 vec)
@@ -84,71 +88,88 @@ void Camera::ChangeRadius(float f)
 void Camera::Update(float timeDelta)
 {
 	mTimeDelta = timeDelta;
-}
 
-void Camera::ProcessInput(bool* state, std::shared_ptr<Mouse> mouse)
-{
 	mRight.y = mLook.y = 0.0f;
 	mRight = glm::normalize(mRight);
 	mLook = glm::normalize(mLook);
 
-	if (mouse->mX < 10)	Scroll(-mRight * mTimeDelta * (4.0f + mRadius * 0.2f));
-	if (mouse->mX > mWidth - 10)	Scroll(mRight * mTimeDelta * (4.0f + mRadius * 0.2f));
-	if (mouse->mY < 10)	Scroll(-mLook * mTimeDelta * (4.0f + mRadius * 0.2f));
-	if (mouse->mY > mHeight - 10)	Scroll(mLook * mTimeDelta * (4.0f + mRadius * 0.2f));
+	if (mX < 10)	Scroll(-mRight * mTimeDelta * (4.0f + mRadius * 0.2f));
+	if (mX > mWidth - 10) Scroll(mRight * mTimeDelta * (4.0f + mRadius * 0.2f));
+	if (mY < 10)	Scroll(-mLook * mTimeDelta * (4.0f + mRadius * 0.2f));
+	if (mY > mHeight - 10) Scroll(mLook * mTimeDelta * (4.0f + mRadius * 0.2f));
 
-	if (mouse->mWheel > 0.0)  ChangeRadius(-10.0f);
-	if (mouse->mWheel < 0.0) ChangeRadius(10.0f);
+	if (mWheel > 0.0)  ChangeRadius(-10.0f);
+	if (mWheel < 0.0) ChangeRadius(10.0f);
 
-	if (state[GLFW_KEY_LEFT])
+	if (state != NULL)
 	{
-		Scroll(-mRight * mTimeDelta * 20.0f);
-	}
-	if (state[GLFW_KEY_RIGHT])
-	{
-		Scroll(mRight * mTimeDelta * 20.0f);
-	}
-	if (state[GLFW_KEY_DOWN])
-	{
-		Scroll(mLook * mTimeDelta * 20.0f);
-	}
-	if (state[GLFW_KEY_UP])
-	{
-		Scroll(-mLook * mTimeDelta  * 20.0f);
-	}
+		if (state[GLFW_KEY_LEFT])
+		{
+			Scroll(-mRight * mTimeDelta * 20.0f);
+		}
+		if (state[GLFW_KEY_RIGHT])
+		{
+			Scroll(mRight * mTimeDelta * 20.0f);
+		}
+		if (state[GLFW_KEY_DOWN])
+		{
+			Scroll(mLook * mTimeDelta * 20.0f);
+		}
+		if (state[GLFW_KEY_UP])
+		{
+			Scroll(-mLook * mTimeDelta  * 20.0f);
+		}
 
-	if (state[GLFW_KEY_A])
-	{
-		Yaw(-mTimeDelta);
-	}
-	if (state[GLFW_KEY_D])
-	{
-		Yaw(mTimeDelta);
-	}
-	if (state[GLFW_KEY_W])
-	{
-		Pitch(mTimeDelta);
-	}
-	if (state[GLFW_KEY_S])
-	{
-		Pitch(-mTimeDelta);
-	}
+		if (state[GLFW_KEY_A])
+		{
+			Yaw(-mTimeDelta);
+		}
+		if (state[GLFW_KEY_D])
+		{
+			Yaw(mTimeDelta);
+		}
+		if (state[GLFW_KEY_W])
+		{
+			Pitch(mTimeDelta);
+		}
+		if (state[GLFW_KEY_S])
+		{
+			Pitch(-mTimeDelta);
+		}
 
-	if (state[GLFW_KEY_LEFT_SHIFT])
-	{
-		if (state[GLFW_KEY_KP_ADD])Zoom(-mTimeDelta);
-		if (state[GLFW_KEY_KP_SUBTRACT])Zoom(mTimeDelta);
-	}
-	else
-	{
-		if (state[GLFW_KEY_KP_ADD])ChangeRadius(-mTimeDelta * 100.0f);
-		if (state[GLFW_KEY_KP_SUBTRACT])ChangeRadius(mTimeDelta * 100.0f);
+		if (state[GLFW_KEY_LEFT_SHIFT])
+		{
+			if (state[GLFW_KEY_KP_ADD])Zoom(-mTimeDelta);
+			if (state[GLFW_KEY_KP_SUBTRACT])Zoom(mTimeDelta);
+		}
+		else
+		{
+			if (state[GLFW_KEY_KP_ADD])ChangeRadius(-mTimeDelta * 100.0f);
+			if (state[GLFW_KEY_KP_SUBTRACT])ChangeRadius(mTimeDelta * 100.0f);
+		}
 	}
 
 	float sideRadius = mRadius * cos(mBeta);
 	float height = mRadius * sin(mBeta);
 
 	mEye = glm::vec3(mFocus.x + sideRadius * cos(mAlpha), mFocus.y + height, mFocus.z + sideRadius * sin(mAlpha));
+	mWheel = 0;
+}
+
+void Camera::PressKey(bool* keys)
+{
+	state = keys;
+}
+
+void Camera::MouseXY(int x, int y)
+{
+	mX = x;
+	mY = y;
+}
+
+void Camera::MouseWheel(int y)
+{
+	mWheel = y;
 }
 
 glm::mat4 Camera::GetViewMatrix()

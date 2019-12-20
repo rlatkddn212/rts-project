@@ -1,6 +1,8 @@
 #pragma once
 #include "Precompiled.h"
 #include "Texture.h"
+#include "Shader.h"
+#include "Camera.h"
 
 enum RightState
 {
@@ -31,10 +33,23 @@ public:
 										   ~Mouse();
 
 	void									InitMouse(GLFWwindow* window);
-	void									Update(GLfloat x, GLfloat y, double wheel);
 	
+	void									SetEndXY(double x, double y);
+	void									SetStartXY(double x, double y);
+	void									IsDragBox(bool t) { isVisiableDragBox = t;  }
+	void									Render(std::shared_ptr<Camera> camera);
+	bool									IsDragBoxPos(glm::vec2 p);
+
+	bool									isVisiableDragBox;
 	int										mW;
 	int										mH;
+
+	std::shared_ptr<Shader>					mMeshShader;
+
+	GLuint									mVertexBuffer;
+	GLuint									mVertexArray;
+	GLfloat									mPrevX;
+	GLfloat									mPrevY;
 
 	GLfloat									mX;
 	GLfloat									mY;

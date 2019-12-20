@@ -1,7 +1,6 @@
 #include "Precompiled.h"
 #include "BoxObject.h"
 
-
 BoxObject::BoxObject(glm::vec3 minV, glm::vec3 maxV)
 {
 	mMaxV = maxV;
@@ -16,7 +15,6 @@ BoxObject::~BoxObject()
 {
 }
 
-// 모델 생성
 void BoxObject::MakeModel(glm::vec3 minV, glm::vec3 maxV)
 {
 	float vert[64];
@@ -63,23 +61,30 @@ void BoxObject::MakeModel(glm::vec3 minV, glm::vec3 maxV)
 
 	std::vector<std::pair<std::string, int> > shaderCodies;
 	shaderCodies.push_back(make_pair(ReadShaderFile("mesh.vert"), GL_VERTEX_SHADER));
-	shaderCodies.push_back(make_pair(ReadShaderFile("image.glsl"), GL_FRAGMENT_SHADER));
+	shaderCodies.push_back(make_pair(ReadShaderFile("line.frag"), GL_FRAGMENT_SHADER));
 	mMeshShader = std::make_shared<Shader>();
 	mMeshShader->BuildShader(shaderCodies);
-
 }
 
 // 랜더링
 void BoxObject::Render(std::shared_ptr<Camera> camera)
 {
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	glm::mat4 mat = camera->GetProjectionMatrix() * camera->GetViewMatrix() * mPos * mRot * mSca;
-	mMeshShader->SetActive();
-	mMeshShader->SetMatrixUniform("mvp_matrix", mat);
+	if (isVisiable)
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		glm::mat4 mat = camera->GetProjectionMatrix() * camera->GetViewMatrix() * mPos * mRot * mSca;
+		mMeshShader->SetActive();
+		mMeshShader->SetMatrixUniform("mvp_matrix", mat);
 
-	mMesh->SetActive();
-	glDrawElements(GL_TRIANGLES, mMesh->GetNumIndices(), GL_UNSIGNED_INT, nullptr);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		mMesh->SetActive();
+		glDrawElements(GL_TRIANGLES, mMesh->GetNumIndices(), GL_UNSIGNED_INT, nullptr);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	}
+}
+
+void BoxObject::SetVisiable(bool t)
+{
+	isVisiable = t;
 }
 
 // Ray 체크

@@ -7,10 +7,6 @@ SkinnedMesh::SkinnedMesh()
 	mAnimTime = 0.0f;
 	m_angle = 0.0f;
 	mNumBones = 0;
-	SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
-
-	SetScale(glm::vec3(1.0f, 1.0f, 1.0f));
-	SetRotation(glm::vec3(0.0f, 0.0f, 0.0f));
 
 	mMinPos = glm::vec3(2000.0f, 2000.0f, 2000.0f);
 	mMaxPos = glm::vec3(-2000.0f, -2000.0f, -2000.0f);
@@ -40,6 +36,9 @@ void SkinnedMesh::LoadModel(const std::string & fileName)
 
 	mBoxObject = std::make_shared<BoxObject>(mMinPos, mMaxPos);
 
+	SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+	SetScale(glm::vec3(1.0f, 1.0f, 1.0f));
+	SetRotation(glm::vec3(0.0f, 0.0f, 0.0f));
 
 	std::vector<std::pair<std::string, int> > shaderCodies;
 	shaderCodies.push_back(make_pair(ReadShaderFile("skinned.vert"), GL_VERTEX_SHADER));
@@ -351,6 +350,16 @@ void SkinnedMesh::BoneTransform()
 	ReadNodeHeirarchy(AnimationTime, scene->mRootNode, Identity);
 }
 
+void SkinnedMesh::Select()
+{
+	mBoxObject->SetVisiable(true);
+}
+
+void SkinnedMesh::UnSelect()
+{
+	mBoxObject->SetVisiable(false);
+}
+
 bool SkinnedMesh::Intersect(Ray ray)
 {
 	glm::mat4 world = mPos * mRot * mSca;
@@ -362,6 +371,7 @@ bool SkinnedMesh::Intersect(Ray ray)
 	if (mBoxObject->RayBoxIntersect(pos, dir))
 	{
 		std::cout << "ray" << std::endl;
+		return true;
 	}
 
 	return false;
@@ -378,4 +388,12 @@ void VertexBoneData::AddBoneData(size_t BoneID, float Weight)
 	}
 
 	assert(0);
+}
+
+glm::vec2 SkinnedMesh::GetScreenPos(std::shared_ptr<Camera> camera)
+{
+	glm::mat4 mat = camera->GetProjectionMatrix() * camera->GetViewMatrix() * mPos;
+	glm::vec4 pos = mat * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+
+	return glm::vec2(pos.x / pos.w, pos.y / pos.w);
 }

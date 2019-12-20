@@ -1,6 +1,5 @@
 #pragma once
 #include "Precompiled.h"
-#include "Mouse.h"
 
 class Camera
 {
@@ -17,10 +16,19 @@ public:
 	void									ChangeRadius(float f);
 
 	void									Update(float timeDelta);
-	void									ProcessInput(bool* state, std::shared_ptr<Mouse> mouse);
-	
+	void									PressKey(bool* keys);
+	void									MouseXY(int x, int y);
+	void									MouseWheel(int y);
+
 	glm::mat4								GetViewMatrix();
 	glm::mat4								GetProjectionMatrix();
+
+	GLfloat									mX;
+	GLfloat									mY;
+
+	double									mWheel;
+	bool*									state;
+
 
 	float									mAlpha, mBeta, mRadius, mFov;
 	glm::vec3								mEye, mFocus, mRight, mLook;
