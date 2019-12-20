@@ -299,7 +299,7 @@ void HeightMap::Update(float deltaTime)
 		glm::vec3(0.0, 1.0, 0.0));
 }
 
-void HeightMap::Render()
+void HeightMap::Render(std::shared_ptr<Camera> camera)
 {
 	glBindVertexArray(mVertexArrayID);
 

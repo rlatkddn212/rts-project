@@ -16,24 +16,30 @@
     <Filter Include="소스 파일\Shader">
       <UniqueIdentifier>{a100e340-db45-4486-bf0f-36cde38f294a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Object">
+      <UniqueIdentifier>{46411bef-b465-440f-ba44-74140d36efd9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Camera">
+      <UniqueIdentifier>{8188d4b6-180d-461f-be74-a0333702cff1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Stage">
+      <UniqueIdentifier>{88f285bd-f059-43c7-992d-8d04f514178c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Terrain">
+      <UniqueIdentifier>{cc3553b7-d779-4732-bcab-05b474363e90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Model">
+      <UniqueIdentifier>{8f50d381-8e7b-4496-8e42-6a66acb233cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\GL">
+      <UniqueIdentifier>{4fee5a0e-02cf-4ff5-8334-006404e00770}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Unit">
+      <UniqueIdentifier>{7e074298-b4c2-406d-bc25-31b0bf8c033b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AxisObject.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="BoxObject.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Font.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="HeightMap.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Model.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
     <ClInclude Include="Mouse.h">
@@ -45,57 +51,63 @@
     <ClInclude Include="Ray.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Shader.h">
-      <Filter>소스 파일</Filter>
+    <ClInclude Include="AxisObject.h">
+      <Filter>소스 파일\Object</Filter>
     </ClInclude>
-    <ClInclude Include="SkinnedMesh.h">
-      <Filter>소스 파일</Filter>
+    <ClInclude Include="BoxObject.h">
+      <Filter>소스 파일\Object</Filter>
     </ClInclude>
-    <ClInclude Include="SkinnedVertexArray.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Terrain.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Texture.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Unit.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="VertexArray.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="VertexArrayAlpha.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="WindowGroup.h">
-      <Filter>소스 파일</Filter>
+    <ClInclude Include="Camera.h">
+      <Filter>소스 파일\Camera</Filter>
     </ClInclude>
     <ClInclude Include="GameStage.h">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowGroup.h">
+      <Filter>소스 파일\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="HeightMap.h">
+      <Filter>소스 파일\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="Terrain.h">
+      <Filter>소스 파일\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="SkinnedMesh.h">
+      <Filter>소스 파일\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>소스 파일\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>소스 파일\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="Unit.h">
+      <Filter>소스 파일\Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="SkinnedVertexArray.h">
+      <Filter>소스 파일\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexArray.h">
+      <Filter>소스 파일\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexArrayAlpha.h">
+      <Filter>소스 파일\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticMesh.h">
+      <Filter>소스 파일\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteUI.h">
+      <Filter>소스 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="TextUI.h">
+      <Filter>소스 파일\Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AxisObject.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="BoxObject.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Font.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="HeightMap.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Model.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Mouse.cpp">
@@ -107,35 +119,56 @@
     <ClCompile Include="Ray.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Shader.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="AxisObject.cpp">
+      <Filter>소스 파일\Object</Filter>
     </ClCompile>
-    <ClCompile Include="SkinnedMesh.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="BoxObject.cpp">
+      <Filter>소스 파일\Object</Filter>
     </ClCompile>
-    <ClCompile Include="SkinnedVertexArray.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Terrain.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Texture.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Unit.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="VertexArray.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="VertexArrayAlpha.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="WindowGroup.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="Camera.cpp">
+      <Filter>소스 파일\Camera</Filter>
     </ClCompile>
     <ClCompile Include="GameStage.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowGroup.cpp">
+      <Filter>소스 파일\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="HeightMap.cpp">
+      <Filter>소스 파일\Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="Terrain.cpp">
+      <Filter>소스 파일\Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="SkinnedMesh.cpp">
+      <Filter>소스 파일\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>소스 파일\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>소스 파일\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="Unit.cpp">
+      <Filter>소스 파일\Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="SkinnedVertexArray.cpp">
+      <Filter>소스 파일\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexArray.cpp">
+      <Filter>소스 파일\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexArrayAlpha.cpp">
+      <Filter>소스 파일\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticMesh.cpp">
+      <Filter>소스 파일\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteUI.cpp">
+      <Filter>소스 파일\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="TextUI.cpp">
+      <Filter>소스 파일\Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

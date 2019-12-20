@@ -38,9 +38,6 @@ void SkinnedMesh::LoadModel(const std::string & fileName)
 	LoadNode(scene->mRootNode, scene);
 	LoadMaterials(scene);
 
-	// 오브젝트 중심
-	printf("%f %f %f", mX / mSize, mY / mSize, mZ / mSize);
-
 	mBoxObject = std::make_shared<BoxObject>(mMinPos, mMaxPos);
 
 
@@ -55,19 +52,11 @@ void SkinnedMesh::Update(float deltaTime)
 {
 	mAnimTime += deltaTime;
 	m_angle += deltaTime * 0.5f;
-
-	float aspect = (float)1024 / (float)768;
-	perspect = glm::perspective(glm::radians(45.0f), aspect, 0.1f, 1000.0f);
-	view = glm::lookAt(glm::vec3(cos(m_angle) * 2.0f, 1.5f, sin(m_angle) * 2.0f),
-		glm::vec3(0.0f, 0.5f, 0.0f),
-		glm::vec3(0.0, 1.0, 0.0));
 }
 
 void SkinnedMesh::RenderModel(std::shared_ptr<Camera> camera)
 {
 	mBoxObject->Render(camera);
-
-	float aspect = (float)1024 / (float)768;
 
 	glm::mat4 model = mPos * mRot * mSca;
 	glm::mat4 mat = camera->GetProjectionMatrix() * camera->GetViewMatrix() * model;
@@ -183,7 +172,6 @@ void SkinnedMesh::LoadMesh(aiMatrix4x4 mat, aiMesh * mesh, const aiScene * scene
 		mMaxPos.y = glm::max(mMaxPos.y, minPos.y);
 		mMaxPos.z = glm::max(mMaxPos.z, minPos.z);
 
-		printf("%f %f %f\n", mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
 		// 정점
 		vertices.insert(vertices.end(), { mesh->mVertices[i].x, mesh->mVertices[i].y , mesh->mVertices[i].z});
 		// 노멀
@@ -244,7 +232,7 @@ void SkinnedMesh::LoadMaterials(const aiScene * scene)
 				int idx = std::string(path.data).rfind("\\");
 				std::string filename = std::string(path.data).substr(idx + 1);
 
-				std::string texPath = filename;
+				std::string texPath = "Assets/Model/" + filename;
 
 				textureList[i] = std::make_shared<Texture>();
 				textureList[i]->Load(texPath.c_str());
@@ -378,8 +366,6 @@ bool SkinnedMesh::Intersect(Ray ray)
 
 	return false;
 }
-
-
 
 void VertexBoneData::AddBoneData(size_t BoneID, float Weight)
 {

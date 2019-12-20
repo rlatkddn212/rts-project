@@ -1,7 +1,6 @@
 #include "Precompiled.h"
 #include "Texture.h"
 
-
 Texture::Texture()
 	:mTextureID(0)
 	, mWidth(0)

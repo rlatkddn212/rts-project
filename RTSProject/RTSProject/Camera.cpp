@@ -10,8 +10,11 @@ Camera::~Camera()
 {
 }
 
-void Camera::Initialize()
+void Camera::Initialize(int w, int h)
 {
+	mWidth = w;
+	mHeight = h;
+
 	mAlpha = mBeta = 0.5f;
 	mRadius = 200.0f;
 	mFov = glm::pi<float>() / 4.0f;
@@ -90,9 +93,9 @@ void Camera::ProcessInput(bool* state, std::shared_ptr<Mouse> mouse)
 	mLook = glm::normalize(mLook);
 
 	if (mouse->mX < 10)	Scroll(-mRight * mTimeDelta * (4.0f + mRadius * 0.2f));
-	if (mouse->mX > 1024 - 10)	Scroll(mRight * mTimeDelta * (4.0f + mRadius * 0.2f));
+	if (mouse->mX > mWidth - 10)	Scroll(mRight * mTimeDelta * (4.0f + mRadius * 0.2f));
 	if (mouse->mY < 10)	Scroll(-mLook * mTimeDelta * (4.0f + mRadius * 0.2f));
-	if (mouse->mY > 768 - 10)	Scroll(mLook * mTimeDelta * (4.0f + mRadius * 0.2f));
+	if (mouse->mY > mHeight - 10)	Scroll(mLook * mTimeDelta * (4.0f + mRadius * 0.2f));
 
 	if (mouse->mWheel > 0.0)  ChangeRadius(-10.0f);
 	if (mouse->mWheel < 0.0) ChangeRadius(10.0f);
@@ -168,7 +171,7 @@ glm::mat4 Camera::GetViewMatrix()
 glm::mat4 Camera::GetProjectionMatrix()
 {
 	glm::mat4 matProj;
-	float aspect = 1024.0f / 768.0f;
+	float aspect = (float)mWidth / mHeight;
 	matProj = glm::perspective(mFov, aspect, 1.0f, 1000.0f);
 	
 	return matProj;

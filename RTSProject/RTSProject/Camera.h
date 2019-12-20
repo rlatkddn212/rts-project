@@ -8,7 +8,7 @@ public:
 											Camera();
 										   ~Camera();
 
-	void									Initialize();
+	void									Initialize(int w, int h);
 
 	void									Scroll(glm::vec3 vec);
 	void									Pitch(float f);
@@ -28,5 +28,8 @@ public:
 	glm::mat4								mMatView;
 	glm::mat4								mMatProj;
 	float									mTimeDelta;
+
+	int										mWidth;
+	int										mHeight;
 };
 

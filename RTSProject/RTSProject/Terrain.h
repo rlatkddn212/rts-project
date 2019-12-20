@@ -4,7 +4,7 @@
 #include "Shader.h"
 #include "VertexArrayAlpha.h"
 #include "Texture.h"
-#include "Model.h"
+#include "StaticMesh.h"
 #include "Camera.h"
 
 struct Patch 
@@ -48,6 +48,5 @@ private:
 	glm::vec2								mSize;
 	std::shared_ptr<HeightMap>				mHeightMap;
 	std::vector<std::shared_ptr<Patch> >	mPatches;
-	std::vector<std::shared_ptr<Model> >	mModelList;
+	std::vector<std::shared_ptr<StaticMesh> >	mModelList;
 };
-

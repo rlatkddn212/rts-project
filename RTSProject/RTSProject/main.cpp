@@ -4,7 +4,7 @@
 #include "Font.h"
 #include "HeightMap.h"
 #include "Terrain.h"
-#include "Model.h"
+#include "StaticMesh.h"
 #include "Camera.h"
 #include "Mouse.h"
 #include "SkinnedMesh.h"
@@ -46,6 +46,9 @@ class Game
 	bool mouseFirstMoved;
 	float mDeltaTime;
 
+	const int screenW = 1024;
+	const int screenH = 768;
+
 public:
 	void Initialize()
 	{
@@ -69,25 +72,26 @@ public:
 			SDL_Log("Failed to initialize SDL_ttf");
 		}
 
-		group = make_shared<WindowGroup>();
-		group->Initialize();
 
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_BLEND);
 		glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
 		glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ZERO);
 
+		group = make_shared<WindowGroup>();
+		group->Initialize();
+
 		mouse = make_shared<Mouse>(window);
 		
 		terrain = make_shared<Terrain>();
 		terrain->Initialize(glm::ivec2(100,100));
 		camera = make_shared<Camera>();
-		camera->Initialize();
+		camera->Initialize(screenW, screenH);
 
 		axis = make_shared<AxisObject>();
 		
 		mesh = make_shared<SkinnedMesh>();
-		mesh->LoadModel("magician.X");
+		mesh->LoadModel("Assets/Model/magician.X");
 		
 	}
 
@@ -107,7 +111,7 @@ public:
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 		// window »ý¼º
-		window = glfwCreateWindow(1024, 768, "ShaderToy Viewer", NULL, NULL);
+		window = glfwCreateWindow(screenW, screenH, "ShaderToy Viewer", NULL, NULL);
 
 		if (window == NULL)
 		{
@@ -239,7 +243,7 @@ public:
 
 	void GenerateOutput()
 	{
-		static const GLfloat black[] = { 0.0f, 0.0f, 0.0f, 1.0f };
+		static const GLfloat black[] = { 0.0f, 0.0f, 1.0f, 1.0f };
 		static const GLfloat one = 1.0f;
 		glClearBufferfv(GL_COLOR, 0, black);
 		glClearBufferfv(GL_DEPTH, 0, &one);
@@ -248,6 +252,8 @@ public:
 		axis->Render(camera);
 		mesh->BoneTransform();
 		mesh->RenderModel(camera);
+
+		group->Render(camera);
 	}
 };
 

@@ -3,6 +3,7 @@
 #include "VertexArray.h"
 #include "Texture.h"
 #include "Shader.h"
+#include "Camera.h"
 
 class HeightMap
 {
@@ -16,7 +17,7 @@ public:
 	void									CreateParticles();
 
 	void									Update(float deltaTime);
-	void									Render();
+	void									Render(std::shared_ptr<Camera> camera);
 	
 	float									GetHeight(glm::ivec2 pos) { return mHeightMap[pos.y * mSize.x + pos.x]; }
 	glm::ivec2								GetCentre() { return glm::ivec2(mSize.x / 2.0f, mSize.y / 2.0f); }

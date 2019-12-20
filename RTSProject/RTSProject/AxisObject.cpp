@@ -47,6 +47,7 @@ void AxisObject::MakeModel()
 	// Position is 3 floats
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vertexSize, 0);
+
 	// Color is 4 floats
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, vertexSize,

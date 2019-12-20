@@ -42,7 +42,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -127,12 +127,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AxisObject.h" />
+    <ClInclude Include="SpriteUI.h" />
     <ClInclude Include="BoxObject.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="GameStage.h" />
     <ClInclude Include="HeightMap.h" />
-    <ClInclude Include="Model.h" />
+    <ClInclude Include="StaticMesh.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="Precompiled.h" />
     <ClInclude Include="Ray.h" />
@@ -140,6 +141,7 @@
     <ClInclude Include="SkinnedMesh.h" />
     <ClInclude Include="SkinnedVertexArray.h" />
     <ClInclude Include="Terrain.h" />
+    <ClInclude Include="TextUI.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Unit.h" />
     <ClInclude Include="VertexArray.h" />
@@ -148,13 +150,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AxisObject.cpp" />
+    <ClCompile Include="SpriteUI.cpp" />
     <ClCompile Include="BoxObject.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="GameStage.cpp" />
     <ClCompile Include="HeightMap.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Model.cpp" />
+    <ClCompile Include="StaticMesh.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="Precompiled.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -165,6 +168,7 @@
     <ClCompile Include="SkinnedMesh.cpp" />
     <ClCompile Include="SkinnedVertexArray.cpp" />
     <ClCompile Include="Terrain.cpp" />
+    <ClCompile Include="TextUI.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Unit.cpp" />
     <ClCompile Include="VertexArray.cpp" />

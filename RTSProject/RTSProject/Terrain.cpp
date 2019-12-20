@@ -162,15 +162,15 @@ void Terrain::AddObject(int type, glm::ivec2 p)
 	float sca_y = (rand() % 1000 / 1000.0f) * 1.0f + 0.5f;
 	glm::vec3 sca = glm::vec3(sca_xz, sca_y, sca_xz);
 
-	std::shared_ptr<Model> obj = std::make_shared<Model>();
+	std::shared_ptr<StaticMesh> obj = std::make_shared<StaticMesh>();
 
 	if (type == 0)
 	{
-		obj->LoadModel("tree.x");
+		obj->LoadModel("Assets/Model/tree.x");
 	}
 	else
 	{
-		obj->LoadModel("stone.x");
+		obj->LoadModel("Assets/Model/stone.x");
 	}
 
 	obj->SetPosition(pos);

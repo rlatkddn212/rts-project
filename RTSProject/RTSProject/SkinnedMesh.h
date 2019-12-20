@@ -39,11 +39,6 @@ struct VertexBoneData
 	void AddBoneData(size_t BoneID, float Weight);
 };
 
-struct Animation
-{
-
-};
-
 class SkinnedMesh
 {
 public:

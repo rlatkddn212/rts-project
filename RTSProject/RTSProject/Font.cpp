@@ -11,7 +11,7 @@ Font::~Font()
 
 void Font::Initialize()
 {
-	Load("Carlito-Regular.ttf");
+	Load("gulim.ttf");
 }
 
 void Font::Terminate()
