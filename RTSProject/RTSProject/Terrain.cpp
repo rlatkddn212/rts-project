@@ -252,8 +252,6 @@ void Terrain::Update(float deltaTime)
 
 void Terrain::Render(std::shared_ptr<Camera> camera)
 {
-	float aspect = (float)1024 / (float)768;
-	
 	glm::mat4 mat = glm::mat4(1.0f);
 	glm::mat4 perspect = camera->GetProjectionMatrix();
 	glm::mat4 view = camera->GetViewMatrix();
@@ -273,8 +271,6 @@ void Terrain::Render(std::shared_ptr<Camera> camera)
 
 	for (int i = 0; i < mModelList.size(); ++i)
 	{
-		mModelList[i]->SetPerspect(perspect);
-		mModelList[i]->SetView(view);
 		mModelList[i]->RenderModel(camera);
 	}
 }

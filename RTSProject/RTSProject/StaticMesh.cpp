@@ -43,21 +43,16 @@ void StaticMesh::LoadModel(const std::string & fileName)
 void StaticMesh::Update(float deltaTime)
 {
 	mAngle += deltaTime * 0.5f;
-
-	float aspect = (float)1024 / (float)768;
-	mPerspect = glm::perspective(glm::radians(45.0f), aspect, 0.1f, 1000.0f);
-	mView = glm::lookAt(glm::vec3(cos(mAngle) * 2.0f, 1.5f, sin(mAngle) * 2.0f),
-		glm::vec3(0.0f, 0.5f, 0.0f),
-		glm::vec3(0.0, 1.0, 0.0));
 }
 
 void StaticMesh::RenderModel(std::shared_ptr<Camera> camera)
 {
-	glm::mat4 mat = camera->GetProjectionMatrix() * camera->GetViewMatrix() * mPos * mRot * mSca;
-	mMeshShader->SetMatrixUniform("mvp_matrix", mat);
 	mMeshShader->SetActive();
+	glm::mat4 mat = mPos * mRot * mSca;
+	glm::mat4 mvp = camera->GetProjectionMatrix() * camera->GetViewMatrix() * mat;
+	mMeshShader->SetMatrixUniform("mvp_matrix", mvp);
 
-	for (size_t i = 0; i < mMeshList.size(); i++)
+	for (size_t i = 0; i < mMeshList.size(); ++i)
 	{
 		unsigned int materialIndex = mMeshToTex[i];
 		if (materialIndex < mTextureList.size() && mTextureList[materialIndex])

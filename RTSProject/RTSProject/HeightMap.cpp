@@ -27,7 +27,6 @@ HeightMap::HeightMap(glm::ivec2 size)
 	mHeightMapTexture = nullptr;
 }
 
-
 HeightMap::~HeightMap()
 {
 	if (mHeightMap != nullptr)

@@ -58,13 +58,13 @@ void GameStage::Update(float deltaTime)
 void GameStage::Render()
 {
 	WindowGroup::Render();
-	terrain->Render(camera);
 	axis->Render(camera);
 	for (int i = 0; i < 10; ++i)
 	{
 		meshes[i]->BoneTransform();
 		meshes[i]->RenderModel(camera);
 	}
+	terrain->Render(camera);
 
 	mMouse->Render(camera);
 }
