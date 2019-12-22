@@ -217,9 +217,9 @@ void Terrain::CreatePath()
 					
 					float neighborHeight = GetHeight(neighborX, neighborY);
 					neighborTile.cost = abs(height - neighborHeight);
-					if (neighborTile.cost > 0.5f)
+					if (neighborTile.cost > 1.0f)
 					{
-						//neighborTile.isMovable = false;
+						neighborTile.isMovable = false;
 					}
 				}
 			}
@@ -261,12 +261,11 @@ std::vector<glm::ivec2> Terrain::GetPath(glm::ivec2 startPos, glm::ivec2 endPos)
 		if (nowTile.xy == endPos)
 		{
 			Tile* point = &nowTile;
-			ret.push_back(point->xy);
-
-			while (point->xy != startPos)
+			
+			while (point != nullptr)
 			{
-				point = point->parent;
 				ret.push_back(point->xy);
+				point = point->parent;
 			}
 
 			reverse(ret.begin(), ret.end());
@@ -283,7 +282,7 @@ std::vector<glm::ivec2> Terrain::GetPath(glm::ivec2 startPos, glm::ivec2 endPos)
 				{
 					float newG = nowTile.g + glm::distance(glm::vec2(pos.x, pos.y), glm::vec2(neigborTile->xy.x, neigborTile->xy.y));
 					float newF = newG + glm::distance(glm::vec2(endPos.x, endPos.y), glm::vec2(neigborTile->xy.x, neigborTile->xy.y));
-
+					
 					// ´ÝÈù °æ¿ì
 					if (neigborTile->isClose)
 					{

@@ -66,6 +66,11 @@ void GameStage::Render()
 
 	terrain->Render(camera);
 	mMouse->Render(camera);
+
+	for (int i = 0; i < mBox.size(); ++i)
+	{
+		mBox[i]->Render(camera);
+	}
 }
 
 void GameStage::PressKey(bool* keys)
@@ -95,7 +100,7 @@ void GameStage::MouseButton(int button, int action)
 	{
 		ray.SetRay(camera, mMouseX, mMouseY);
 		glm::ivec2 pos;
-
+		mBox.clear();
 		if (terrain->Intersect(ray, pos))
 		{
 			for (int i = 0; i < 10; ++i)
@@ -106,6 +111,10 @@ void GameStage::MouseButton(int button, int action)
 
 					for (int i = 0; i < ret.size(); ++i)
 					{
+						shared_ptr<BoxObject> box = make_shared<BoxObject>(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+						
+						box->SetPosition(glm::vec3(ret[i].x, terrain->GetHeight(ret[i].x, ret[i].y), -ret[i].y));
+						mBox.push_back(box);
 						printf("%d %d\n", ret[i].x, ret[i].y);
 					}
 				}

@@ -30,6 +30,8 @@ public:
 	
 	std::vector<std::shared_ptr<Unit> >		mUnits;
 
+	std::vector<std::shared_ptr<BoxObject> > mBox;
+
 	std::shared_ptr<AxisObject>				axis;
 
 	bool									isLeftPress;

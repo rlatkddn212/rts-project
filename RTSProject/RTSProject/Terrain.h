@@ -12,7 +12,7 @@ class pqComp
 {
 public:
 	
-	pqComp(const bool& revparam = false)
+	pqComp(const bool& revparam = true)
 	{
 		reverse = revparam;
 	}
