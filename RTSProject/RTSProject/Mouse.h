@@ -36,9 +36,10 @@ public:
 	
 	void									SetEndXY(double x, double y);
 	void									SetStartXY(double x, double y);
-	void									IsDragBox(bool t) { isVisiableDragBox = t;  }
+	void									VisiableDragBox(bool t) { isVisiableDragBox = t;  }
 	void									Render(std::shared_ptr<Camera> camera);
 	bool									IsDragBoxPos(glm::vec2 p);
+	bool									IsDragBox() { return isVisiableDragBox; }
 
 	bool									isVisiableDragBox;
 	int										mW;

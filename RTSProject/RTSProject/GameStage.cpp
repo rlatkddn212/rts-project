@@ -1,5 +1,6 @@
 #include "Precompiled.h"
 #include "GameStage.h"
+#include "Magician.h"
 
 using namespace std;
 
@@ -26,16 +27,15 @@ void GameStage::Initialize(GLFWwindow* window, int w, int h)
 
 	for (int i = 0; i < 10; ++i)
 	{
-		shared_ptr<SkinnedMesh> mesh = make_shared<SkinnedMesh>();
-		mesh->LoadModel("Assets/Model/magician.X");
-		meshes.push_back(mesh);
+		shared_ptr<Unit> mesh = make_shared<Magician>();
+		mUnits.push_back(mesh);
 	}
 
 	for (int i = 0; i < 10; ++i)
 	{
 		int x = rand() % 100;
 		int y = rand() % 100;
-		meshes[i]->SetPosition(glm::vec3((x), terrain->GetHeight(x, y), -y));
+		mUnits[i]->SetPosition(glm::vec3((x), terrain->GetHeight(x, y), -y));
 	}
 }
 
@@ -51,7 +51,7 @@ void GameStage::Update(float deltaTime)
 	camera->Update(deltaTime);
 	for (int i = 0; i < 10; ++i)
 	{
-		meshes[i]->Update(deltaTime);
+		mUnits[i]->Update(deltaTime);
 	}
 }
 
@@ -61,11 +61,10 @@ void GameStage::Render()
 	axis->Render(camera);
 	for (int i = 0; i < 10; ++i)
 	{
-		meshes[i]->BoneTransform();
-		meshes[i]->RenderModel(camera);
+		mUnits[i]->Render(camera);
 	}
-	terrain->Render(camera);
 
+	terrain->Render(camera);
 	mMouse->Render(camera);
 }
 
@@ -82,7 +81,7 @@ void GameStage::CursorPos(double xPos, double yPos)
 	if (isLeftPress)
 	{
 		mMouse->SetEndXY(mMouseX, mMouseY);
-		mMouse->IsDragBox(true);
+		mMouse->VisiableDragBox(true);
 	}
 	else
 	{
@@ -94,7 +93,24 @@ void GameStage::MouseButton(int button, int action)
 {
 	if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
 	{
-		
+		ray.SetRay(camera, mMouseX, mMouseY);
+		glm::ivec2 pos;
+
+		if (terrain->Intersect(ray, pos))
+		{
+			for (int i = 0; i < 10; ++i)
+			{
+				if (mUnits[i]->isSelected())
+				{
+					vector<glm::ivec2> ret = terrain->GetPath(glm::ivec2(mUnits[i]->mPos.x, -mUnits[i]->mPos.z), pos);
+
+					for (int i = 0; i < ret.size(); ++i)
+					{
+						printf("%d %d\n", ret[i].x, ret[i].y);
+					}
+				}
+			}
+		}
 	}
 	else if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_RELEASE)
 	{
@@ -103,18 +119,17 @@ void GameStage::MouseButton(int button, int action)
 	else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
 	{
 		ray.SetRay(camera, mMouseX, mMouseY);
-
 		for (int i = 0; i < 10; ++i)
 		{
-			meshes[i]->UnSelect();
+			mUnits[i]->UnSelect();
 		}
 
 		bool isSelect = false;
 		for (int i = 0; i < 10; ++i)
 		{
-			if (meshes[i]->Intersect(ray))
+			if (mUnits[i]->Intersect(ray))
 			{
-				meshes[i]->Select();
+				mUnits[i]->Select();
 				isSelect = true;
 				break;
 			}
@@ -130,20 +145,23 @@ void GameStage::MouseButton(int button, int action)
 	{
 		if (isLeftPress)
 		{
-			for (int i = 0; i < 10; ++i)
+			if (mMouse->IsDragBox())
 			{
-				glm::vec2 p = meshes[i]->GetScreenPos(camera);
-				p.x = p.x * (mWidth / 2) + mWidth / 2;
-				p.y = -p.y * (mHeight / 2) + mHeight / 2;
-				
-				if (mMouse->IsDragBoxPos(p))
+				for (int i = 0; i < 10; ++i)
 				{
-					meshes[i]->Select();
+					glm::vec2 p = mUnits[i]->GetScreenPos(camera);
+					p.x = p.x * (mWidth / 2) + mWidth / 2;
+					p.y = -p.y * (mHeight / 2) + mHeight / 2;
+
+					if (mMouse->IsDragBoxPos(p))
+					{
+						mUnits[i]->Select();
+					}
 				}
 			}
-
+			
 			isLeftPress = false;
-			mMouse->IsDragBox(false);
+			mMouse->VisiableDragBox(false);
 		}
 	}
 }

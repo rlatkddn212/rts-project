@@ -7,6 +7,7 @@
 #include "Mouse.h"
 #include "SkinnedMesh.h"
 #include "AxisObject.h"
+#include "Unit.h"
 
 class GameStage : public WindowGroup
 {
@@ -27,7 +28,8 @@ public:
 	std::shared_ptr<HeightMap>				heightMap;
 	std::shared_ptr<Terrain>				terrain;
 	
-	std::vector<std::shared_ptr<SkinnedMesh> >	meshes;
+	std::vector<std::shared_ptr<Unit> >		mUnits;
+
 	std::shared_ptr<AxisObject>				axis;
 
 	bool									isLeftPress;

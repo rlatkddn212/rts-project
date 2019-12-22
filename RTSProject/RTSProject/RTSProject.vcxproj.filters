@@ -102,6 +102,15 @@
     <ClInclude Include="TextUI.h">
       <Filter>소스 파일\Object</Filter>
     </ClInclude>
+    <ClInclude Include="Drone.h">
+      <Filter>소스 파일\Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="Knight.h">
+      <Filter>소스 파일\Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="Magician.h">
+      <Filter>소스 파일\Unit</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Font.cpp">
@@ -169,6 +178,15 @@
     </ClCompile>
     <ClCompile Include="TextUI.cpp">
       <Filter>소스 파일\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Drone.cpp">
+      <Filter>소스 파일\Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="Knight.cpp">
+      <Filter>소스 파일\Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="Magician.cpp">
+      <Filter>소스 파일\Unit</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -34,8 +34,6 @@ void SkinnedMesh::LoadModel(const std::string & fileName)
 	LoadNode(scene->mRootNode, scene);
 	LoadMaterials(scene);
 
-	mBoxObject = std::make_shared<BoxObject>(mMinPos, mMaxPos);
-
 	SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 	SetScale(glm::vec3(1.0f, 1.0f, 1.0f));
 	SetRotation(glm::vec3(0.0f, 0.0f, 0.0f));
@@ -55,8 +53,6 @@ void SkinnedMesh::Update(float deltaTime)
 
 void SkinnedMesh::RenderModel(std::shared_ptr<Camera> camera)
 {
-	mBoxObject->Render(camera);
-
 	glm::mat4 model = mPos * mRot * mSca;
 	glm::mat4 mat = camera->GetProjectionMatrix() * camera->GetViewMatrix() * model;
 
@@ -350,33 +346,6 @@ void SkinnedMesh::BoneTransform()
 	ReadNodeHeirarchy(AnimationTime, scene->mRootNode, Identity);
 }
 
-void SkinnedMesh::Select()
-{
-	mBoxObject->SetVisiable(true);
-}
-
-void SkinnedMesh::UnSelect()
-{
-	mBoxObject->SetVisiable(false);
-}
-
-bool SkinnedMesh::Intersect(Ray ray)
-{
-	glm::mat4 world = mPos * mRot * mSca;
-	glm::mat4 worldInv = glm::inverse(world);
-	glm::vec3 pos = worldInv * glm::vec4(ray.org, 1.0f);
-	glm::vec3 dir = worldInv * glm::vec4(ray.dir, 0.0f);
-	dir = glm::normalize(dir);
-
-	if (mBoxObject->RayBoxIntersect(pos, dir))
-	{
-		std::cout << "ray" << std::endl;
-		return true;
-	}
-
-	return false;
-}
-
 void VertexBoneData::AddBoneData(size_t BoneID, float Weight)
 {
 	for (size_t i = 0; i < 4; i++) {
@@ -388,12 +357,4 @@ void VertexBoneData::AddBoneData(size_t BoneID, float Weight)
 	}
 
 	assert(0);
-}
-
-glm::vec2 SkinnedMesh::GetScreenPos(std::shared_ptr<Camera> camera)
-{
-	glm::mat4 mat = camera->GetProjectionMatrix() * camera->GetViewMatrix() * mPos;
-	glm::vec4 pos = mat * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
-
-	return glm::vec2(pos.x / pos.w, pos.y / pos.w);
 }

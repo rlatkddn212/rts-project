@@ -127,6 +127,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AxisObject.h" />
+    <ClInclude Include="Drone.h" />
+    <ClInclude Include="Knight.h" />
+    <ClInclude Include="Magician.h" />
     <ClInclude Include="SpriteUI.h" />
     <ClInclude Include="BoxObject.h" />
     <ClInclude Include="Camera.h" />
@@ -150,6 +153,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AxisObject.cpp" />
+    <ClCompile Include="Drone.cpp" />
+    <ClCompile Include="Knight.cpp" />
+    <ClCompile Include="Magician.cpp" />
     <ClCompile Include="SpriteUI.cpp" />
     <ClCompile Include="BoxObject.cpp" />
     <ClCompile Include="Camera.cpp" />

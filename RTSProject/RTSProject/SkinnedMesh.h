@@ -9,7 +9,6 @@
 #include "SkinnedVertexArray.h"
 #include "Shader.h"
 #include <map>
-#include "BoxObject.h"
 #include "Camera.h"
 #include "Ray.h"
 
@@ -58,12 +57,16 @@ public:
 	void									LoadMaterials(const aiScene *scene);
 
 	// 변환 행렬
-	void									SetPosition(glm::vec3 p) { 
-												mBoxObject->SetPosition(p);
-												mPos = glm::translate(glm::mat4(1.0f), p);  
-											}
+	void									SetPosition(glm::vec3 p) { 	mPos = glm::translate(glm::mat4(1.0f), p); }
 	void									SetRotation(glm::vec3 r) { mRot = glm::yawPitchRoll(r.x, r.y, r.z); }
 	void									SetScale(glm::vec3 s) { mSca = glm::scale(glm::mat4(1.0f), s); }
+
+	glm::mat4								GetPositionMat() { return mPos; }
+	glm::mat4								GetRotationMat() { return mRot; }
+	glm::mat4								GetScaleMat() { return mSca; }
+
+	glm::vec3								GetMinPos() { return mMinPos; }
+	glm::vec3								GetMaxPos() { return mMaxPos; }
 
 	// 뷰 프로젝션
 	void									SetPerspect(glm::mat4 p) { perspect = p; }
@@ -73,16 +76,10 @@ public:
 	void									ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, const glm::mat4& ParentTransform);
 	void									BoneTransform();
 
-	void									Select();
-	void									UnSelect();
-
-	bool									Intersect(Ray ray);
-	glm::vec2								GetScreenPos(std::shared_ptr<Camera> camera);
 
 	// box Object
 	glm::vec3								mMinPos;
 	glm::vec3								mMaxPos;
-	std::shared_ptr<BoxObject>				mBoxObject;
 
 	std::vector<glm::mat4>					Transforms;
 	glm::mat4								mPos, mRot, mSca;

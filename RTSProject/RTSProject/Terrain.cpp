@@ -1,6 +1,8 @@
 #include "Precompiled.h"
 #include "Terrain.h"
 #include "Camera.h"
+#include <queue>
+using namespace std;
 
 Patch::Patch()
 {
@@ -11,7 +13,7 @@ Patch::~Patch()
 {
 }
 
-void Patch::CreateMesh(HeightMap & hm, SDL_FRect source, int index)
+void Patch::CreateMesh(HeightMap & hm, SDL_FRect source)
 {
 	int width = source.w;
 	int height = source.h;
@@ -43,14 +45,18 @@ void Patch::CreateMesh(HeightMap & hm, SDL_FRect source, int index)
 				printf("over");
 			}
 
+			// 버텍스
 			verts[(z0 * (width + 1) + x0) * 10] = pos.x;
 			verts[(z0 * (width + 1) + x0) * 10 + 1] = pos.y;
 			verts[(z0 * (width + 1) + x0) * 10 + 2] = pos.z;
+			// 노멀
 			verts[(z0 * (width + 1) + x0) * 10 + 3] = normal.x;
 			verts[(z0 * (width + 1) + x0) * 10 + 4] = normal.y;
 			verts[(z0 * (width + 1) + x0) * 10 + 5] = normal.z;
+			// 텍스쳐
 			verts[(z0 * (width + 1) + x0) * 10 + 6] = auv.x * 8.0f;
 			verts[(z0 * (width + 1) + x0) * 10 + 7] = auv.y * 8.0f;
+			// 알파
 			verts[(z0 * (width + 1) + x0) * 10 + 8] = auv.x;
 			verts[(z0 * (width + 1) + x0) * 10 + 9] = auv.y;
 		}
@@ -151,6 +157,8 @@ void Terrain::GenerateRandomTerrain(int numPatches)
 				AddObject(1, glm::ivec2(x, y));	//Stone
 		}
 	}
+
+	CreatePath();
 }
 
 void Terrain::AddObject(int type, glm::ivec2 p)
@@ -181,9 +189,226 @@ void Terrain::AddObject(int type, glm::ivec2 p)
 
 float Terrain::GetHeight(float x, float y)
 {
-	
 	return mHeightMap->GetHeight(glm::ivec2(x, y));
 }
+
+void Terrain::CreatePath()
+{
+	int dy[8] = {-1, -1, -1, 0, 0, 1, 1, 1};
+	int dx[8] = {-1, 0, 1, -1, 1, -1, 0, 1};
+	// 패스 생성
+	for (int y = 0; y < mSize.y; ++y)
+	{
+		for (int x = 0; x < mSize.x; ++x)
+		{
+			float height = GetHeight(x, y);
+			for (int k = 0; k < 8; ++k)
+			{
+				int neighborX = x + dx[k];
+				int neighborY = y + dy[k];
+				
+				if (0 <= neighborX && neighborX < mSize.x 
+					&& 0 <= neighborY && neighborY < mSize.y)
+				{
+					Tile& neighborTile = mTile[neighborY][neighborX];
+					mTile[y][x].neigbors[k] = &neighborTile;
+					
+					neighborTile.xy = glm::ivec2(neighborX, neighborY);
+					
+					float neighborHeight = GetHeight(neighborX, neighborY);
+					neighborTile.cost = abs(height - neighborHeight);
+					if (neighborTile.cost > 0.5f)
+					{
+						//neighborTile.isMovable = false;
+					}
+				}
+			}
+		}
+	}
+}
+
+std::vector<glm::ivec2> Terrain::GetPath(glm::ivec2 startPos, glm::ivec2 endPos)
+{
+	std::vector<glm::ivec2> ret;
+
+	priority_queue<pair<float, glm::ivec2>, vector<pair<float, glm::ivec2>>, pqComp > pq;
+	pq.push(make_pair(0.0f, startPos));
+	
+	// 초기화
+	for (int y = 0; y < mSize.y; ++y)
+	{
+		for (int x = 0; x < mSize.x; ++x)
+		{
+			mTile[y][x].f = mTile[y][x].g = 0.0f;
+			mTile[y][x].parent = nullptr;
+			mTile[y][x].isClose = mTile[y][x].isOpen = false;
+		}
+	}
+	
+	mTile[startPos.y][startPos.x].isOpen = true;
+
+	while (! pq.empty())
+	{
+		float cost = pq.top().first;
+		glm::ivec2 pos = pq.top().second;
+		pq.pop();
+
+		Tile& nowTile = mTile[pos.y][pos.x];
+		if (nowTile.isClose) continue;
+		nowTile.isClose = true;
+		
+		// 도착한 경우
+		if (nowTile.xy == endPos)
+		{
+			Tile* point = &nowTile;
+			ret.push_back(point->xy);
+
+			while (point->xy != startPos)
+			{
+				point = point->parent;
+				ret.push_back(point->xy);
+			}
+
+			reverse(ret.begin(), ret.end());
+
+			break;
+		}
+
+		for (int i = 0; i < 8; ++i)
+		{
+			if (nowTile.neigbors[i] != nullptr)
+			{
+				Tile* neigborTile = nowTile.neigbors[i];
+				if (neigborTile->isMovable)
+				{
+					float newG = nowTile.g + glm::distance(glm::vec2(pos.x, pos.y), glm::vec2(neigborTile->xy.x, neigborTile->xy.y));
+					float newF = newG + glm::distance(glm::vec2(endPos.x, endPos.y), glm::vec2(neigborTile->xy.x, neigborTile->xy.y));
+
+					// 닫힌 경우
+					if (neigborTile->isClose)
+					{
+						// 기존 것보다 작다면 대체 한다.
+						if (newF < neigborTile->f)
+						{
+							neigborTile->g = newG;
+							neigborTile->f = newF;
+							neigborTile->parent = &nowTile;
+						}
+					}
+					else if (neigborTile->isOpen)
+					{
+						if (newF < neigborTile->f)
+						{
+							neigborTile->g = newG;
+							neigborTile->f = newF;
+							neigborTile->parent = &nowTile;
+							
+							// 맵이 클 경우 문제가 될 수 있음 pq size를 고려해서 최적화 시킬 필요가 있음
+							pq.push(make_pair(newF, neigborTile->xy));
+						}
+					}
+					else
+					{
+						neigborTile->g = newG;
+						neigborTile->f = newF;
+						neigborTile->parent = &nowTile;
+						neigborTile->isOpen = true;
+
+						pq.push(make_pair(newF, neigborTile->xy));
+					}
+				}
+			}
+		}
+	}
+
+	return ret;
+}
+
+bool Terrain::Intersect(Ray & ray, glm::ivec2& ret)
+{
+	glm::vec3 pos = ray.org;
+	glm::vec3 dir = ray.dir;
+	dir = glm::normalize(dir);
+
+	for (int y = 0; y < mSize.y - 1; ++y)
+	{
+		for (int x = 0; x < mSize.x - 1; ++x)
+		{
+			glm::vec3 p;
+			if (RayTriangleIntersect(ray.org, dir,
+				glm::vec3(x, GetHeight(x, y), -y),
+				glm::vec3(glm::vec3(x, GetHeight(x, y + 1), -y - 1)),
+				glm::vec3(glm::vec3(x + 1, GetHeight(x + 1, y), -y)),
+				p))
+			{
+				p.z *= -1;
+				int nx = (int)p.x + (((p.x - (int)p.x) < 0.5f) ? 0 : 1);
+				int ny = (int)p.z + (((p.z - (int)p.z) < 0.5f) ? 0 : 1);
+				ret = glm::ivec2(nx, ny);
+				
+				return true;
+			}
+
+			if (RayTriangleIntersect(ray.org, dir,
+				glm::vec3(x + 1, GetHeight(x + 1, y + 1), -y - 1),
+				glm::vec3(glm::vec3(x + 1, GetHeight(x, y), -y)),
+				glm::vec3(glm::vec3(x, GetHeight(x, y + 1), -y - 1)),
+				p))
+			{
+				p.z *= -1;
+				int nx = (int)p.x + (((p.x - (int)p.x) < 0.5f) ? 0 : 1);
+				int ny = (int)p.z + (((p.z - (int)p.z) < 0.5f) ? 0 : 1);
+				ret = glm::ivec2(nx, ny);
+				
+				return true;
+			}
+		}
+	}
+	
+	return false;
+}
+
+bool Terrain::RayTriangleIntersect(const glm::vec3 & orig, const glm::vec3 & dir, 
+		const glm::vec3 & v0, const glm::vec3 & v1, const glm::vec3 & v2, glm::vec3& P)
+{
+	glm::vec3 v0v1 = v1 - v0;
+	glm::vec3 v0v2 = v2 - v0;
+	glm::vec3 N = glm::cross(v0v1, v0v2);
+	float area2 = N.length();
+
+	float NdotRayDirection = glm::dot(N, dir);
+	if (fabs(NdotRayDirection) < 0.00001)
+	{
+		return false;
+	}
+
+	float t = glm::dot((v0 - orig), N) / NdotRayDirection;
+	if (t < 0) return false;
+
+	P = orig + t * dir;
+
+	glm::vec3 C;
+
+	glm::vec3 edge0 = v1 - v0;
+	glm::vec3 vp0 = P - v0;
+
+	C = glm::cross(edge0, vp0);
+	if (glm::dot(N, C) < 0) return false;
+
+	glm::vec3 edge1 = v2 - v1;
+	glm::vec3 vp1 = P - v1;
+	C = glm::cross(edge1, vp1);
+	if (glm::dot(N, C) < 0)  return false;
+
+	glm::vec3 edge2 = v0 - v2;
+	glm::vec3 vp2 = P - v2;
+	C = glm::cross(edge2, vp2);
+	if (glm::dot(N, C) < 0) return false;
+
+	return true;
+}
+
+
 
 void Terrain::CreatePatches(int numPatches)
 {
@@ -202,7 +427,7 @@ void Terrain::CreatePatches(int numPatches)
 					(int)((y + 1) * (mSize.y - 1) / (float)numPatches) - (int)(y * (mSize.y - 1) / (float)numPatches) };
 
 			std::shared_ptr<Patch> p = std::make_shared<Patch>();
-			p->CreateMesh(*mHeightMap, r, x + y);
+			p->CreateMesh(*mHeightMap, r);
 			mPatches.push_back(p);
 		}
 	}
