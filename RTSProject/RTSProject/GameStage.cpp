@@ -52,6 +52,7 @@ void GameStage::Update(float deltaTime)
 	for (int i = 0; i < 10; ++i)
 	{
 		mUnits[i]->Update(deltaTime);
+		mUnits[i]->SetHeight(terrain);
 	}
 }
 
@@ -108,6 +109,7 @@ void GameStage::MouseButton(int button, int action)
 				if (mUnits[i]->isSelected())
 				{
 					vector<glm::ivec2> ret = terrain->GetPath(glm::ivec2(mUnits[i]->mPos.x, -mUnits[i]->mPos.z), pos);
+					mUnits[i]->SetPath(ret);
 
 					for (int i = 0; i < ret.size(); ++i)
 					{

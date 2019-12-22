@@ -73,7 +73,7 @@ public:
 	void									SetView(glm::mat4 v) { view = v; }
 
 	// read Bone
-	void									ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, const glm::mat4& ParentTransform);
+	void									ReadNodeHeirarchy(const aiAnimation* pAnimation, float AnimationTime, const aiNode* pNode, const glm::mat4& ParentTransform);
 	void									BoneTransform();
 
 
@@ -103,6 +103,8 @@ public:
 	glm::mat4								perspect;
 	glm::mat4								view;
 	float									mAnimTime;
+
+	int										mAnimationIdx;
 
 	double									mX;
 	double									mY;

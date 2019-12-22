@@ -3,7 +3,7 @@
 
 Unit::Unit()
 {
-
+	speed = 8.0f;
 }
 
 Unit::~Unit()
@@ -16,9 +16,64 @@ void Unit::MakeBoxObject()
 	mBoxObject = std::make_shared<BoxObject>(mSkinnedMesh->GetMinPos(), mSkinnedMesh->GetMaxPos());
 }
 
+glm::vec3 Unit::GetDirection(glm::vec2 p1, glm::vec2 p2)
+{
+	float dx = p2.x - p1.x, dy = p2.y - p1.y;
+
+	if (dx < 0 && dy > 0)	return glm::vec3(glm::pi<float>() / 4, 0.0f, 0.0f);
+	if (dx == 0 && dy > 0)	return glm::vec3(0.0f, 0.0f, 0.0f);
+	if (dx > 0 && dy > 0)	return glm::vec3(-glm::pi<float>() / 4, 0.0f, 0.0f);
+	if (dx > 0 && dy == 0)	return glm::vec3(-glm::pi<float>() / 2, 0.0f, 0.0f);
+	if (dx > 0 && dy < 0)	return glm::vec3((-glm::pi<float>() / 4) * 3, 0.0f, 0.0f);
+	if (dx == 0 && dy < 0)	return glm::vec3(glm::pi<float>(), 0.0f, 0.0f);
+	if (dx < 0 && dy < 0)	return glm::vec3((glm::pi<float>() / 4) * 3, 0.0f, 0.0f);
+	if (dx < 0 && dy == 0)	return glm::vec3(glm::pi<float>() / 2, 0.0f, 0.0f);
+
+	return mRot;
+}
+
 void Unit::Update(float deltaTime)
 {
 	mSkinnedMesh->Update(deltaTime);
+	if (!mPath.empty())
+	{
+		SetAnimation(2);
+		float len = deltaTime * speed;
+		glm::vec2 prev = glm::vec2(mPos.x, -mPos.z);
+		for (int i = mPosIndex; i < mPath.size(); ++i)
+		{
+			float d = glm::distance(prev, glm::vec2(mPath[i]));
+			len -= d;
+			if (len < 0.0f)
+			{
+				glm::vec2 pos = prev + (1 - (-len / d)) *  (glm::vec2(mPath[i]) - prev);
+				
+				mRot = GetDirection(glm::vec2(mPath[i]), prev);
+				SetRotation(mRot);
+				mPos.x = pos.x;
+				mPos.z = -pos.y;
+
+				SetPosition(mPos);
+				break;
+			}
+			
+			++mPosIndex;
+			prev = mPath[i];
+		}
+
+		if (len > 0)
+		{
+			SetAnimation(1);
+			mPos.x = mPath[mPath.size() - 1].x;
+			mPos.z = -mPath[mPath.size() - 1].y;
+
+			SetPosition(mPos);
+		}
+	}
+	else
+	{
+		SetAnimation(1);
+	}
 }
 
 void Unit::Render(std::shared_ptr<Camera> camera)
