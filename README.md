@@ -3,11 +3,16 @@
 
 모던 OpenGL RTS 프로젝트
 
+사용 라이브러리 : assimp, glm, glfw, SDL, SOIL
 
 카메라 : wasd, 방향키, 마우스 휠로 조정
 
 ![rtsimage](https://github.com/rlatkddn212/rts-project/blob/master/RTS.png)
 
+지금까지 구현한 주요 기술
+1. height map, alpha map 사용하여 지형 생성
+2. 스켈레톤 캐릭터 애니메이션
+3. 픽킹, 드래그 (캐릭터 선택)
 
 
 프로젝트 진행
@@ -22,7 +27,7 @@
 | 카메라               | 50%    | 1         |
 | 키보드 마우스 입출력 | 100%   | 1         |
 | 미니맵               | 0%     | 2         |
-| 경로 이동            | 0%     | 1         |
+| 경로 이동            | 100%     | 1         |
 | 유닛 충돌 이동       | 0%     | 2         |
 | ray(픽킹)            | 100%   | 1         |
 | 맵 에디터            | 0%     | 5         |
