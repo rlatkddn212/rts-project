@@ -14,6 +14,8 @@ Unit::~Unit()
 void Unit::MakeBoxObject()
 {
 	mBoxObject = std::make_shared<BoxObject>(mSkinnedMesh->GetMinPos(), mSkinnedMesh->GetMaxPos());
+	mBoxObject->SetScale(glm::vec3(0.3f, 0.3, 0.3f));
+	SetScale(glm::vec3(0.3f, 0.3, 0.3f));
 }
 
 glm::vec3 Unit::GetDirection(glm::vec2 p1, glm::vec2 p2)

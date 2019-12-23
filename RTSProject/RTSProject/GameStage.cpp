@@ -113,11 +113,13 @@ void GameStage::MouseButton(int button, int action)
 
 					for (int i = 0; i < ret.size(); ++i)
 					{
+#ifdef SHOW_BOX
 						shared_ptr<BoxObject> box = make_shared<BoxObject>(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
 						
 						box->SetPosition(glm::vec3(ret[i].x, terrain->GetHeight(ret[i].x, ret[i].y), -ret[i].y));
 						mBox.push_back(box);
 						printf("%d %d\n", ret[i].x, ret[i].y);
+#endif
 					}
 				}
 			}

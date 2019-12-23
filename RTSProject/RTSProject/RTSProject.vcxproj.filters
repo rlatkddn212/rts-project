@@ -37,6 +37,9 @@
     <Filter Include="소스 파일\Unit">
       <UniqueIdentifier>{7e074298-b4c2-406d-bc25-31b0bf8c033b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Building">
+      <UniqueIdentifier>{da247ce2-91bd-44b8-a36d-ef32dcda5de8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Font.h">
@@ -110,6 +113,9 @@
     </ClInclude>
     <ClInclude Include="Magician.h">
       <Filter>소스 파일\Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="Building.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -187,6 +193,9 @@
     </ClCompile>
     <ClCompile Include="Magician.cpp">
       <Filter>소스 파일\Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="Building.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
