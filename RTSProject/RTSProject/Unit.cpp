@@ -65,6 +65,7 @@ void Unit::Update(float deltaTime)
 			prev = mPath[i];
 		}
 
+		// µµÂøÇÑ °æ¿ì
 		if (len > 0)
 		{
 			SetAnimation(1);
@@ -124,9 +125,40 @@ glm::vec2 Unit::GetScreenPos(std::shared_ptr<Camera> camera)
 	return glm::vec2(pos.x / pos.w, pos.y / pos.w);
 }
 
+void Unit::SetPath(const std::vector<glm::ivec2>& path)
+{
+	mPosIndex = 0;
+	mPath.clear();
+	mPath = path;
+}
+
 void Unit::SetPosOnTerrain(shared_ptr<Terrain> terrain, float x, float y)
 {
+	if (terrain->IsUnitOnTile(x, y) || terrain->IsObjectOnTile(x, y))
+	{
+		if (!mPath.empty())
+		{
+			glm::ivec2 lastPos = mPath[mPath.size() - 1];
+			
+			if (glm::ivec2(x, y) == lastPos || mPath.size() >= 2 && glm::ivec2(x, y) == mPath[mPath.size() - 2])
+			{
+				glm::ivec2 closePos;
+				if (! terrain->GetClosedPosition(lastPos, &closePos))
+				{
+					assert(0);
+				}
+
+				SetPath(terrain->GetPath(glm::vec2(x, y), closePos, false));
+			}
+			else
+			{
+				SetPath(terrain->GetPath(glm::vec2(x, y), lastPos));
+			}
+		}
+	}
+
 	terrain->SetUnitOnTile(x, y);
 	SetPosition(glm::vec3(x, 0.0f, -y));
 	SetHeight(terrain);
+
 }

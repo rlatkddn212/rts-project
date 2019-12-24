@@ -99,7 +99,7 @@ public:
 	void									AddObject(int type, glm::ivec2 p);
 	void									CreatePath();
 
-	std::vector<glm::ivec2>					GetPath(glm::ivec2 startPos, glm::ivec2 endPos);
+	std::vector<glm::ivec2>					GetPath(glm::ivec2 startPos, glm::ivec2 endPos, bool isObjectCollision = true);
 	float									GetHeight(float x, float y);
 	glm::vec2								GetSize() { return mSize; }
 
@@ -108,6 +108,8 @@ public:
 												const glm::vec3& orig, const glm::vec3& dir,
 												const glm::vec3& v0, const glm::vec3& v1, const glm::vec3& v2, glm::vec3& P);
 	
+	bool									GetClosedPosition(glm::ivec2 p1, glm::ivec2* closePos);
+
 	void									InitUnitTile();
 	void									SetUnitOnTile(int x, int y, int type = 1) { mTile[y][x].mUnitObject = type; }
 	void									SetObjectOnTile(int x, int y, int type = 1) { mTile[y][x].mTileObject = type; }

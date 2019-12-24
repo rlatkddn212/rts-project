@@ -121,7 +121,7 @@
       <Filter>소스 파일\Building</Filter>
     </ClInclude>
     <ClInclude Include="Math3D.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>소스 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

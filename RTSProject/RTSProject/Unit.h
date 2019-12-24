@@ -29,7 +29,7 @@ public:
 	
 	bool									isSelected() { return mIsSelect; }
 
-	void									SetPath(const std::vector<glm::ivec2>& path) { mPosIndex = 0;  mPath = path; }
+	void									SetPath(const std::vector<glm::ivec2>& path);
 	glm::ivec2								GetNextPos() { mPosIndex += 1; return mPath[mPosIndex]; }
 
 	void									SetAnimation(int idx) { mSkinnedMesh->mAnimationIdx = idx; };

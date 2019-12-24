@@ -280,7 +280,7 @@ void Terrain::CreatePath()
 	}
 }
 
-std::vector<glm::ivec2> Terrain::GetPath(glm::ivec2 startPos, glm::ivec2 endPos)
+std::vector<glm::ivec2> Terrain::GetPath(glm::ivec2 startPos, glm::ivec2 endPos, bool isObjectCollision)
 {
 	std::vector<glm::ivec2> ret;
 
@@ -333,6 +333,11 @@ std::vector<glm::ivec2> Terrain::GetPath(glm::ivec2 startPos, glm::ivec2 endPos)
 				Tile* neigborTile = nowTile.neigbors[i];
 				if (neigborTile->isMovable)
 				{
+					if (isObjectCollision && (neigborTile->mTileObject != -1 || neigborTile->mUnitObject != -1))
+					{
+						continue;
+					}
+
 					float newG = nowTile.g + glm::distance(glm::vec2(pos.x, pos.y), glm::vec2(neigborTile->xy.x, neigborTile->xy.y));
 					float newF = newG + glm::distance(glm::vec2(endPos.x, endPos.y), glm::vec2(neigborTile->xy.x, neigborTile->xy.y));
 					
@@ -458,6 +463,55 @@ bool Terrain::RayTriangleIntersect(const glm::vec3 & orig, const glm::vec3 & dir
 	if (glm::dot(N, C) < 0) return false;
 
 	return true;
+}
+
+bool Terrain::GetClosedPosition(glm::ivec2 p1, glm::ivec2* closePos)
+{
+	int n = 1;
+	int nx = p1.x;
+	int ny = p1.y;
+	int d = 1;
+	
+	while (n < 15)
+	{
+		if (0 <= ny && ny < mSize.y)
+		{
+			for (int i = 0; i < n; ++i)
+			{
+				nx = nx + d;
+				if (0 <= nx && nx < mSize.x)
+				{
+					if (IsMovableTile(nx, ny) && !IsObjectOnTile(nx, ny) && !IsUnitOnTile(nx, ny))
+					{
+						*closePos = glm::ivec2(nx, ny);
+						
+						return true;
+					}
+				}
+			}
+		}
+		if (0 <= nx && nx < mSize.x)
+		{
+			for (int i = 0; i < n; ++i)
+			{
+				ny = ny + d;
+				if (0 <= ny && ny < mSize.y)
+				{
+					if (IsMovableTile(nx, ny) && !IsObjectOnTile(nx, ny) && !IsUnitOnTile(nx, ny))
+					{
+						*closePos = glm::ivec2(nx, ny);
+		
+						return true;
+					}
+				}
+			}
+		}
+		
+		n++;
+		d *= -1;
+	}
+
+	return false;
 }
 
 void Terrain::InitUnitTile()
