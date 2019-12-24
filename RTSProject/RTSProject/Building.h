@@ -1,8 +1,16 @@
 #pragma once
-class Building
+
+#include "StaticMesh.h"
+
+class Building : public StaticMesh
 {
 public:
-											Building();
+											Building(int type);
 										   ~Building();
-};
+	virtual void							LoadShader();
 
+	int										GetType() { return mType; }
+
+private:
+	int										mType;
+};

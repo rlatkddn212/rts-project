@@ -37,11 +37,17 @@ struct Tile
 	float f;
 	float g;
 
+	int mTileObject;
+	int mUnitObject;
+
 	Tile* parent;
 	Tile* neigbors[8];
 
 	Tile()
 	{
+		mTileObject = -1;
+		mUnitObject = -1;
+
 		cost = 0.0f;
 		isMovable = true;
 		isOpen = false;
@@ -95,10 +101,13 @@ public:
 
 	void									CreatePath();
 	std::vector<glm::ivec2>					GetPath(glm::ivec2 startPos, glm::ivec2 endPos);
-	bool								Intersect(Ray& ray, glm::ivec2& ret);
+	bool									Intersect(Ray& ray, glm::ivec2& ret);
 	bool									RayTriangleIntersect(
 												const glm::vec3& orig, const glm::vec3& dir,
 												const glm::vec3& v0, const glm::vec3& v1, const glm::vec3& v2, glm::vec3& P);
+	
+	void									InitUnitTile();
+	void									SetUnitOnTile(int x, int y) { mTile[x][y].mUnitObject = 1; }
 
 private:
 

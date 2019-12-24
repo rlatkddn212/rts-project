@@ -58,7 +58,7 @@ void SkinnedMesh::RenderModel(std::shared_ptr<Camera> camera)
 
 	mMeshShader->SetActive();
 
-	mMeshShader->SetVectorUniform("lightDir", glm::vec3(1.0f, 0.0f, 0.0f));
+	mMeshShader->SetVectorUniform("lightDir", glm::vec3(0.0f, 1.0f, 0.0f));
 	mMeshShader->SetVector4Uniform("teamColor", glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
 	mMeshShader->SetMatrixUniform("mvp_matrix", mat);
 	mMeshShader->SetMatrixUniform("model", model);

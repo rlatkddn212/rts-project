@@ -14,17 +14,23 @@ GameStage::~GameStage()
 
 void GameStage::Initialize(GLFWwindow* window, int w, int h)
 {
+	playerState = PLAYER_NONE;
+
 	WindowGroup::Initialize(window, w, h);
 
-	terrain = make_shared<Terrain>();
-	terrain->Initialize(glm::ivec2(100, 100));
+	// 지형
+	mTerrain = make_shared<Terrain>();
+	mTerrain->Initialize(glm::ivec2(100, 100));
+	
+	// 카메라
 	camera = make_shared<Camera>();
 	camera->Initialize(w, h);
 
-	axis = make_shared<AxisObject>();
-	isLeftPress = false;
+	// 좌표계
+	mAxis = make_shared<AxisObject>();
+	mIsLeftPress = false;
 
-
+	// 유닛 배치
 	for (int i = 0; i < 10; ++i)
 	{
 		shared_ptr<Unit> mesh = make_shared<Magician>();
@@ -35,8 +41,11 @@ void GameStage::Initialize(GLFWwindow* window, int w, int h)
 	{
 		int x = rand() % 100;
 		int y = rand() % 100;
-		mUnits[i]->SetPosition(glm::vec3((x), terrain->GetHeight(x, y), -y));
+		mUnits[i]->SetPosOnTerrain(mTerrain, x, y);
 	}
+
+	// 건물
+	mBuildingToPlace = nullptr;
 }
 
 void GameStage::Terminate()
@@ -48,35 +57,80 @@ void GameStage::Update(float deltaTime)
 {
 	WindowGroup::Update(deltaTime);
 
+	mTerrain->InitUnitTile();
 	camera->Update(deltaTime);
 	for (int i = 0; i < 10; ++i)
 	{
 		mUnits[i]->Update(deltaTime);
-		mUnits[i]->SetHeight(terrain);
+		glm::vec3 unitPos = mUnits[i]->GetPosition();
+		mUnits[i]->SetPosOnTerrain(mTerrain, unitPos.x, -unitPos.z);
 	}
 }
 
 void GameStage::Render()
 {
 	WindowGroup::Render();
-	axis->Render(camera);
+	mAxis->Render(camera);
 	for (int i = 0; i < 10; ++i)
 	{
 		mUnits[i]->Render(camera);
 	}
 
-	terrain->Render(camera);
+	mTerrain->Render(camera);
 	mMouse->Render(camera);
 
 	for (int i = 0; i < mBox.size(); ++i)
 	{
 		mBox[i]->Render(camera);
 	}
+
+	if (mBuildingToPlace)
+	{
+		mBuildingToPlace->RenderModel(camera);
+	}
+
+	for (int i = 0; i < mBuildings.size(); ++i)
+	{
+		mBuildings[i]->RenderModel(camera);
+	}
 }
 
 void GameStage::PressKey(bool* keys)
 {
 	camera->PressKey(keys);
+
+
+	// 건물 위치 지정
+	if (keys[GLFW_KEY_1] == true)
+	{
+		for (int i = 0; i < 10; ++i)
+		{
+			mUnits[i]->UnSelect();
+		}
+
+		playerState = PLAYER_BUILDING;
+		mBuildingToPlace = std::make_shared<Building>(0);
+	}
+	else if (keys[GLFW_KEY_2] == true)
+	{
+		for (int i = 0; i < 10; ++i)
+		{
+			mUnits[i]->UnSelect();
+		}
+
+		playerState = PLAYER_BUILDING;
+		mBuildingToPlace = std::make_shared<Building>(1);
+	}
+	else if (keys[GLFW_KEY_3] == true)
+	{
+		for (int i = 0; i < 10; ++i)
+		{
+			mUnits[i]->UnSelect();
+		}
+
+		playerState = PLAYER_BUILDING;
+		mBuildingToPlace = std::make_shared<Building>(2);
+	}
 }
 
 void GameStage::CursorPos(double xPos, double yPos)
@@ -84,39 +138,54 @@ void GameStage::CursorPos(double xPos, double yPos)
 	mMouseX = xPos;
 	mMouseY = yPos;
 	
-	if (isLeftPress)
+	if (playerState == PLAYER_BUILDING)
 	{
-		mMouse->SetEndXY(mMouseX, mMouseY);
-		mMouse->VisiableDragBox(true);
+		ray.SetRay(camera, mMouseX, mMouseY);
+		glm::ivec2 pos;
+
+		if (mTerrain->Intersect(ray, pos))
+		{
+			mBuildingToPlace->SetPosition(glm::vec3(pos.x, mTerrain->GetHeight(pos.x, -pos.y), -pos.y));
+		}
 	}
 	else
 	{
-		camera->MouseXY(xPos, yPos);
+		if (mIsLeftPress)
+		{
+			mMouse->SetEndXY(mMouseX, mMouseY);
+			mMouse->VisiableDragBox(true);
+		}
+		else
+		{
+			camera->MouseXY(xPos, yPos);
+		}
 	}
 }
 
 void GameStage::MouseButton(int button, int action)
 {
+	// 오른쪽 마우스 클릭시 유닛 이동
 	if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
 	{
 		ray.SetRay(camera, mMouseX, mMouseY);
 		glm::ivec2 pos;
 		mBox.clear();
-		if (terrain->Intersect(ray, pos))
+		if (mTerrain->Intersect(ray, pos))
 		{
 			for (int i = 0; i < 10; ++i)
 			{
 				if (mUnits[i]->isSelected())
 				{
-					vector<glm::ivec2> ret = terrain->GetPath(glm::ivec2(mUnits[i]->mPos.x, -mUnits[i]->mPos.z), pos);
+					vector<glm::ivec2> ret = mTerrain->GetPath(glm::ivec2(mUnits[i]->mPos.x, -mUnits[i]->mPos.z), pos);
 					mUnits[i]->SetPath(ret);
 
 					for (int i = 0; i < ret.size(); ++i)
 					{
+#define SHOW_BOX
 #ifdef SHOW_BOX
 						shared_ptr<BoxObject> box = make_shared<BoxObject>(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
 						
-						box->SetPosition(glm::vec3(ret[i].x, terrain->GetHeight(ret[i].x, ret[i].y), -ret[i].y));
+						box->SetPosition(glm::vec3(ret[i].x, mTerrain->GetHeight(ret[i].x, -ret[i].y), -ret[i].y));
 						mBox.push_back(box);
 						printf("%d %d\n", ret[i].x, ret[i].y);
 #endif
@@ -129,34 +198,46 @@ void GameStage::MouseButton(int button, int action)
 	{
 
 	}
+	// 왼쪽 마우스 클릭시
 	else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
 	{
-		ray.SetRay(camera, mMouseX, mMouseY);
-		for (int i = 0; i < 10; ++i)
+		// 기본 상태일 경우 유닛 선택 확인
+		if (playerState == PLAYER_NONE)
 		{
-			mUnits[i]->UnSelect();
-		}
-
-		bool isSelect = false;
-		for (int i = 0; i < 10; ++i)
-		{
-			if (mUnits[i]->Intersect(ray))
+			ray.SetRay(camera, mMouseX, mMouseY);
+			for (int i = 0; i < 10; ++i)
 			{
-				mUnits[i]->Select();
-				isSelect = true;
-				break;
+				mUnits[i]->UnSelect();
+			}
+
+			bool isSelect = false;
+			for (int i = 0; i < 10; ++i)
+			{
+				if (mUnits[i]->Intersect(ray))
+				{
+					mUnits[i]->Select();
+					isSelect = true;
+					break;
+				}
+			}
+			if (!isSelect)
+			{
+				mMouse->SetStartXY(mMouseX, mMouseY);
+				mIsLeftPress = true;
 			}
 		}
-		
-		if (! isSelect)
+		// 건물 짓기 준비 상태일 경우
+		else if (playerState == PLAYER_BUILDING)
 		{
-			mMouse->SetStartXY(mMouseX, mMouseY);
-			isLeftPress = true;
+			// 만약 건설 가능한 구역이라면 건물 추가
+			shared_ptr<Building> building = make_shared<Building>(mBuildingToPlace->GetType());
+			building->SetPosition(mBuildingToPlace->GetPosition());
+			mBuildings.push_back(building);
 		}
 	}
 	else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)
 	{
-		if (isLeftPress)
+		if (mIsLeftPress)
 		{
 			if (mMouse->IsDragBox())
 			{
@@ -173,7 +254,7 @@ void GameStage::MouseButton(int button, int action)
 				}
 			}
 			
-			isLeftPress = false;
+			mIsLeftPress = false;
 			mMouse->VisiableDragBox(false);
 		}
 	}

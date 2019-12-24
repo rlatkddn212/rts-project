@@ -71,6 +71,7 @@ void BoxObject::Render(std::shared_ptr<Camera> camera)
 {
 	if (isVisiable)
 	{
+		glDisable(GL_CULL_FACE);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glm::mat4 mat = camera->GetProjectionMatrix() * camera->GetViewMatrix() * mPos * mRot * mSca;
 		mMeshShader->SetActive();
@@ -79,6 +80,7 @@ void BoxObject::Render(std::shared_ptr<Camera> camera)
 		mMesh->SetActive();
 		glDrawElements(GL_TRIANGLES, mMesh->GetNumIndices(), GL_UNSIGNED_INT, nullptr);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		glEnable(GL_CULL_FACE);
 	}
 }
 

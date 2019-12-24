@@ -32,12 +32,7 @@ void StaticMesh::LoadModel(const std::string & fileName)
 	aiMatrix4x4 mat;
 	LoadNode(scene->mRootNode, scene, mat);
 	LoadMaterials(scene);
-
-	std::vector<std::pair<std::string, int> > shaderCodies;
-	shaderCodies.push_back(make_pair(ReadShaderFile("mesh.vert"), GL_VERTEX_SHADER));
-	shaderCodies.push_back(make_pair(ReadShaderFile("mesh.frag"), GL_FRAGMENT_SHADER));
-	mMeshShader = std::make_shared<Shader>();
-	mMeshShader->BuildShader(shaderCodies);
+	LoadShader();
 }
 
 void StaticMesh::Update(float deltaTime)
@@ -48,9 +43,11 @@ void StaticMesh::Update(float deltaTime)
 void StaticMesh::RenderModel(std::shared_ptr<Camera> camera)
 {
 	mMeshShader->SetActive();
-	glm::mat4 mat = mPos * mRot * mSca;
+	glm::mat4 mat = mPosMat * mRotMat * mScaMat;
 	glm::mat4 mvp = camera->GetProjectionMatrix() * camera->GetViewMatrix() * mat;
 	mMeshShader->SetMatrixUniform("mvp_matrix", mvp);
+
+	mMeshShader->SetVectorUniform("lightDir", glm::vec3(0.0f, 0.0f, 1.0f));
 
 	for (size_t i = 0; i < mMeshList.size(); ++i)
 	{
@@ -147,4 +144,13 @@ void StaticMesh::LoadMaterials(const aiScene * scene)
 			}
 		}
 	}
+}
+
+void StaticMesh::LoadShader()
+{
+	std::vector<std::pair<std::string, int> > shaderCodies;
+	shaderCodies.push_back(make_pair(ReadShaderFile("mesh.vert"), GL_VERTEX_SHADER));
+	shaderCodies.push_back(make_pair(ReadShaderFile("mesh.frag"), GL_FRAGMENT_SHADER));
+	mMeshShader = std::make_shared<Shader>();
+	mMeshShader->BuildShader(shaderCodies);
 }

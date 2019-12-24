@@ -40,6 +40,9 @@
     <Filter Include="소스 파일\Building">
       <UniqueIdentifier>{da247ce2-91bd-44b8-a36d-ef32dcda5de8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Common">
+      <UniqueIdentifier>{61290f22-4ee1-44ac-a17d-884ad8e41549}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Font.h">
@@ -115,6 +118,9 @@
       <Filter>소스 파일\Unit</Filter>
     </ClInclude>
     <ClInclude Include="Building.h">
+      <Filter>소스 파일\Building</Filter>
+    </ClInclude>
+    <ClInclude Include="Math3D.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -195,6 +201,9 @@
       <Filter>소스 파일\Unit</Filter>
     </ClCompile>
     <ClCompile Include="Building.cpp">
+      <Filter>소스 파일\Building</Filter>
+    </ClCompile>
+    <ClCompile Include="Math3D.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -245,6 +254,12 @@
       <Filter>소스 파일\Shader</Filter>
     </None>
     <None Include="line.frag">
+      <Filter>소스 파일\Shader</Filter>
+    </None>
+    <None Include="building.frag">
+      <Filter>소스 파일\Shader</Filter>
+    </None>
+    <None Include="building.vert">
       <Filter>소스 파일\Shader</Filter>
     </None>
   </ItemGroup>

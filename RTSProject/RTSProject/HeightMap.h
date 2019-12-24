@@ -19,6 +19,7 @@ public:
 	void									Update(float deltaTime);
 	void									Render(std::shared_ptr<Camera> camera);
 	
+	// 삼각형 상에 점 공식으로 변경 필요
 	float									GetHeight(glm::ivec2 pos) { return mHeightMap[pos.y * mSize.x + pos.x]; }
 	glm::ivec2								GetCentre() { return glm::ivec2(mSize.x / 2.0f, mSize.y / 2.0f); }
 

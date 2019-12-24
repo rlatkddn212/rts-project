@@ -62,7 +62,7 @@ public:
 		{
 			SDL_Log("Failed to initialize SDL_ttf");
 		}
-
+		glEnable(GL_CULL_FACE);
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_BLEND);
 		glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
@@ -70,7 +70,6 @@ public:
 
 		group = make_shared<GameStage>();
 		group->Initialize(window, screenW, screenH);
-
 	}
 
 	void InitGLFW()

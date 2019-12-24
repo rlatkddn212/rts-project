@@ -2,6 +2,8 @@
 #include "Terrain.h"
 #include "Camera.h"
 #include <queue>
+#include "Math3D.h"
+
 using namespace std;
 
 Patch::Patch()
@@ -163,6 +165,8 @@ void Terrain::GenerateRandomTerrain(int numPatches)
 
 void Terrain::AddObject(int type, glm::ivec2 p)
 {
+	mTile[p.y][p.x].mTileObject = type;
+
 	glm::vec3 pos = glm::vec3((float)p.x, mHeightMap->GetHeight(p), (float)-p.y);
 	glm::vec3 rot = glm::vec3((rand() % 1000 / 1000.0f) * 3.0f, (rand() % 1000 / 1000.0f) * 0.13f, (rand() % 1000 / 1000.0f) * 0.13f);
 
@@ -187,9 +191,58 @@ void Terrain::AddObject(int type, glm::ivec2 p)
 	mModelList.push_back(obj);
 }
 
-float Terrain::GetHeight(float x, float y)
+
+float cross(glm::vec2 p0, glm::vec2 p1, glm::vec2 p2)
 {
-	return mHeightMap->GetHeight(glm::ivec2(x, y));
+	float temp = p0.x * p1.y + p1.x * p2.y + p2.x * p0.y;
+	temp = temp - p0.y * p1.x - p1.y * p2.x - p2.y * p0.x;
+	if (temp >= 0.0f)
+	{
+		return temp;
+	}
+	else
+	{
+		return temp;
+	}
+}
+
+float Terrain::GetHeight(float px, float py)
+{
+	
+	glm::vec2 pos = glm::vec2(px, py);
+	for (int y = 0; y < mSize.y - 1; ++y)
+	{
+		for (int x = 0; x < mSize.x - 1; ++x)
+		{
+			{
+				glm::vec2 p0 = glm::vec2(x, -y);
+				glm::vec2 p1 = glm::vec2(x, -y - 1);
+				glm::vec2 p2 = glm::vec2(x + 1, -y);
+				
+				if (cross(p0, p1, pos) >= 0.0f && cross(p1, p2, pos) >= 0.0f&& cross(p2, p0, pos) >= 0.0f)
+				{
+					return (mHeightMap->GetHeight(glm::ivec2(p2.x, -p2.y)) * cross(p0, p1, pos)
+					+ mHeightMap->GetHeight(glm::ivec2(p0.x, -p0.y)) * cross(p1, p2, pos)
+					+ mHeightMap->GetHeight(glm::ivec2(p1.x, -p1.y)) * cross(p2, p0, pos)) / cross(p0, p1, p2);
+				}
+			}
+
+			{
+				glm::vec2 p0 = glm::vec2(x + 1, -y - 1);
+				glm::vec2 p1 = glm::vec2(x + 1, -y);
+				glm::vec2 p2 = glm::vec2(x, -y - 1);
+
+				if (cross(p0, p1, pos) >= 0.0f && cross(p1, p2, pos) >= 0.0f&& cross(p2, p0, pos) >= 0.0f)
+				{
+					return (mHeightMap->GetHeight(glm::ivec2(p2.x, -p2.y)) * cross(p0, p1, pos)
+						+ mHeightMap->GetHeight(glm::ivec2(p0.x, -p0.y)) * cross(p1, p2, pos)
+						+ mHeightMap->GetHeight(glm::ivec2(p1.x, -p1.y)) * cross(p2, p0, pos)) / cross(p0, p1, p2);
+				}
+			}
+		}
+	}
+
+	return mHeightMap->GetHeight(glm::ivec2(px, -py));
 }
 
 void Terrain::CreatePath()
@@ -201,7 +254,7 @@ void Terrain::CreatePath()
 	{
 		for (int x = 0; x < mSize.x; ++x)
 		{
-			float height = GetHeight(x, y);
+			float height = mHeightMap->GetHeight(glm::vec2(x, y));
 			for (int k = 0; k < 8; ++k)
 			{
 				int neighborX = x + dx[k];
@@ -215,7 +268,7 @@ void Terrain::CreatePath()
 					
 					neighborTile.xy = glm::ivec2(neighborX, neighborY);
 					
-					float neighborHeight = GetHeight(neighborX, neighborY);
+					float neighborHeight = mHeightMap->GetHeight(glm::vec2(neighborX, neighborY));
 					neighborTile.cost = abs(height - neighborHeight);
 					if (neighborTile.cost > 1.0f)
 					{
@@ -335,9 +388,9 @@ bool Terrain::Intersect(Ray & ray, glm::ivec2& ret)
 		{
 			glm::vec3 p;
 			if (RayTriangleIntersect(ray.org, dir,
-				glm::vec3(x, GetHeight(x, y), -y),
-				glm::vec3(glm::vec3(x, GetHeight(x, y + 1), -y - 1)),
-				glm::vec3(glm::vec3(x + 1, GetHeight(x + 1, y), -y)),
+				glm::vec3(x, mHeightMap->GetHeight(glm::ivec2(x, y)), -y),
+				glm::vec3(glm::vec3(x, mHeightMap->GetHeight(glm::ivec2(x, y + 1)), -y - 1)),
+				glm::vec3(glm::vec3(x + 1, mHeightMap->GetHeight(glm::ivec2(x + 1, y)), -y)),
 				p))
 			{
 				p.z *= -1;
@@ -349,9 +402,9 @@ bool Terrain::Intersect(Ray & ray, glm::ivec2& ret)
 			}
 
 			if (RayTriangleIntersect(ray.org, dir,
-				glm::vec3(x + 1, GetHeight(x + 1, y + 1), -y - 1),
-				glm::vec3(glm::vec3(x + 1, GetHeight(x, y), -y)),
-				glm::vec3(glm::vec3(x, GetHeight(x, y + 1), -y - 1)),
+				glm::vec3(x + 1, mHeightMap->GetHeight(glm::ivec2(x + 1, y + 1)), -y - 1),
+				glm::vec3(glm::vec3(x + 1, mHeightMap->GetHeight(glm::ivec2(x, y)), -y)),
+				glm::vec3(glm::vec3(x, mHeightMap->GetHeight(glm::ivec2(x, y + 1)), -y - 1)),
 				p))
 			{
 				p.z *= -1;
@@ -405,6 +458,17 @@ bool Terrain::RayTriangleIntersect(const glm::vec3 & orig, const glm::vec3 & dir
 	if (glm::dot(N, C) < 0) return false;
 
 	return true;
+}
+
+void Terrain::InitUnitTile()
+{
+	for (int i = 0; i < 100; ++i)
+	{
+		for (int j = 0; j < 100; ++j)
+		{
+			mTile[i][j].mUnitObject = -1;
+		}
+	}
 }
 
 

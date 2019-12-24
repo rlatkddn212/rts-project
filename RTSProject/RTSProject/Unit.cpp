@@ -1,9 +1,11 @@
 #include "Precompiled.h"
 #include "Unit.h"
 
+using namespace std;
+
 Unit::Unit()
 {
-	speed = 8.0f;
+	speed = 3.0f;
 }
 
 Unit::~Unit()
@@ -120,4 +122,11 @@ glm::vec2 Unit::GetScreenPos(std::shared_ptr<Camera> camera)
 	glm::vec4 pos = mat * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
 
 	return glm::vec2(pos.x / pos.w, pos.y / pos.w);
+}
+
+void Unit::SetPosOnTerrain(shared_ptr<Terrain> terrain, float x, float y)
+{
+	terrain->SetUnitOnTile(x, y);
+	SetPosition(glm::vec3(x, 0.0f, -y));
+	SetHeight(terrain);
 }
