@@ -43,6 +43,8 @@ void SkinnedMesh::LoadModel(const std::string & fileName)
 	shaderCodies.push_back(make_pair(ReadShaderFile("skinned.frag"), GL_FRAGMENT_SHADER));
 	mMeshShader = std::make_shared<Shader>();
 	mMeshShader->BuildShader(shaderCodies);
+
+	//importer.FreeScene();
 }
 
 void SkinnedMesh::Update(float deltaTime)

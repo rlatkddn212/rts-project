@@ -165,7 +165,7 @@ void Terrain::GenerateRandomTerrain(int numPatches)
 
 void Terrain::AddObject(int type, glm::ivec2 p)
 {
-	mTile[p.y][p.x].mTileObject = type;
+	SetObjectOnTile(p.x, p.y, type);
 
 	glm::vec3 pos = glm::vec3((float)p.x, mHeightMap->GetHeight(p), (float)-p.y);
 	glm::vec3 rot = glm::vec3((rand() % 1000 / 1000.0f) * 3.0f, (rand() % 1000 / 1000.0f) * 0.13f, (rand() % 1000 / 1000.0f) * 0.13f);
@@ -471,8 +471,6 @@ void Terrain::InitUnitTile()
 	}
 }
 
-
-
 void Terrain::CreatePatches(int numPatches)
 {
 	mPatches.clear();
@@ -480,9 +478,9 @@ void Terrain::CreatePatches(int numPatches)
 	if (mHeightMap == NULL)return;
 
 	//Create make_shared<patches
-	for (int y = 0; y < numPatches; y++)
+	for (int y = 0; y < numPatches; ++y)
 	{
-		for (int x = 0; x < numPatches; x++)
+		for (int x = 0; x < numPatches; ++x)
 		{
 			SDL_FRect r = { (int)(x * (mSize.x - 1) / (float)numPatches),
 					  (int)(y * (mSize.y - 1) / (float)numPatches),

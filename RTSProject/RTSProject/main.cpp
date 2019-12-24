@@ -62,6 +62,7 @@ public:
 		{
 			SDL_Log("Failed to initialize SDL_ttf");
 		}
+
 		glEnable(GL_CULL_FACE);
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_BLEND);

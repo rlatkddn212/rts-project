@@ -89,25 +89,32 @@ public:
 
 	void									Initialize(glm::vec2 _size);
 	void									Release();
+	void									Update(float deltaTime);
+	void									Render(std::shared_ptr<Camera> camera);
+
 	void									GenerateRandomTerrain(int numPatches);
 	void									CreatePatches(int numPatches);
 	void									CreateAlphaMaps();
 
-	void									Update(float deltaTime);
-	void									Render(std::shared_ptr<Camera> camera);
-
 	void									AddObject(int type, glm::ivec2 p);
-	float									GetHeight(float x, float y);
-
 	void									CreatePath();
+
 	std::vector<glm::ivec2>					GetPath(glm::ivec2 startPos, glm::ivec2 endPos);
+	float									GetHeight(float x, float y);
+	glm::vec2								GetSize() { return mSize; }
+
 	bool									Intersect(Ray& ray, glm::ivec2& ret);
 	bool									RayTriangleIntersect(
 												const glm::vec3& orig, const glm::vec3& dir,
 												const glm::vec3& v0, const glm::vec3& v1, const glm::vec3& v2, glm::vec3& P);
 	
 	void									InitUnitTile();
-	void									SetUnitOnTile(int x, int y) { mTile[x][y].mUnitObject = 1; }
+	void									SetUnitOnTile(int x, int y, int type = 1) { mTile[y][x].mUnitObject = type; }
+	void									SetObjectOnTile(int x, int y, int type = 1) { mTile[y][x].mTileObject = type; }
+
+	bool									IsUnitOnTile(int x, int y) { return (mTile[y][x].mUnitObject != -1) ? true : false; };
+	bool									IsObjectOnTile(int x, int y) { return (mTile[y][x].mTileObject != -1) ? true : false; };
+	bool									IsMovableTile(int x, int y) { return mTile[y][x].isMovable; };
 
 private:
 

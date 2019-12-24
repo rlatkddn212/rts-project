@@ -37,6 +37,7 @@ public:
 	void									SetView(glm::mat4 v) { mView = v; }
 	
 	virtual void							LoadShader();
+	virtual void							SetUniform();
 
 	glm::vec3								mPos, mRot, mSca;
 	glm::mat4								mPosMat, mRotMat, mScaMat;

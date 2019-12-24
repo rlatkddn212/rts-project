@@ -33,6 +33,8 @@ void StaticMesh::LoadModel(const std::string & fileName)
 	LoadNode(scene->mRootNode, scene, mat);
 	LoadMaterials(scene);
 	LoadShader();
+
+	importer.FreeScene();
 }
 
 void StaticMesh::Update(float deltaTime)
@@ -45,8 +47,9 @@ void StaticMesh::RenderModel(std::shared_ptr<Camera> camera)
 	mMeshShader->SetActive();
 	glm::mat4 mat = mPosMat * mRotMat * mScaMat;
 	glm::mat4 mvp = camera->GetProjectionMatrix() * camera->GetViewMatrix() * mat;
+	
+	SetUniform();
 	mMeshShader->SetMatrixUniform("mvp_matrix", mvp);
-
 	mMeshShader->SetVectorUniform("lightDir", glm::vec3(0.0f, 0.0f, 1.0f));
 
 	for (size_t i = 0; i < mMeshList.size(); ++i)
@@ -153,4 +156,8 @@ void StaticMesh::LoadShader()
 	shaderCodies.push_back(make_pair(ReadShaderFile("mesh.frag"), GL_FRAGMENT_SHADER));
 	mMeshShader = std::make_shared<Shader>();
 	mMeshShader->BuildShader(shaderCodies);
+}
+
+void StaticMesh::SetUniform()
+{
 }

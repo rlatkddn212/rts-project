@@ -131,6 +131,11 @@ void GameStage::PressKey(bool* keys)
 		playerState = PLAYER_BUILDING;
 		mBuildingToPlace = std::make_shared<Building>(2);
 	}
+	else if (keys[GLFW_KEY_ESCAPE] == true)
+	{
+		playerState = PLAYER_NONE;
+		mBuildingToPlace = nullptr;
+	}
 }
 
 void GameStage::CursorPos(double xPos, double yPos)
@@ -145,6 +150,15 @@ void GameStage::CursorPos(double xPos, double yPos)
 
 		if (mTerrain->Intersect(ray, pos))
 		{
+			if (mBuildingToPlace->isPossibleBuild(mTerrain, pos.x, pos.y))
+			{
+				mBuildingToPlace->SetColor(glm::vec3(0.0f, 1.0f, 0.0f));
+			}
+			else
+			{
+				mBuildingToPlace->SetColor(glm::vec3(1.0f, 0.0f, 0.0f));
+			}
+			
 			mBuildingToPlace->SetPosition(glm::vec3(pos.x, mTerrain->GetHeight(pos.x, -pos.y), -pos.y));
 		}
 	}
@@ -181,7 +195,6 @@ void GameStage::MouseButton(int button, int action)
 
 					for (int i = 0; i < ret.size(); ++i)
 					{
-#define SHOW_BOX
 #ifdef SHOW_BOX
 						shared_ptr<BoxObject> box = make_shared<BoxObject>(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
 						
@@ -217,6 +230,7 @@ void GameStage::MouseButton(int button, int action)
 				{
 					mUnits[i]->Select();
 					isSelect = true;
+
 					break;
 				}
 			}
@@ -229,10 +243,19 @@ void GameStage::MouseButton(int button, int action)
 		// 건물 짓기 준비 상태일 경우
 		else if (playerState == PLAYER_BUILDING)
 		{
-			// 만약 건설 가능한 구역이라면 건물 추가
-			shared_ptr<Building> building = make_shared<Building>(mBuildingToPlace->GetType());
-			building->SetPosition(mBuildingToPlace->GetPosition());
-			mBuildings.push_back(building);
+			ray.SetRay(camera, mMouseX, mMouseY);
+			glm::ivec2 pos;
+			mBox.clear();
+			if (mTerrain->Intersect(ray, pos))
+			{
+				// 만약 건설 가능한 구역이라면 건물 추가
+				if (mBuildingToPlace->isPossibleBuild(mTerrain, pos.x, pos.y))
+				{
+					shared_ptr<Building> building = make_shared<Building>(mBuildingToPlace->GetType());
+					building->BuildOnTerrain(mTerrain, pos.x, pos.y);
+					mBuildings.push_back(building);
+				}
+			}
 		}
 	}
 	else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)
