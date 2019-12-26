@@ -132,6 +132,7 @@
     <ClInclude Include="Knight.h" />
     <ClInclude Include="Magician.h" />
     <ClInclude Include="Math3D.h" />
+    <ClInclude Include="MoveController.h" />
     <ClInclude Include="SpriteUI.h" />
     <ClInclude Include="BoxObject.h" />
     <ClInclude Include="Camera.h" />
@@ -160,6 +161,7 @@
     <ClCompile Include="Knight.cpp" />
     <ClCompile Include="Magician.cpp" />
     <ClCompile Include="Math3D.cpp" />
+    <ClCompile Include="MoveController.cpp" />
     <ClCompile Include="SpriteUI.cpp" />
     <ClCompile Include="BoxObject.cpp" />
     <ClCompile Include="Camera.cpp" />

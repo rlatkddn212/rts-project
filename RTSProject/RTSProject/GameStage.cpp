@@ -1,6 +1,7 @@
 #include "Precompiled.h"
 #include "GameStage.h"
 #include "Magician.h"
+#include "Math3D.h"
 
 using namespace std;
 
@@ -41,7 +42,7 @@ void GameStage::Initialize(GLFWwindow* window, int w, int h)
 	{
 		int x = rand() % 100;
 		int y = rand() % 100;
-		mUnits[i]->SetPosOnTerrain(mTerrain, x, y);
+		mUnits[i]->SetPosOnTerrain(mTerrain, glm::ivec2(x, y));
 	}
 
 	// °Ç¹°
@@ -63,7 +64,7 @@ void GameStage::Update(float deltaTime)
 	{
 		mUnits[i]->Update(deltaTime);
 		glm::vec3 unitPos = mUnits[i]->GetPosition();
-		mUnits[i]->SetPosOnTerrain(mTerrain, unitPos.x, -unitPos.z);
+		mUnits[i]->SetPosOnTerrain(mTerrain, glm::vec2(unitPos.x, -unitPos.z));
 	}
 }
 
@@ -159,7 +160,7 @@ void GameStage::CursorPos(double xPos, double yPos)
 				mBuildingToPlace->SetColor(glm::vec3(1.0f, 0.0f, 0.0f));
 			}
 			
-			mBuildingToPlace->SetPosition(glm::vec3(pos.x, mTerrain->GetHeight(pos.x, -pos.y), -pos.y));
+			mBuildingToPlace->SetPosition(glm::vec3(pos.x, mTerrain->GetHeight(glm::vec2(pos.x, -pos.y)), -pos.y));
 		}
 	}
 	else
@@ -190,19 +191,18 @@ void GameStage::MouseButton(int button, int action)
 			{
 				if (mUnits[i]->isSelected())
 				{
-					vector<glm::ivec2> ret = mTerrain->GetPath(glm::ivec2(mUnits[i]->mPos.x, -mUnits[i]->mPos.z), pos);
-					mUnits[i]->SetPath(ret);
+					mUnits[i]->SetMove(mTerrain, pos);
 
+#ifdef SHOW_BOX
 					for (int i = 0; i < ret.size(); ++i)
 					{
-#ifdef SHOW_BOX
 						shared_ptr<BoxObject> box = make_shared<BoxObject>(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
 						
 						box->SetPosition(glm::vec3(ret[i].x, mTerrain->GetHeight(ret[i].x, -ret[i].y), -ret[i].y));
 						mBox.push_back(box);
 						printf("%d %d\n", ret[i].x, ret[i].y);
-#endif
 					}
+#endif
 				}
 			}
 		}

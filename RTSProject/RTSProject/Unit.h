@@ -17,7 +17,7 @@ public:
 
 	glm::vec3								GetDirection(glm::vec2 p1, glm::vec2 p2);
 	glm::vec3 								GetPosition() { return mPos; }
-	void									SetHeight(std::shared_ptr<Terrain> terrain) { mPos.y = terrain->GetHeight(mPos.x, mPos.z); SetPosition(mPos); }
+	void									SetHeight(std::shared_ptr<Terrain> terrain) { mPos.y = terrain->GetHeight(glm::vec2(mPos.x, mPos.z)); SetPosition(mPos); }
 	void									Update(float deltaTime);
 	void									Render(std::shared_ptr<Camera> camera);
 
@@ -30,11 +30,12 @@ public:
 	bool									isSelected() { return mIsSelect; }
 
 	void									SetPath(const std::vector<glm::ivec2>& path);
+	void									SetMove(std::shared_ptr<Terrain> terrain, glm::ivec2 movePos);
 	glm::ivec2								GetNextPos() { mPosIndex += 1; return mPath[mPosIndex]; }
 
 	void									SetAnimation(int idx) { mSkinnedMesh->mAnimationIdx = idx; };
 
-	void									SetPosOnTerrain(std::shared_ptr<Terrain> terrain, float x, float y);
+	void									SetPosOnTerrain(std::shared_ptr<Terrain> terrain, glm::vec2 p);
 
 	bool									mIsSelect;
 	std::shared_ptr<BoxObject>				mBoxObject;
@@ -45,6 +46,8 @@ public:
 	std::vector<glm::ivec2>					mPath;
 
 	float									speed;
+
+	glm::ivec2								mMovePos;
 
 	std::shared_ptr<SkinnedMesh>			mSkinnedMesh;
 };

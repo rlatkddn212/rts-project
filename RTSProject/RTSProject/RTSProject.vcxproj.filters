@@ -121,6 +121,9 @@
       <Filter>소스 파일\Building</Filter>
     </ClInclude>
     <ClInclude Include="Math3D.h">
+      <Filter>소스 파일\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveController.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -204,6 +207,9 @@
       <Filter>소스 파일\Building</Filter>
     </ClCompile>
     <ClCompile Include="Math3D.cpp">
+      <Filter>소스 파일\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="MoveController.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

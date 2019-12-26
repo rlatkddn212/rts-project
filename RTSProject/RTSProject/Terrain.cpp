@@ -165,7 +165,7 @@ void Terrain::GenerateRandomTerrain(int numPatches)
 
 void Terrain::AddObject(int type, glm::ivec2 p)
 {
-	SetObjectOnTile(p.x, p.y, type);
+	SetObjectOnTile(p, type);
 
 	glm::vec3 pos = glm::vec3((float)p.x, mHeightMap->GetHeight(p), (float)-p.y);
 	glm::vec3 rot = glm::vec3((rand() % 1000 / 1000.0f) * 3.0f, (rand() % 1000 / 1000.0f) * 0.13f, (rand() % 1000 / 1000.0f) * 0.13f);
@@ -206,10 +206,10 @@ float cross(glm::vec2 p0, glm::vec2 p1, glm::vec2 p2)
 	}
 }
 
-float Terrain::GetHeight(float px, float py)
+float Terrain::GetHeight(glm::vec2 p)
 {
 	
-	glm::vec2 pos = glm::vec2(px, py);
+	glm::vec2 pos = p;
 	for (int y = 0; y < mSize.y - 1; ++y)
 	{
 		for (int x = 0; x < mSize.x - 1; ++x)
@@ -242,7 +242,7 @@ float Terrain::GetHeight(float px, float py)
 		}
 	}
 
-	return mHeightMap->GetHeight(glm::ivec2(px, -py));
+	return mHeightMap->GetHeight(RoundPosition(glm::vec2(p.x, -p.y)));
 }
 
 void Terrain::CreatePath()
@@ -481,9 +481,10 @@ bool Terrain::GetClosedPosition(glm::ivec2 p1, glm::ivec2* closePos)
 				nx = nx + d;
 				if (0 <= nx && nx < mSize.x)
 				{
-					if (IsMovableTile(nx, ny) && !IsObjectOnTile(nx, ny) && !IsUnitOnTile(nx, ny))
+					glm::ivec2 newPos = glm::ivec2(nx, ny);
+					if (IsMovableTile(newPos) && !IsObjectOnTile(newPos) && !IsUnitOnTile(newPos))
 					{
-						*closePos = glm::ivec2(nx, ny);
+						*closePos = newPos;
 						
 						return true;
 					}
@@ -497,9 +498,10 @@ bool Terrain::GetClosedPosition(glm::ivec2 p1, glm::ivec2* closePos)
 				ny = ny + d;
 				if (0 <= ny && ny < mSize.y)
 				{
-					if (IsMovableTile(nx, ny) && !IsObjectOnTile(nx, ny) && !IsUnitOnTile(nx, ny))
+					glm::ivec2 newPos = glm::ivec2(nx, ny);
+					if (IsMovableTile(newPos) && !IsObjectOnTile(newPos) && !IsUnitOnTile(newPos))
 					{
-						*closePos = glm::ivec2(nx, ny);
+						*closePos = newPos;
 		
 						return true;
 					}

@@ -37,7 +37,7 @@ public:
 	std::shared_ptr<Building>				mBuildingToPlace;
 	std::shared_ptr<HeightMap>				mHeightMap;
 	std::shared_ptr<Terrain>				mTerrain;
-	std::vector<std::shared_ptr<BoxObject> > mBox;
+	std::vector<std::shared_ptr<BoxObject>> mBox;
 	std::vector<std::shared_ptr<Unit> >		mUnits;
 	std::shared_ptr<AxisObject>				mAxis;
 

@@ -10,7 +10,7 @@
 #pragma comment(lib, "SOIL.lib")
 #pragma comment(lib, "assimp-vc141-mtd.lib")
 
-#include <GL/glew.h>	
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <stdio.h>
 #include <stdlib.h>

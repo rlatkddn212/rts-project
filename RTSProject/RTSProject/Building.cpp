@@ -46,14 +46,15 @@ bool Building::isPossibleBuild(shared_ptr<Terrain> terrain, int x, int y)
 		{
 			int nx = x + i - 1;
 			int ny = y + j - 1;
+			glm::ivec2 newPos = glm::ivec2(nx, ny);
 
 			bool isBuild = false;
 
 			if (0 <= nx && nx < size.x && 0 <= ny && ny < size.y)
 			{
-				if (terrain->IsMovableTile(nx, ny)
-					&& !terrain->IsObjectOnTile(nx, ny)
-					&& !terrain->IsUnitOnTile(nx, ny))
+				if (terrain->IsMovableTile(newPos)
+					&& !terrain->IsObjectOnTile(newPos)
+					&& !terrain->IsUnitOnTile(newPos))
 				{
 					isBuild = true;
 				}
@@ -71,7 +72,7 @@ bool Building::isPossibleBuild(shared_ptr<Terrain> terrain, int x, int y)
 
 void Building::BuildOnTerrain(std::shared_ptr<Terrain> terrain, int x, int y)
 {
-	SetPosition(glm::vec3(x, terrain->GetHeight(x, -y), -y));
+	SetPosition(glm::vec3(x, terrain->GetHeight(glm::vec2(x, -y)), -y));
 
 	for (int i = 0; i < 3; ++i)
 	{
@@ -80,7 +81,7 @@ void Building::BuildOnTerrain(std::shared_ptr<Terrain> terrain, int x, int y)
 			int nx = x + i - 1;
 			int ny = y + j - 1;
 
-			terrain->SetObjectOnTile(x, y);
+			terrain->SetObjectOnTile(glm::ivec2(x, y));
 		}
 	}
 }

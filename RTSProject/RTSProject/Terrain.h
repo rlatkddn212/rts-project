@@ -100,7 +100,7 @@ public:
 	void									CreatePath();
 
 	std::vector<glm::ivec2>					GetPath(glm::ivec2 startPos, glm::ivec2 endPos, bool isObjectCollision = true);
-	float									GetHeight(float x, float y);
+	float									GetHeight(glm::vec2 p);
 	glm::vec2								GetSize() { return mSize; }
 
 	bool									Intersect(Ray& ray, glm::ivec2& ret);
@@ -111,12 +111,12 @@ public:
 	bool									GetClosedPosition(glm::ivec2 p1, glm::ivec2* closePos);
 
 	void									InitUnitTile();
-	void									SetUnitOnTile(int x, int y, int type = 1) { mTile[y][x].mUnitObject = type; }
-	void									SetObjectOnTile(int x, int y, int type = 1) { mTile[y][x].mTileObject = type; }
+	void									SetUnitOnTile(glm::ivec2 p, int type = 1) { mTile[p.y][p.x].mUnitObject = type; }
+	void									SetObjectOnTile(glm::ivec2 p, int type = 1) { mTile[p.y][p.x].mTileObject = type; }
 
-	bool									IsUnitOnTile(int x, int y) { return (mTile[y][x].mUnitObject != -1) ? true : false; };
-	bool									IsObjectOnTile(int x, int y) { return (mTile[y][x].mTileObject != -1) ? true : false; };
-	bool									IsMovableTile(int x, int y) { return mTile[y][x].isMovable; };
+	bool									IsUnitOnTile(glm::ivec2 p) { return (mTile[p.y][p.x].mUnitObject != -1) ? true : false; };
+	bool									IsObjectOnTile(glm::ivec2 p) { return (mTile[p.y][p.x].mTileObject != -1) ? true : false; };
+	bool									IsMovableTile(glm::ivec2 p) { return mTile[p.y][p.x].isMovable; };
 
 private:
 

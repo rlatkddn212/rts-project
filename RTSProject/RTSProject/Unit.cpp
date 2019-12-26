@@ -1,5 +1,6 @@
 #include "Precompiled.h"
 #include "Unit.h"
+#include "Math3D.h"
 
 using namespace std;
 
@@ -44,13 +45,19 @@ void Unit::Update(float deltaTime)
 		SetAnimation(2);
 		float len = deltaTime * speed;
 		glm::vec2 prev = glm::vec2(mPos.x, -mPos.z);
+
+		if (mPosIndex == 0)
+		{
+			mPosIndex = 1;
+		}
+
 		for (int i = mPosIndex; i < mPath.size(); ++i)
 		{
 			float d = glm::distance(prev, glm::vec2(mPath[i]));
 			len -= d;
 			if (len < 0.0f)
 			{
-				glm::vec2 pos = prev + (1 - (-len / d)) *  (glm::vec2(mPath[i]) - prev);
+				glm::vec2 pos = prev + (1 - (-len / d)) * (glm::vec2(mPath[i]) - prev);
 				
 				mRot = GetDirection(glm::vec2(mPath[i]), prev);
 				SetRotation(mRot);
@@ -71,7 +78,7 @@ void Unit::Update(float deltaTime)
 			SetAnimation(1);
 			mPos.x = mPath[mPath.size() - 1].x;
 			mPos.z = -mPath[mPath.size() - 1].y;
-
+			mPath.clear();
 			SetPosition(mPos);
 		}
 	}
@@ -132,15 +139,29 @@ void Unit::SetPath(const std::vector<glm::ivec2>& path)
 	mPath = path;
 }
 
-void Unit::SetPosOnTerrain(shared_ptr<Terrain> terrain, float x, float y)
+void Unit::SetMove(std::shared_ptr<Terrain> terrain, glm::ivec2 movePos)
 {
-	if (terrain->IsUnitOnTile(x, y) || terrain->IsObjectOnTile(x, y))
+	vector<glm::ivec2> ret = terrain->GetPath(RoundPosition(glm::vec2(mPos.x, -mPos.z)), movePos);
+	SetPath(ret);
+
+	if (!ret.empty())
 	{
+		mMovePos = movePos;
+	}
+}
+
+void Unit::SetPosOnTerrain(shared_ptr<Terrain> terrain, glm::vec2 p)
+{
+	// 이미 타일에 다른 오브젝트가 있다면
+	if (terrain->IsUnitOnTile(RoundPosition(p)) || terrain->IsObjectOnTile(RoundPosition(p)))
+	{
+		// 경로가 남아 있을 경우
 		if (!mPath.empty())
 		{
 			glm::ivec2 lastPos = mPath[mPath.size() - 1];
 			
-			if (glm::ivec2(x, y) == lastPos || mPath.size() >= 2 && glm::ivec2(x, y) == mPath[mPath.size() - 2])
+			if (glm::distance(p, glm::vec2(lastPos)) < 2.0f 
+				&& (terrain->IsUnitOnTile(RoundPosition(lastPos)) || terrain->IsObjectOnTile(RoundPosition(lastPos))))
 			{
 				glm::ivec2 closePos;
 				if (! terrain->GetClosedPosition(lastPos, &closePos))
@@ -148,17 +169,29 @@ void Unit::SetPosOnTerrain(shared_ptr<Terrain> terrain, float x, float y)
 					assert(0);
 				}
 
-				SetPath(terrain->GetPath(glm::vec2(x, y), closePos, false));
+				SetPath(terrain->GetPath(RoundPosition(p), closePos));
 			}
 			else
 			{
-				SetPath(terrain->GetPath(glm::vec2(x, y), lastPos));
+				if (mPath[0] != RoundPosition(p))
+				{
+					SetPath(terrain->GetPath(RoundPosition(p), lastPos));
+				}
 			}
+		}
+		else
+		{
+			glm::ivec2 closePos;
+			if (!terrain->GetClosedPosition(RoundPosition(mMovePos), &closePos))
+			{
+				assert(0);
+			}
+			SetPath(terrain->GetPath(RoundPosition(mMovePos), closePos));
 		}
 	}
 
-	terrain->SetUnitOnTile(x, y);
-	SetPosition(glm::vec3(x, 0.0f, -y));
+	terrain->SetUnitOnTile(RoundPosition(p));
+	SetPosition(glm::vec3(p.x, 0.0f, -p.y));
 	SetHeight(terrain);
 
 }
