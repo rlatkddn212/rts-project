@@ -19,6 +19,7 @@ void GameStage::Initialize(GLFWwindow* window, int w, int h)
 
 	WindowGroup::Initialize(window, w, h);
 
+	mMoveController = std::make_shared<MoveController>();
 	// ÁöÇü
 	mTerrain = make_shared<Terrain>();
 	mTerrain->Initialize(glm::ivec2(100, 100));
@@ -66,6 +67,11 @@ void GameStage::Update(float deltaTime)
 		glm::vec3 unitPos = mUnits[i]->GetPosition();
 		mUnits[i]->SetPosOnTerrain(mTerrain, glm::vec2(unitPos.x, -unitPos.z));
 	}
+
+	mMoveController->SetTerrain(mTerrain);
+	mMoveController->SetUnit(mUnits);
+
+	mMoveController->Update(deltaTime);
 }
 
 void GameStage::Render()

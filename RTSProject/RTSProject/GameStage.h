@@ -9,6 +9,7 @@
 #include "AxisObject.h"
 #include "Unit.h"
 #include "Building.h"
+#include "MoveController.h"
 
 enum PlayerState
 {
@@ -33,6 +34,8 @@ public:
 	virtual void							MouseButton(int button, int action);
 	virtual void							MouseWheel(double yPos);
 
+
+	std::shared_ptr<MoveController>			mMoveController;
 	std::vector<std::shared_ptr<Building>>	mBuildings;
 	std::shared_ptr<Building>				mBuildingToPlace;
 	std::shared_ptr<HeightMap>				mHeightMap;

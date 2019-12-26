@@ -40,35 +40,37 @@ glm::vec3 Unit::GetDirection(glm::vec2 p1, glm::vec2 p2)
 void Unit::Update(float deltaTime)
 {
 	mSkinnedMesh->Update(deltaTime);
+	/*
 	if (!mPath.empty())
 	{
 		SetAnimation(2);
 		float len = deltaTime * speed;
 		glm::vec2 prev = glm::vec2(mPos.x, -mPos.z);
 
-		if (mPosIndex == 0)
+		if (mPathIdx == 0)
 		{
-			mPosIndex = 1;
+			mPathIdx = 1;
 		}
 
-		for (int i = mPosIndex; i < mPath.size(); ++i)
+		for (int i = mPathIdx; i < mPath.size(); ++i)
 		{
 			float d = glm::distance(prev, glm::vec2(mPath[i]));
 			len -= d;
+			
 			if (len < 0.0f)
 			{
 				glm::vec2 pos = prev + (1 - (-len / d)) * (glm::vec2(mPath[i]) - prev);
 				
-				mRot = GetDirection(glm::vec2(mPath[i]), prev);
-				SetRotation(mRot);
+				SetRotation(GetDirection(glm::vec2(mPath[i]), prev));
 				mPos.x = pos.x;
 				mPos.z = -pos.y;
 
 				SetPosition(mPos);
+
 				break;
 			}
 			
-			++mPosIndex;
+			++mPathIdx;
 			prev = mPath[i];
 		}
 
@@ -86,6 +88,7 @@ void Unit::Update(float deltaTime)
 	{
 		SetAnimation(1);
 	}
+	*/
 }
 
 void Unit::Render(std::shared_ptr<Camera> camera)
@@ -134,10 +137,13 @@ glm::vec2 Unit::GetScreenPos(std::shared_ptr<Camera> camera)
 
 void Unit::SetPath(const std::vector<glm::ivec2>& path)
 {
-	mPosIndex = 0;
+	mPathIdx = 0;
 	mPath.clear();
 	mPath = path;
 }
+
+
+
 
 void Unit::SetMove(std::shared_ptr<Terrain> terrain, glm::ivec2 movePos)
 {
@@ -153,6 +159,7 @@ void Unit::SetMove(std::shared_ptr<Terrain> terrain, glm::ivec2 movePos)
 void Unit::SetPosOnTerrain(shared_ptr<Terrain> terrain, glm::vec2 p)
 {
 	// 이미 타일에 다른 오브젝트가 있다면
+	/*
 	if (terrain->IsUnitOnTile(RoundPosition(p)) || terrain->IsObjectOnTile(RoundPosition(p)))
 	{
 		// 경로가 남아 있을 경우
@@ -189,7 +196,7 @@ void Unit::SetPosOnTerrain(shared_ptr<Terrain> terrain, glm::vec2 p)
 			SetPath(terrain->GetPath(RoundPosition(mMovePos), closePos));
 		}
 	}
-
+	*/
 	terrain->SetUnitOnTile(RoundPosition(p));
 	SetPosition(glm::vec3(p.x, 0.0f, -p.y));
 	SetHeight(terrain);

@@ -30,17 +30,23 @@ public:
 	bool									isSelected() { return mIsSelect; }
 
 	void									SetPath(const std::vector<glm::ivec2>& path);
+	std::vector<glm::ivec2>					GetPath() { return mPath; }
+
 	void									SetMove(std::shared_ptr<Terrain> terrain, glm::ivec2 movePos);
-	glm::ivec2								GetNextPos() { mPosIndex += 1; return mPath[mPosIndex]; }
+	glm::ivec2								GetMove() { return mMovePos; }
 
 	void									SetAnimation(int idx) { mSkinnedMesh->mAnimationIdx = idx; };
-
 	void									SetPosOnTerrain(std::shared_ptr<Terrain> terrain, glm::vec2 p);
+	float									GetSpeed() { return speed; }
 
+	int										GetPathIdx() { return mPathIdx; }
+	void									SetPathIdx(int pathIdx) { mPathIdx = pathIdx; }
+
+protected:
 	bool									mIsSelect;
 	std::shared_ptr<BoxObject>				mBoxObject;
 
-	int										mPosIndex;
+	int										mPathIdx;
 
 	glm::vec3								mPos, mRot, mSca;
 	std::vector<glm::ivec2>					mPath;
