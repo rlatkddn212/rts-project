@@ -295,5 +295,14 @@
     <None Include="sight.frag">
       <Filter>소스 파일\Shader</Filter>
     </None>
+    <None Include="fog.frag">
+      <Filter>소스 파일\Shader</Filter>
+    </None>
+    <None Include="visiable.frag">
+      <Filter>소스 파일\Shader</Filter>
+    </None>
+    <None Include="visited.frag">
+      <Filter>소스 파일\Shader</Filter>
+    </None>
   </ItemGroup>
 </Project>

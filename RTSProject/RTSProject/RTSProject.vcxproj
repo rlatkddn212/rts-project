@@ -200,6 +200,7 @@
     <None Include="building.vert" />
     <None Include="color.frag" />
     <None Include="color.vert" />
+    <None Include="fog.frag" />
     <None Include="height.frag" />
     <None Include="height.vert" />
     <None Include="line.frag" />
@@ -215,6 +216,8 @@
     <None Include="terrain.frag" />
     <None Include="terrain.vert" />
     <None Include="line.vert" />
+    <None Include="visiable.frag" />
+    <None Include="visited.frag" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
