@@ -5,35 +5,28 @@ using namespace std;
 
 Building::Building(int type)
 {
+	mBuildingMesh = std::make_shared<BuildingMesh>();
 	mType = type;
+	
 	if (type == 0)
 	{
-		LoadModel("Assets/Model/barracks.X");
+		mBuildingMesh->LoadModel("Assets/Model/barracks.X");
 	}
 	else if (type == 1)
 	{
-		LoadModel("Assets/Model/tower.x");
+		mBuildingMesh->LoadModel("Assets/Model/tower.x");
 	}
 	else if (type == 2)
 	{
-		LoadModel("Assets/Model/townhall.x");
+		mBuildingMesh->LoadModel("Assets/Model/townhall.x");
 	}
 
-	SetScale(glm::vec3(0.1f, 0.1f, 0.1f));
+	mBuildingMesh->SetScale(glm::vec3(0.1f, 0.1f, 0.1f));
 	SetColor(glm::vec3(1.0f, 1.0f, 1.0f));
 }
 
 Building::~Building()
 {
-}
-
-void Building::LoadShader()
-{
-	std::vector<std::pair<std::string, int> > shaderCodies;
-	shaderCodies.push_back(make_pair(ReadShaderFile("building.vert"), GL_VERTEX_SHADER));
-	shaderCodies.push_back(make_pair(ReadShaderFile("building.frag"), GL_FRAGMENT_SHADER));
-	mMeshShader = std::make_shared<Shader>();
-	mMeshShader->BuildShader(shaderCodies);
 }
 
 bool Building::isPossibleBuild(shared_ptr<Terrain> terrain, int x, int y)
@@ -72,7 +65,7 @@ bool Building::isPossibleBuild(shared_ptr<Terrain> terrain, int x, int y)
 
 void Building::BuildOnTerrain(std::shared_ptr<Terrain> terrain, int x, int y)
 {
-	SetPosition(glm::vec3(x, terrain->GetHeight(glm::vec2(x, -y)), -y));
+	mBuildingMesh->SetPosition(glm::vec3(x, terrain->GetHeight(glm::vec2(x, -y)), -y));
 
 	for (int i = 0; i < 3; ++i)
 	{
@@ -86,7 +79,12 @@ void Building::BuildOnTerrain(std::shared_ptr<Terrain> terrain, int x, int y)
 	}
 }
 
-void Building::SetUniform()
+void Building::Update(float deltaTime)
 {
-	mMeshShader->SetVectorUniform("buildingColor", mColor);
+	mBuildingMesh->Update(deltaTime);
+}
+
+void Building::Render(std::shared_ptr<Camera> camera)
+{
+	mBuildingMesh->RenderModel(camera);
 }

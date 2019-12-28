@@ -149,6 +149,10 @@ void StaticMesh::LoadMaterials(const aiScene * scene)
 	}
 }
 
+void StaticMesh::SetUniform()
+{
+}
+
 void StaticMesh::LoadShader()
 {
 	std::vector<std::pair<std::string, int> > shaderCodies;
@@ -156,8 +160,4 @@ void StaticMesh::LoadShader()
 	shaderCodies.push_back(make_pair(ReadShaderFile("mesh.frag"), GL_FRAGMENT_SHADER));
 	mMeshShader = std::make_shared<Shader>();
 	mMeshShader->BuildShader(shaderCodies);
-}
-
-void StaticMesh::SetUniform()
-{
 }

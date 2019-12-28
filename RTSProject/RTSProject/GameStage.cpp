@@ -2,6 +2,7 @@
 #include "GameStage.h"
 #include "Magician.h"
 #include "Math3D.h"
+#include "FogOfWar.h"
 
 using namespace std;
 
@@ -48,6 +49,8 @@ void GameStage::Initialize(GLFWwindow* window, int w, int h)
 
 	// °Ç¹°
 	mBuildingToPlace = nullptr;
+
+	shared_ptr<FogOfWar> fog = make_shared<FogOfWar>();
 }
 
 void GameStage::Terminate()
@@ -93,12 +96,12 @@ void GameStage::Render()
 
 	if (mBuildingToPlace)
 	{
-		mBuildingToPlace->RenderModel(camera);
+		mBuildingToPlace->Render(camera);
 	}
 
 	for (int i = 0; i < mBuildings.size(); ++i)
 	{
-		mBuildings[i]->RenderModel(camera);
+		mBuildings[i]->Render(camera);
 	}
 }
 

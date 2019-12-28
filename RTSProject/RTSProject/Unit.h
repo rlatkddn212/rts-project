@@ -1,10 +1,11 @@
 #pragma once
 
+#include "RTSObject.h"
 #include "SkinnedMesh.h"
 #include "BoxObject.h"
 #include "Terrain.h"
 
-class Unit
+class Unit :public RTSObject
 {
 public:
 											Unit();
@@ -47,8 +48,6 @@ protected:
 	std::shared_ptr<BoxObject>				mBoxObject;
 
 	int										mPathIdx;
-
-	glm::vec3								mPos, mRot, mSca;
 	std::vector<glm::ivec2>					mPath;
 
 	float									speed;

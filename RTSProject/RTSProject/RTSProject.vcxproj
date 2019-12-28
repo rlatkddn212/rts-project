@@ -128,11 +128,15 @@
   <ItemGroup>
     <ClInclude Include="AxisObject.h" />
     <ClInclude Include="Building.h" />
+    <ClInclude Include="BuildingMesh.h" />
     <ClInclude Include="Drone.h" />
+    <ClInclude Include="FogOfWar.h" />
     <ClInclude Include="Knight.h" />
     <ClInclude Include="Magician.h" />
+    <ClInclude Include="MapObject.h" />
     <ClInclude Include="Math3D.h" />
     <ClInclude Include="MoveController.h" />
+    <ClInclude Include="RTSObject.h" />
     <ClInclude Include="SpriteUI.h" />
     <ClInclude Include="BoxObject.h" />
     <ClInclude Include="Camera.h" />
@@ -157,11 +161,15 @@
   <ItemGroup>
     <ClCompile Include="AxisObject.cpp" />
     <ClCompile Include="Building.cpp" />
+    <ClCompile Include="BuildingMesh.cpp" />
     <ClCompile Include="Drone.cpp" />
+    <ClCompile Include="FogOfWar.cpp" />
     <ClCompile Include="Knight.cpp" />
     <ClCompile Include="Magician.cpp" />
+    <ClCompile Include="MapObject.cpp" />
     <ClCompile Include="Math3D.cpp" />
     <ClCompile Include="MoveController.cpp" />
+    <ClCompile Include="RTSObject.cpp" />
     <ClCompile Include="SpriteUI.cpp" />
     <ClCompile Include="BoxObject.cpp" />
     <ClCompile Include="Camera.cpp" />
@@ -197,6 +205,7 @@
     <None Include="line.frag" />
     <None Include="mesh.frag" />
     <None Include="mesh.vert" />
+    <None Include="sight.frag" />
     <None Include="skinned.frag" />
     <None Include="skinned.vert" />
     <None Include="Sprite.frag" />

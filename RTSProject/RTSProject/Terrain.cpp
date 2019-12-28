@@ -174,16 +174,7 @@ void Terrain::AddObject(int type, glm::ivec2 p)
 	float sca_y = (rand() % 1000 / 1000.0f) * 1.0f + 0.5f;
 	glm::vec3 sca = glm::vec3(sca_xz, sca_y, sca_xz);
 
-	std::shared_ptr<StaticMesh> obj = std::make_shared<StaticMesh>();
-
-	if (type == 0)
-	{
-		obj->LoadModel("Assets/Model/tree.x");
-	}
-	else
-	{
-		obj->LoadModel("Assets/Model/stone.x");
-	}
+	std::shared_ptr<MapObject> obj = std::make_shared<MapObject>(type);
 
 	obj->SetPosition(pos);
 	obj->SetRotation(rot);
@@ -613,6 +604,6 @@ void Terrain::Render(std::shared_ptr<Camera> camera)
 
 	for (int i = 0; i < mModelList.size(); ++i)
 	{
-		mModelList[i]->RenderModel(camera);
+		mModelList[i]->Render(camera);
 	}
 }

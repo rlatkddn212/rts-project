@@ -126,6 +126,18 @@
     <ClInclude Include="MoveController.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
+    <ClInclude Include="MapObject.h">
+      <Filter>소스 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="RTSObject.h">
+      <Filter>소스 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="BuildingMesh.h">
+      <Filter>소스 파일\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="FogOfWar.h">
+      <Filter>소스 파일\Terrain</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Font.cpp">
@@ -212,6 +224,18 @@
     <ClCompile Include="MoveController.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="MapObject.cpp">
+      <Filter>소스 파일\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="RTSObject.cpp">
+      <Filter>소스 파일\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="BuildingMesh.cpp">
+      <Filter>소스 파일\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="FogOfWar.cpp">
+      <Filter>소스 파일\Terrain</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="color.frag">
@@ -266,6 +290,9 @@
       <Filter>소스 파일\Shader</Filter>
     </None>
     <None Include="building.vert">
+      <Filter>소스 파일\Shader</Filter>
+    </None>
+    <None Include="sight.frag">
       <Filter>소스 파일\Shader</Filter>
     </None>
   </ItemGroup>

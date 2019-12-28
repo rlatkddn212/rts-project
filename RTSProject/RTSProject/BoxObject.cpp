@@ -73,7 +73,7 @@ void BoxObject::Render(std::shared_ptr<Camera> camera)
 	{
 		glDisable(GL_CULL_FACE);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		glm::mat4 mat = camera->GetProjectionMatrix() * camera->GetViewMatrix() * mPos * mRot * mSca;
+		glm::mat4 mat = camera->GetProjectionMatrix() * camera->GetViewMatrix() * mPosMat * mRotMat * mScaMat;
 		mMeshShader->SetActive();
 		mMeshShader->SetMatrixUniform("mvp_matrix", mat);
 

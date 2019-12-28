@@ -4,7 +4,7 @@
 #include "Shader.h"
 #include "VertexArrayAlpha.h"
 #include "Texture.h"
-#include "StaticMesh.h"
+#include "MapObject.h"
 #include "Camera.h"
 #include "Ray.h"
 
@@ -131,5 +131,5 @@ private:
 	glm::vec2								mSize;
 	std::shared_ptr<HeightMap>				mHeightMap;
 	std::vector<std::shared_ptr<Patch> >	mPatches;
-	std::vector<std::shared_ptr<StaticMesh> >	mModelList;
+	std::vector<std::shared_ptr<MapObject> > mModelList;
 };
