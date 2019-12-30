@@ -50,7 +50,7 @@ void GameStage::Initialize(GLFWwindow* window, int w, int h)
 	// °Ç¹°
 	mBuildingToPlace = nullptr;
 
-	shared_ptr<FogOfWar> fog = make_shared<FogOfWar>();
+	mFogOfWar = make_shared<FogOfWar>();
 }
 
 void GameStage::Terminate()
@@ -75,6 +75,8 @@ void GameStage::Update(float deltaTime)
 	mMoveController->SetUnit(mUnits);
 
 	mMoveController->Update(deltaTime);
+
+	mFogOfWar->Update(deltaTime, mUnits);
 }
 
 void GameStage::Render()

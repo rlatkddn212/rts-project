@@ -10,6 +10,7 @@
 #include "Unit.h"
 #include "Building.h"
 #include "MoveController.h"
+#include "FogOfWar.h"
 
 enum PlayerState
 {
@@ -43,6 +44,7 @@ public:
 	std::vector<std::shared_ptr<BoxObject>> mBox;
 	std::vector<std::shared_ptr<Unit> >		mUnits;
 	std::shared_ptr<AxisObject>				mAxis;
+	std::shared_ptr<FogOfWar>				mFogOfWar;
 
 	bool									mIsLeftPress;
 	PlayerState								playerState;

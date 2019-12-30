@@ -217,7 +217,9 @@
     <None Include="terrain.vert" />
     <None Include="line.vert" />
     <None Include="visiable.frag" />
+    <None Include="visiable.vert" />
     <None Include="visited.frag" />
+    <None Include="visited.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

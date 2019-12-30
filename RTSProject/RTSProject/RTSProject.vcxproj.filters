@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="소스 파일\Shader">
-      <UniqueIdentifier>{a100e340-db45-4486-bf0f-36cde38f294a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\Object">
       <UniqueIdentifier>{46411bef-b465-440f-ba44-74140d36efd9}</UniqueIdentifier>
     </Filter>
@@ -42,6 +39,9 @@
     </Filter>
     <Filter Include="소스 파일\Common">
       <UniqueIdentifier>{61290f22-4ee1-44ac-a17d-884ad8e41549}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Shader">
+      <UniqueIdentifier>{a100e340-db45-4486-bf0f-36cde38f294a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -302,6 +302,12 @@
       <Filter>소스 파일\Shader</Filter>
     </None>
     <None Include="visited.frag">
+      <Filter>소스 파일\Shader</Filter>
+    </None>
+    <None Include="visiable.vert">
+      <Filter>소스 파일\Shader</Filter>
+    </None>
+    <None Include="visited.vert">
       <Filter>소스 파일\Shader</Filter>
     </None>
   </ItemGroup>
