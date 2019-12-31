@@ -298,16 +298,16 @@
     <None Include="fog.frag">
       <Filter>소스 파일\Shader</Filter>
     </None>
-    <None Include="visiable.frag">
-      <Filter>소스 파일\Shader</Filter>
-    </None>
     <None Include="visited.frag">
       <Filter>소스 파일\Shader</Filter>
     </None>
-    <None Include="visiable.vert">
+    <None Include="visited.vert">
       <Filter>소스 파일\Shader</Filter>
     </None>
-    <None Include="visited.vert">
+    <None Include="visible.vert">
+      <Filter>소스 파일\Shader</Filter>
+    </None>
+    <None Include="visible.frag">
       <Filter>소스 파일\Shader</Filter>
     </None>
   </ItemGroup>

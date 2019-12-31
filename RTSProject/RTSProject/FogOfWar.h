@@ -18,7 +18,7 @@ public:
 	GLuint									mVao;
 
 	std::shared_ptr<Texture>				mSightTexture;
-	std::shared_ptr<Texture>				mVisiableTexture;
+	std::shared_ptr<Texture>				mVisibleTexture;
 	std::shared_ptr<Texture>				mVisitedTexture;
 	std::shared_ptr<Texture>				mFogTexture;
 

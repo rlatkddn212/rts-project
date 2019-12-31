@@ -216,8 +216,8 @@
     <None Include="terrain.frag" />
     <None Include="terrain.vert" />
     <None Include="line.vert" />
-    <None Include="visiable.frag" />
-    <None Include="visiable.vert" />
+    <None Include="visible.frag" />
+    <None Include="visible.vert" />
     <None Include="visited.frag" />
     <None Include="visited.vert" />
   </ItemGroup>

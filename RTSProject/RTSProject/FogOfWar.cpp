@@ -115,8 +115,8 @@ FogOfWar::FogOfWar()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 
-	mVisiableTexture = std::make_shared<Texture>();
-	mVisiableTexture->CreateTexture(1024, 768);
+	mVisibleTexture = std::make_shared<Texture>();
+	mVisibleTexture->CreateTexture(1024, 768);
 
 	// 방문 텍스쳐 생성
 	mVisitedTexture  = std::make_shared<Texture>();
@@ -139,7 +139,7 @@ void FogOfWar::Update(float deltaTime, std::vector<std::shared_ptr<Unit>> unit)
 
 	glm::mat4 proj = glm::ortho(-50.0f, 50.f, -50.0f, 50.0f, -1000.0f, 1000.0f);
 	glm::mat4 view = glm::lookAt(glm::vec3(50.0f, -100.0f, 50.0f), glm::vec3(50.0f, 0.0f, 50.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-	// visiable 유닛 위치
+	// visible 유닛 위치
 	{
 		glBindVertexArray(mVao);
 		// 반복문으로 위치 값을 넣는다.
@@ -147,7 +147,7 @@ void FogOfWar::Update(float deltaTime, std::vector<std::shared_ptr<Unit>> unit)
 		glGenFramebuffers(1, &framebuffer);
 		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mVisiableTexture->GetTextureID(), 0);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mVisibleTexture->GetTextureID(), 0);
 
 		// Frame buffer 완전성 위배
 		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
@@ -156,12 +156,12 @@ void FogOfWar::Update(float deltaTime, std::vector<std::shared_ptr<Unit>> unit)
 		}
 
 		//랜더링
-		std::vector<std::pair<std::string, int> > visiableCodies;
-		Shader visiableShader;
-		visiableCodies.clear();
-		visiableCodies.push_back(make_pair(ReadShaderFile("visiable.vert"), GL_VERTEX_SHADER));
-		visiableCodies.push_back(make_pair(ReadShaderFile("visiable.frag"), GL_FRAGMENT_SHADER));
-		visiableShader.BuildShader(visiableCodies);
+		std::vector<std::pair<std::string, int> > visibleCodies;
+		Shader visibleShader;
+		visibleCodies.clear();
+		visibleCodies.push_back(make_pair(ReadShaderFile("visible.vert"), GL_VERTEX_SHADER));
+		visibleCodies.push_back(make_pair(ReadShaderFile("visible.frag"), GL_FRAGMENT_SHADER));
+		visibleShader.BuildShader(visibleCodies);
 		
 		
 		std::vector<float> posData(unit.size() * 3);
@@ -193,19 +193,20 @@ void FogOfWar::Update(float deltaTime, std::vector<std::shared_ptr<Unit>> unit)
 
 		glVertexAttribDivisor(2, 1);
 
-		// visiable 텍스쳐 생성
+		// visible 텍스쳐 생성
 		static const GLfloat green[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 		glClearBufferfv(GL_COLOR, 0, green);
 
 		glm::mat4 matrix = proj * view;
-		visiableShader.SetActive();
-		visiableShader.SetMatrixUniform("vp_matrix", matrix);
+		visibleShader.SetActive();
+		visibleShader.SetMatrixUniform("vp_matrix", matrix);
 		
 		mSightTexture->SetActive();
 
 		glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, unit.size());
 		
 		//PrintScreen(framebuffer, "visiable.bmp");
+		glDeleteBuffers(1, &unitPosBuffer);
  		glDeleteFramebuffers(1, &framebuffer);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
@@ -240,7 +241,7 @@ void FogOfWar::Update(float deltaTime, std::vector<std::shared_ptr<Unit>> unit)
 
 
 		visitedShader.SetActive();
-		mVisiableTexture->SetActive();
+		mVisibleTexture->SetActive();
 
 		// TODO 적절한 Blend 함수로 변경
 		glEnable(GL_BLEND);
@@ -285,7 +286,7 @@ void FogOfWar::Update(float deltaTime, std::vector<std::shared_ptr<Unit>> unit)
 
 		fogShader.SetActive();
 		glActiveTexture(GL_TEXTURE0);
-		mVisiableTexture->SetActive();
+		mVisibleTexture->SetActive();
 		glActiveTexture(GL_TEXTURE1);
 		mVisitedTexture->SetActive();
 
