@@ -126,9 +126,16 @@ FogOfWar::FogOfWar()
 // 
 void FogOfWar::Update(float deltaTime, std::vector<std::shared_ptr<Unit>> unit)
 {
+
+	glDisable(GL_CULL_FACE);
+	glDisable(GL_DEPTH_TEST);
+	//
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_ONE, GL_ONE);
+	//glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ZERO);
+
 	glm::mat4 proj = glm::ortho(-100.f, 100.f, -100.0f, 100.0f, -1000.0f, 1000.0f);
 	glm::mat4 view = glm::lookAt(glm::vec3(50.0f, 100.0f, -50.0f), glm::vec3(50.0f, 0.0f, -50.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-	glDisable(GL_CULL_FACE);
 	// visiable À¯´Ö À§Ä¡
 	{
 		glBindVertexArray(mVao);
@@ -225,7 +232,7 @@ void FogOfWar::Update(float deltaTime, std::vector<std::shared_ptr<Unit>> unit)
 		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer2);
 		glReadPixels(0, 0, 1024, 1024, GL_RGB, GL_UNSIGNED_BYTE, bytes);
 
-		SOIL_save_image("visiable.bmp", SOIL_SAVE_TYPE_BMP, 1024, 1024, 3, bytes);
+		//SOIL_save_image("visiable.bmp", SOIL_SAVE_TYPE_BMP, 1024, 1024, 3, bytes);
 		delete[] bytes;
 		
 		glDeleteFramebuffers(1, &framebuffer);
@@ -477,6 +484,8 @@ void FogOfWar::Update(float deltaTime, std::vector<std::shared_ptr<Unit>> unit)
 	}
 	*/
 	glEnable(GL_CULL_FACE);
+	glDisable(GL_BLEND);
+	glEnable(GL_DEPTH_TEST);
 
 }
 
