@@ -130,7 +130,6 @@ FogOfWar::FogOfWar()
 
 void FogOfWar::Update(float deltaTime, std::vector<std::shared_ptr<Unit>> unit)
 {
-
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_DEPTH_TEST);
 	//
@@ -138,8 +137,8 @@ void FogOfWar::Update(float deltaTime, std::vector<std::shared_ptr<Unit>> unit)
 	glBlendFunc(GL_ONE, GL_ONE);
 	//glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ZERO);
 
-	glm::mat4 proj = glm::ortho(-100.f, 100.f, -100.0f, 100.0f, -1000.0f, 1000.0f);
-	glm::mat4 view = glm::lookAt(glm::vec3(50.0f, 100.0f, -50.0f), glm::vec3(50.0f, 0.0f, -50.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	glm::mat4 proj = glm::ortho(-50.0f, 50.f, -50.0f, 50.0f, -1000.0f, 1000.0f);
+	glm::mat4 view = glm::lookAt(glm::vec3(50.0f, -100.0f, 50.0f), glm::vec3(50.0f, 0.0f, 50.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 	// visiable 유닛 위치
 	{
 		glBindVertexArray(mVao);
@@ -171,7 +170,7 @@ void FogOfWar::Update(float deltaTime, std::vector<std::shared_ptr<Unit>> unit)
 			glm::vec3 pos = unit[i]->GetPosition();
 			posData[i * 3] = pos.x;
 			posData[i * 3 + 1] = pos.y;
-			posData[i * 3 + 2] = pos.z;
+			posData[i * 3 + 2] = -pos.z;
 		}
 		
 		GLuint unitPosBuffer;
@@ -207,7 +206,7 @@ void FogOfWar::Update(float deltaTime, std::vector<std::shared_ptr<Unit>> unit)
 		glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, unit.size());
 		
 		//PrintScreen(framebuffer, "visiable.bmp");
-		glDeleteFramebuffers(1, &framebuffer);
+ 		glDeleteFramebuffers(1, &framebuffer);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
@@ -245,8 +244,9 @@ void FogOfWar::Update(float deltaTime, std::vector<std::shared_ptr<Unit>> unit)
 
 		// TODO 적절한 Blend 함수로 변경
 		glEnable(GL_BLEND);
-		glBlendFunc(GL_ONE, GL_ONE);
+		glBlendEquation(GL_MAX);
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
 		int a = 0;
 		if (a == 1)
 			PrintScreen(framebuffer, "visited.bmp");
@@ -289,6 +289,7 @@ void FogOfWar::Update(float deltaTime, std::vector<std::shared_ptr<Unit>> unit)
 		glActiveTexture(GL_TEXTURE1);
 		mVisitedTexture->SetActive();
 
+		glBlendEquation(GL_MAX);
 		// TODO 적절한 Blend 함수로 변경
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 

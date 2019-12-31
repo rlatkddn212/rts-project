@@ -1,6 +1,8 @@
 #version 430 core
 
 layout(binding = 0) uniform sampler2D image01;
+
+
 in vec2 fragTexCoord;
 in float shade;
 out vec4 color;

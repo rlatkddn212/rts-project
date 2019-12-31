@@ -94,6 +94,9 @@ void Unit::Update(float deltaTime)
 void Unit::Render(std::shared_ptr<Camera> camera)
 {
 	mSkinnedMesh->BoneTransform();
+
+	glActiveTexture(GL_TEXTURE1);
+	mFogTexture->SetActive();
 	mSkinnedMesh->RenderModel(camera);
 
 	mBoxObject->Render(camera);

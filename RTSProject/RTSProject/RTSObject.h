@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Camera.h"
+#include "Texture.h"
 
 class RTSObject
 {
@@ -15,8 +16,11 @@ public:
 	void									SetRotation(glm::vec3 r) { mRot = r; }
 	void									SetScale(glm::vec3 s) { mSca = s; }
 
+	void									SetFogTexture(std::shared_ptr<Texture> texture) { mFogTexture = texture; }
+
 protected:
 
+	std::shared_ptr<Texture>				mFogTexture;
 	glm::vec3								mPos, mRot, mSca;
 };
 

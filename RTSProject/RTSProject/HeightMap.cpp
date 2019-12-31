@@ -150,7 +150,6 @@ bool HeightMap::LoadFromFile(const std::string& fileName)
 	glGenFramebuffers(1, &framebuffer2);
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer2);
 
-	// create a color attachment texture
 	unsigned int textureColorbuffer2;
 	glGenTextures(1, &textureColorbuffer2);
 	glBindTexture(GL_TEXTURE_2D, textureColorbuffer2);

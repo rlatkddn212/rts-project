@@ -548,11 +548,11 @@ void Terrain::CreateAlphaMaps()
 	float min_range[] = { 0.0f, 1.0f, 15.0f };
 	float max_range[] = { 2.0f, 16.0f, 21.0f };
 
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 3; ++i)
 	{
-		for (int y = 0; y < 128; y++)
+		for (int y = 0; y < 128; ++y)
 		{
-			for (int x = 0; x < 128; x++)
+			for (int x = 0; x < 128; ++x)
 			{
 				int hm_x = (int)(mHeightMap->mSize.x * (x / (float)(128)));
 				int hm_y = (int)(mHeightMap->mSize.y * (y / (float)(128)));
@@ -579,7 +579,7 @@ void Terrain::CreateAlphaMaps()
 
 void Terrain::Update(float deltaTime)
 {
-	for (int i = 0; i < (int)mPatches.size(); i++)
+	for (int i = 0; i < (int)mPatches.size(); ++i)
 		mPatches[i]->Update(deltaTime);
 }
 
@@ -598,10 +598,15 @@ void Terrain::Render(std::shared_ptr<Camera> camera)
 	snow->SetActive();
 	glActiveTexture(GL_TEXTURE3);
 	alpha->SetActive();
+	glActiveTexture(GL_TEXTURE4);
+	mFogTexture->SetActive();
 
-	for (int i = 0; i < (int)mPatches.size(); i++)
+	for (int i = 0; i < (int)mPatches.size(); ++i)
+	{
 		mPatches[i]->Render(mat);
+	}
 
+	glActiveTexture(GL_TEXTURE0);
 	for (int i = 0; i < mModelList.size(); ++i)
 	{
 		mModelList[i]->Render(camera);

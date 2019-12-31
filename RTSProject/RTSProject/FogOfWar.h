@@ -13,7 +13,7 @@ public:
 	virtual void							Render();
 	
 	void									PrintScreen(GLuint framebuffer, const std::string& str);
-		
+	std::shared_ptr<Texture>				GetFogTexture() { return mFogTexture; }
 
 	GLuint									mVao;
 

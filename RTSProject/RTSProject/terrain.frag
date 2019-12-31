@@ -4,6 +4,7 @@ layout(binding = 0) uniform sampler2D image01;
 layout (binding = 1) uniform sampler2D image02;
 layout (binding = 2) uniform sampler2D image03;
 layout (binding = 3) uniform sampler2D image04;
+layout (binding = 4) uniform sampler2D image05;
 
 in vec2 fragTexCoord;
 in vec2 fragAlphaCoord;
@@ -15,6 +16,7 @@ void main()
 	vec4 c1 = texture(image01, fragTexCoord);
 	vec4 c2 = texture(image02, fragTexCoord);
 	vec4 c3 = texture(image03, fragTexCoord);
+	vec4 c4 = texture(image05, fragAlphaCoord);
 	
 	float inverse = 1.0f / (a.r + a.g + a.b);
 
@@ -22,5 +24,5 @@ void main()
     c2 *= a.g * inverse;
     c3 *= a.b * inverse;
 
-	color = c1 + c2 + c3;
+	color = (c1 + c2 + c3) * c4;
 }

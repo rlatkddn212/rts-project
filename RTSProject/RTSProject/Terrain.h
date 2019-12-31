@@ -118,6 +118,8 @@ public:
 	bool									IsObjectOnTile(glm::ivec2 p) { return (mTile[p.y][p.x].mTileObject != -1) ? true : false; };
 	bool									IsMovableTile(glm::ivec2 p) { return mTile[p.y][p.x].isMovable; };
 
+	void									SetFogTexture(std::shared_ptr<Texture> texture) { mFogTexture = texture; }
+
 private:
 
 	// 배열 크기는 고정, 조절 필요
@@ -127,6 +129,8 @@ private:
 	std::shared_ptr<Texture>				mountain;
 	std::shared_ptr<Texture>				snow;
 	std::shared_ptr<Texture>				grass;
+
+	std::shared_ptr<Texture>				mFogTexture;
 
 	glm::vec2								mSize;
 	std::shared_ptr<HeightMap>				mHeightMap;
