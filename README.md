@@ -7,6 +7,9 @@
 
 카메라 : wasd, 방향키, 마우스 휠로 조정
 
+
+개발 진행중 : 전장의 안개, fog of war
+
 ![rtsimage](https://github.com/rlatkddn212/rts-project/blob/master/RTS.png)
 
 지금까지 구현한 주요 기술
