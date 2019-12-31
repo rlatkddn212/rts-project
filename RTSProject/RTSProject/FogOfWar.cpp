@@ -59,13 +59,9 @@ FogOfWar::FogOfWar()
 	glGenFramebuffers(1, &framebuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 
-	// create a color attachment texture
-	glGenTextures(1, &mSightTexture);
-	glBindTexture(GL_TEXTURE_2D, mSightTexture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1024, 768, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mSightTexture, 0);
+	mSightTexture = std::make_shared<Texture>();
+	mSightTexture->CreateTexture(1024, 768);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mSightTexture->GetTextureID(), 0);
 
 	// Frame buffer 완전성 위배
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
@@ -90,18 +86,15 @@ FogOfWar::FogOfWar()
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
 	unsigned char* bytes = new unsigned char[10000 * 3];
-	unsigned int framebuffer2;
+	GLuint framebuffer2;
 	glGenFramebuffers(1, &framebuffer2);
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer2);
 
 	// create a color attachment texture
-	unsigned int textureColorbuffer2;
-	glGenTextures(1, &textureColorbuffer2);
-	glBindTexture(GL_TEXTURE_2D, textureColorbuffer2);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 100, 100, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer2, 0);
+
+	std::shared_ptr<Texture> textureColor = std::make_shared<Texture>();
+	textureColor->CreateTexture(100, 100);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColor->GetTextureID(), 0);
 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 	{
@@ -120,10 +113,21 @@ FogOfWar::FogOfWar()
 	glDeleteFramebuffers(1, &framebuffer);
 	
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+
+	mVisiableTexture = std::make_shared<Texture>();
+	mVisiableTexture->CreateTexture(1024, 768);
+
+	// 방문 텍스쳐 생성
+	mVisitedTexture  = std::make_shared<Texture>();
+	mVisitedTexture->CreateTexture(1024, 768);
+	
+	// Fog 텍스쳐 생성
+	mFogTexture = std::make_shared<Texture>();
+	mFogTexture->CreateTexture(1024, 768);
+
 }
 
-
-// 
 void FogOfWar::Update(float deltaTime, std::vector<std::shared_ptr<Unit>> unit)
 {
 
@@ -143,13 +147,8 @@ void FogOfWar::Update(float deltaTime, std::vector<std::shared_ptr<Unit>> unit)
 		GLuint framebuffer;
 		glGenFramebuffers(1, &framebuffer);
 		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-		glGenTextures(1, &mVisiableTexture);
-		glBindTexture(GL_TEXTURE_2D, mVisiableTexture);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1024, 768, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mVisiableTexture, 0);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mVisiableTexture->GetTextureID(), 0);
 
 		// Frame buffer 완전성 위배
 		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
@@ -160,7 +159,6 @@ void FogOfWar::Update(float deltaTime, std::vector<std::shared_ptr<Unit>> unit)
 		//랜더링
 		std::vector<std::pair<std::string, int> > visiableCodies;
 		Shader visiableShader;
-
 		visiableCodies.clear();
 		visiableCodies.push_back(make_pair(ReadShaderFile("visiable.vert"), GL_VERTEX_SHADER));
 		visiableCodies.push_back(make_pair(ReadShaderFile("visiable.frag"), GL_FRAGMENT_SHADER));
@@ -193,6 +191,7 @@ void FogOfWar::Update(float deltaTime, std::vector<std::shared_ptr<Unit>> unit)
 			0,                  // 다음 요소 까지 간격(stride)
 			(void*)0            // 배열 버퍼의 오프셋(offset; 옮기는 값)
 		);
+
 		glVertexAttribDivisor(2, 1);
 
 		// visiable 텍스쳐 생성
@@ -203,212 +202,27 @@ void FogOfWar::Update(float deltaTime, std::vector<std::shared_ptr<Unit>> unit)
 		visiableShader.SetActive();
 		visiableShader.SetMatrixUniform("vp_matrix", matrix);
 		
-		glBindTexture(GL_TEXTURE_2D, mSightTexture);
+		mSightTexture->SetActive();
 
-		glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, 10);
+		glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, unit.size());
 		
-		unsigned char* bytes = new unsigned char[1024 * 1024 * 3];
-		unsigned int framebuffer2;
-		glGenFramebuffers(1, &framebuffer2);
-		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer2);
-
-		// create a color attachment texture
-		unsigned int textureColorbuffer2;
-		glGenTextures(1, &textureColorbuffer2);
-		glBindTexture(GL_TEXTURE_2D, textureColorbuffer2);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1024, 1024, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer2, 0);
-
-		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-		{
-			printf("no");
-		}
-
-		glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
-		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebuffer2);
-		glBlitFramebuffer(0, 0, 1024, 768, 0, 0, 1024, 1024, GL_COLOR_BUFFER_BIT, GL_LINEAR);
-		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer2);
-		glReadPixels(0, 0, 1024, 1024, GL_RGB, GL_UNSIGNED_BYTE, bytes);
-
-		//SOIL_save_image("visiable.bmp", SOIL_SAVE_TYPE_BMP, 1024, 1024, 3, bytes);
-		delete[] bytes;
-		
+		//PrintScreen(framebuffer, "visiable.bmp");
 		glDeleteFramebuffers(1, &framebuffer);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
-	{
-
-	/*
-		// 반복문으로 위치 값을 넣는다.
-		GLuint framebuffer;
-		glGenFramebuffers(1, &framebuffer);
-		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-		glGenTextures(1, &mVisiableTexture);
-		glBindTexture(GL_TEXTURE_2D, mVisiableTexture);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1024, 768, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mVisiableTexture, 0);
-
-		// Frame buffer 완전성 위배
-		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-		{
-			return;
-		}
-		
-		GLuint VertexArrayID;
-		glGenVertexArrays(1, &VertexArrayID);
-		glBindVertexArray(VertexArrayID);
-
-		static const GLfloat g_vertex_buffer_data[] =
-		{
-			-0.5f, -0.5f, 0.0f,
-			0.5f, -0.5f, 0.0f,
-			-0.5f,  0.5f, 0.0f,
-			0.5f,  0.5f, 0.0f,
-		};
-		static const GLfloat g_uv_buffer_data[] =
-		{
-			0.0, 1.0,
-			1.0, 1.0,
-			0.0, 0.0,
-			1.0, 0.0,
-		};
-
-		// 버텍스 버퍼에 핸들
-		GLuint vertexbuffer[2];
-		// 버퍼를 생성
-		glGenBuffers(2, &vertexbuffer[0]);
-		glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer[0]);
-		// 버텍스들을 OpenGL로
-		glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
-
-		glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer[1]);
-		// 버텍스들을 OpenGL로
-		glBufferData(GL_ARRAY_BUFFER, sizeof(g_uv_buffer_data), g_uv_buffer_data, GL_STATIC_DRAW);
-
-		static const GLfloat posData[] =
-		{
-			0.0f, -0.0f, -0.0f,
-		};
-
-		GLuint unitPosBuffer;
-		glGenBuffers(1, &unitPosBuffer);
-		glBindBuffer(GL_ARRAY_BUFFER, unitPosBuffer);
-
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 3, &posData[0], GL_STATIC_DRAW);
-
-		//랜더링
-		std::vector<std::pair<std::string, int> > visiableCodies;
-		Shader visiableShader;
-
-		visiableCodies.clear();
-		visiableCodies.push_back(make_pair(ReadShaderFile("visiable.vert"), GL_VERTEX_SHADER));
-		visiableCodies.push_back(make_pair(ReadShaderFile("visiable.frag"), GL_FRAGMENT_SHADER));
-		visiableShader.BuildShader(visiableCodies);
-
-		static const GLfloat blue[] = { 0.0f, 0.0f, 1.0f, 1.0f };
-		glClearBufferfv(GL_COLOR, 0, blue);
-
-		glm::mat4 matrix = proj * view;
-		visiableShader.SetMatrixUniform("vp_matrix", matrix);
-
-		glBindTexture(GL_TEXTURE_2D, mSightTexture);
-		visiableShader.SetActive();
-
-		glEnableVertexAttribArray(0);
-		glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer[0]);
-
-		glVertexAttribPointer(
-			0,                  // 0번째 속성(attribute).
-			3,                  // 크기(size)
-			GL_FLOAT,           // 타입(type)
-			GL_FALSE,           // 정규화(normalized)?
-			0,                  // 다음 요소 까지 간격(stride)
-			(void*)0            // 배열 버퍼의 오프셋(offset; 옮기는 값)
-		);
-
-		glEnableVertexAttribArray(1);
-		glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer[1]);
-
-		glVertexAttribPointer(
-			1,                  // 0번째 속성(attribute).
-			2,                  // 크기(size)
-			GL_FLOAT,           // 타입(type)
-			GL_FALSE,           // 정규화(normalized)?
-			0,                  // 다음 요소 까지 간격(stride)
-			(void*)0            // 배열 버퍼의 오프셋(offset; 옮기는 값)
-		);
-
-		glEnableVertexAttribArray(2);
-		glBindBuffer(GL_ARRAY_BUFFER, unitPosBuffer);
-
-		glVertexAttribPointer(
-			2,                  // 0번째 속성(attribute).
-			3,                  // 크기(size)
-			GL_FLOAT,           // 타입(type)
-			GL_FALSE,           // 정규화(normalized)?
-			0,                  // 다음 요소 까지 간격(stride)
-			(void*)0            // 배열 버퍼의 오프셋(offset; 옮기는 값)
-		);
-
-
-		glVertexAttribDivisor(2, 1);
-		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);c
-		*/
-		/*
-		unsigned char* bytes = new unsigned char[10000 * 3];
-		unsigned int framebuffer2;
-		glGenFramebuffers(1, &framebuffer2);
-		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer2);
-
-		// create a color attachment texture
-		unsigned int textureColorbuffer2;
-		glGenTextures(1, &textureColorbuffer2);
-		glBindTexture(GL_TEXTURE_2D, textureColorbuffer2);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 100, 100, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer2, 0);
-
-		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-		{
-			printf("no");
-		}
-
-		glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
-		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebuffer2);
-		glBlitFramebuffer(0, 0, 1024, 768, 0, 0, 100, 100, GL_COLOR_BUFFER_BIT, GL_LINEAR);
-		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer2);
-		glReadPixels(0, 0, 100, 100, GL_RGB, GL_UNSIGNED_BYTE, bytes);
-
-		SOIL_save_image("visiable2.bmp", SOIL_SAVE_TYPE_BMP, 100, 100, 3, bytes);
-		delete[] bytes;
-
-		glDeleteFramebuffers(1, &framebuffer);
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		*/
-	}
-
-
-	/*
 	// visited 방문한 위치 텍스쳐
 	{
 		glBindVertexArray(mVao);
 		GLuint framebuffer;
 		glGenFramebuffers(1, &framebuffer);
 		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-		glGenTextures(1, &mVisitedTexture);
-		glBindTexture(GL_TEXTURE_2D, mVisitedTexture);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1024, 768, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mVisitedTexture, 0);
+		static const GLfloat green[] = { 0.0f, 0.0f, 0.0f, 1.0f };
+
+		glClearBufferfv(GL_COLOR, 0, green);
+
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mVisitedTexture->GetTextureID(), 0);
 
 		// Frame buffer 완전성 위배
 		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
@@ -421,38 +235,34 @@ void FogOfWar::Update(float deltaTime, std::vector<std::shared_ptr<Unit>> unit)
 		Shader visitedShader;
 
 		visitedCodies.clear();
-		visitedCodies.push_back(make_pair(ReadShaderFile("st.vert"), GL_VERTEX_SHADER));
+		visitedCodies.push_back(make_pair(ReadShaderFile("visited.vert"), GL_VERTEX_SHADER));
 		visitedCodies.push_back(make_pair(ReadShaderFile("visited.frag"), GL_FRAGMENT_SHADER));
 		visitedShader.BuildShader(visitedCodies);
 
-		static const GLfloat green[] = { 1.0f, 0.25f, 1.0f, 1.0f };
-
-		glClearBufferfv(GL_COLOR, 0, green);
-		glBindVertexArray(mVao);
 
 		visitedShader.SetActive();
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, mSightTexture);
+		mVisiableTexture->SetActive();
 
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, mVisitedTexture);
-
+		// TODO 적절한 Blend 함수로 변경
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_ONE, GL_ONE);
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-	}
+		int a = 0;
+		if (a == 1)
+			PrintScreen(framebuffer, "visited.bmp");
 
+		glDeleteFramebuffers(1, &framebuffer);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+	
 	// Fog of War
 	{
 		glBindVertexArray(mVao);
 		GLuint framebuffer;
 		glGenFramebuffers(1, &framebuffer);
 		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-		glGenTextures(1, &mFogTexture);
-		glBindTexture(GL_TEXTURE_2D, mFogTexture);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1024, 768, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mFogTexture, 0);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mFogTexture->GetTextureID(), 0);
 
 		// Frame buffer 완전성 위배
 		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
@@ -469,27 +279,63 @@ void FogOfWar::Update(float deltaTime, std::vector<std::shared_ptr<Unit>> unit)
 		fogCodies.push_back(make_pair(ReadShaderFile("fog.frag"), GL_FRAGMENT_SHADER));
 		fogShader.BuildShader(fogCodies);
 
-		static const GLfloat green[] = { 1.0f, 0.25f, 1.0f, 1.0f };
+		static const GLfloat green[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 
 		glClearBufferfv(GL_COLOR, 0, green);
-		glBindVertexArray(mVao);
 
 		fogShader.SetActive();
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, mVisiableTexture);
+		mVisiableTexture->SetActive();
 		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, mVisitedTexture);
+		mVisitedTexture->SetActive();
 
+		// TODO 적절한 Blend 함수로 변경
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+		int a = 0;
+		if (a == 1)
+			PrintScreen(framebuffer, "Fog.bmp");
+
+		glDeleteFramebuffers(1, &framebuffer);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
-	*/
+
+	glActiveTexture(GL_TEXTURE0);
 	glEnable(GL_CULL_FACE);
 	glDisable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
-
 }
 
 void FogOfWar::Render()
 {
 
+}
+
+void FogOfWar::PrintScreen(GLuint framebuffer, const std::string& str)
+{
+	unsigned char* bytes = new unsigned char[1024 * 1024 * 3];
+	GLuint drawFrameBuffer;
+	glGenFramebuffers(1, &drawFrameBuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, drawFrameBuffer);
+
+	// create a color attachment texture
+	std::shared_ptr<Texture> textureColorbuffer2 = std::make_shared<Texture>();
+	textureColorbuffer2->CreateTexture(1024, 1024);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer2->GetTextureID(), 0);
+	
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+	{
+		printf("frame buffer 완전성 위배");
+	}
+
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, drawFrameBuffer);
+	glBlitFramebuffer(0, 0, 1024, 768, 0, 0, 1024, 1024, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+	glBindFramebuffer(GL_FRAMEBUFFER, drawFrameBuffer);
+	glReadPixels(0, 0, 1024, 1024, GL_RGB, GL_UNSIGNED_BYTE, bytes);
+
+	SOIL_save_image(str.c_str(), SOIL_SAVE_TYPE_BMP, 1024, 1024, 3, bytes);
+	
+	delete[] bytes;
+	glDeleteFramebuffers(1, &drawFrameBuffer);
 }

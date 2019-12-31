@@ -572,7 +572,7 @@ void Terrain::CreateAlphaMaps()
 	}
 
 	alpha = std::make_shared<Texture>();
-	alpha->LoadRawData(bytes, 128, 128, 4);
+	alpha->CreateFromRawData(bytes, 128, 128, 4);
 
 	delete[] bytes;
 }

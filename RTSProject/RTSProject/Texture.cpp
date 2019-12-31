@@ -47,7 +47,7 @@ bool Texture::Load(const std::string& fileName)
 	return true;
 }
 
-bool Texture::LoadRawData(unsigned char* image, int w, int h, int channels)
+bool Texture::CreateFromRawData(unsigned char* image, int w, int h, int channels)
 {
 	int format = GL_RGB;
 	if (channels == 4)
@@ -73,6 +73,7 @@ void Texture::Unload()
 	glDeleteTextures(1, &mTextureID);
 }
 
+// Font
 void Texture::CreateFromSurface(SDL_Surface* surface)
 {
 	mWidth = surface->w;
@@ -89,7 +90,24 @@ void Texture::CreateFromSurface(SDL_Surface* surface)
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, mWidth, mHeight, 0, GL_BGRA,
 		GL_UNSIGNED_BYTE, surface->pixels);
 
-	SOIL_save_image("image.TGA", SOIL_SAVE_TYPE_TGA, mWidth, mHeight, 4, (const unsigned char*)(surface->pixels));
+	// TODO
+	// SOIL_save_image("image.TGA", SOIL_SAVE_TYPE_TGA, mWidth, mHeight, 4, (const unsigned char*)(surface->pixels));
+}
+
+void Texture::CreateTexture(int w, int h)
+{
+	mWidth = w;
+	mHeight = h;
+
+	glGenTextures(1, &mTextureID);
+	glBindTexture(GL_TEXTURE_2D, mTextureID);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_BGRA,
+		GL_UNSIGNED_BYTE, NULL);
 }
 
 void Texture::SetActive()

@@ -17,5 +17,3 @@ private:
 	std::shared_ptr<Terrain>				mTerrain;
 	std::vector<std::shared_ptr<Unit> >*	mpUnits;
 };
-
-

@@ -9,17 +9,21 @@ public:
 										   ~Texture();
 
 	bool									Load(const std::string& fileName);
-	bool									LoadRawData(unsigned char* image, int w, int h, int channels = 4);
-
 	void									Unload();
+
+	bool									CreateFromRawData(unsigned char* image, int w, int h, int channels = 4);
 	void									CreateFromSurface(struct SDL_Surface* surface);
+	void									CreateTexture(int w, int h);
 
 	void									SetActive();
 
 	int										GetWidth() const { return mWidth; }
 	int										GetHeight() const { return mHeight; }
+
+	GLuint									GetTextureID() { return mTextureID; }
+
 private:
-	unsigned int							mTextureID;
+	GLuint									mTextureID;
 	int										mWidth;
 	int										mHeight;
 };
