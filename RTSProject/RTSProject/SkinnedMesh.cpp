@@ -56,16 +56,14 @@ void SkinnedMesh::Update(float deltaTime)
 void SkinnedMesh::RenderModel(std::shared_ptr<Camera> camera)
 {
 	glm::mat4 model = mPos * mRot * mSca;
-	glm::mat4 mat = camera->GetProjectionMatrix() * camera->GetViewMatrix() * model;
+	glm::mat4 mat = camera->GetProjectionMatrix() * camera->GetViewMatrix();
 
 	mMeshShader->SetActive();
 
 	mMeshShader->SetVectorUniform("lightDir", glm::vec3(0.0f, 1.0f, 0.0f));
 	mMeshShader->SetVector4Uniform("teamColor", glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
-	mMeshShader->SetMatrixUniform("mvp_matrix", mat);
-	mMeshShader->SetMatrixUniform("model", model);
-	mMeshShader->SetMatrixUniform("view", camera->GetViewMatrix());
-	mMeshShader->SetMatrixUniform("perspect", camera->GetProjectionMatrix());
+	mMeshShader->SetMatrixUniform("vpMatrix", mat);
+	mMeshShader->SetMatrixUniform("worldMatrix", model);
 
 	for (int i = 0; i < 100; ++i)
 	{

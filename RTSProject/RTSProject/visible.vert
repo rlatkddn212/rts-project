@@ -11,6 +11,6 @@ out vec2 outtc;
 void main(void)
 {
     outtc = tc;
-	 vec4 pos = vec4( 5 * position.xzy + offset, 1.0); 
+	 vec4 pos = vec4(10 * position.xzy + offset, 1.0); 
 	 gl_Position = vp_matrix * pos;
 }

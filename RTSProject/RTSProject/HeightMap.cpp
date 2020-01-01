@@ -306,7 +306,7 @@ void HeightMap::Render(std::shared_ptr<Camera> camera)
 
 	glm::mat4 mvpMat = glm::mat4(1.0f);
 	mvpMat = mPerspect * mView * mvpMat;
-	mShader->SetMatrixUniform("mvp_matrix", mvpMat);
+	mShader->SetMatrixUniform("vpMatrix", mvpMat);
 
 	glDrawArrays(GL_POINTS, 0, mSize.x * mSize.y);
 }

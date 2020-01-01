@@ -98,11 +98,11 @@ void Patch::CreateMesh(HeightMap & hm, SDL_FRect source)
 	delete[] indices;
 }
 
-void Patch::Render(glm::mat4& mvpMat)
+void Patch::Render(glm::mat4& vpMat)
 {
 	mVertexArray->SetActive();
 	mMeshShader->SetActive();
-	mMeshShader->SetMatrixUniform("mvp_matrix", mvpMat);
+	mMeshShader->SetMatrixUniform("vpMatrix", vpMat);
 	
 	glDrawElements(GL_TRIANGLES, mVertexArray->GetNumIndices(), GL_UNSIGNED_INT, nullptr);
 }
@@ -606,9 +606,11 @@ void Terrain::Render(std::shared_ptr<Camera> camera)
 		mPatches[i]->Render(mat);
 	}
 
-	glActiveTexture(GL_TEXTURE0);
+	glActiveTexture(GL_TEXTURE1);
+	mFogTexture->SetActive();
 	for (int i = 0; i < mModelList.size(); ++i)
 	{
 		mModelList[i]->Render(camera);
 	}
+	glActiveTexture(GL_TEXTURE0);
 }

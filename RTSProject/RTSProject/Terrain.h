@@ -71,7 +71,7 @@ struct Patch
 	SDL_FRect								GetRect() { return mRect; }
 
 	void									CreateMesh(HeightMap& hm, SDL_FRect source);
-	void									Render(glm::mat4& mvpMat);
+	void									Render(glm::mat4& vpMat);
 	void									Update(float deltaTime);
 	
 	SDL_FRect								mRect;

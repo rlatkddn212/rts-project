@@ -46,10 +46,14 @@ void StaticMesh::RenderModel(std::shared_ptr<Camera> camera)
 {
 	mMeshShader->SetActive();
 	glm::mat4 mat = mPosMat * mRotMat * mScaMat;
-	glm::mat4 mvp = camera->GetProjectionMatrix() * camera->GetViewMatrix() * mat;
+
+
+	glm::vec4 pos = mat * glm::vec4(0.0, 0.0, 0.0, 1.0f);
+	glm::mat4 vp = camera->GetProjectionMatrix() * camera->GetViewMatrix();
 	
 	SetUniform();
-	mMeshShader->SetMatrixUniform("mvp_matrix", mvp);
+	mMeshShader->SetMatrixUniform("worldMatrix", mat);
+	mMeshShader->SetMatrixUniform("vpMatrix", vp);
 	mMeshShader->SetVectorUniform("lightDir", glm::vec3(0.0f, 0.0f, 1.0f));
 
 	for (size_t i = 0; i < mMeshList.size(); ++i)

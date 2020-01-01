@@ -73,9 +73,11 @@ void BoxObject::Render(std::shared_ptr<Camera> camera)
 	{
 		glDisable(GL_CULL_FACE);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		glm::mat4 mat = camera->GetProjectionMatrix() * camera->GetViewMatrix() * mPosMat * mRotMat * mScaMat;
+		glm::mat4 world = mPosMat * mRotMat * mScaMat;
+		glm::mat4 mat = camera->GetProjectionMatrix() * camera->GetViewMatrix();
 		mMeshShader->SetActive();
-		mMeshShader->SetMatrixUniform("mvp_matrix", mat);
+		mMeshShader->SetMatrixUniform("worldMatrix", world);
+		mMeshShader->SetMatrixUniform("vpMatrix", mat);
 
 		mMesh->SetActive();
 		glDrawElements(GL_TRIANGLES, mMesh->GetNumIndices(), GL_UNSIGNED_INT, nullptr);

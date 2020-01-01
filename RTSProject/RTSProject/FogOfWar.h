@@ -17,10 +17,13 @@ public:
 
 	GLuint									mVao;
 
+	Shader									mVisibleShader;
+	Shader									mVisitedShader;
+	Shader									mFogShader;
+
 	std::shared_ptr<Texture>				mSightTexture;
 	std::shared_ptr<Texture>				mVisibleTexture;
 	std::shared_ptr<Texture>				mVisitedTexture;
 	std::shared_ptr<Texture>				mFogTexture;
-
 };
 

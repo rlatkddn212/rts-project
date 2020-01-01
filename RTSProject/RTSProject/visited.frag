@@ -7,9 +7,9 @@ void main()
 {
      vec4 c = texture(uTexture, outtc);
 	 
-	 if (c.r > 0.8)
+	 if (c.r > 0.1)
 	 {
-		outColor = vec4(0.5, 0.5, 0.5, 1.0);
+		outColor = vec4(0.3, 0.3, 0.3, 1.0);
 	 }
 	 else
 	 {

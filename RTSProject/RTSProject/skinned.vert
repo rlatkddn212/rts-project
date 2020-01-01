@@ -10,7 +10,8 @@ out vec2 fragTexCoord;
 out float shade;
 
 uniform mat4 gBones[100];
-uniform mat4 mvp_matrix;
+uniform mat4 vpMatrix;
+uniform mat4 worldMatrix;
 uniform vec3 lightDir;
 
 void main()
@@ -24,6 +25,6 @@ void main()
 	shade = max(0.0f, dot(normalize(inNormal), lightDir));
 	shade = 0.2f + shade * 0.8f;
 
-	gl_Position = mvp_matrix * BoneTransform * vec4(inPosition, 1.0);
+	gl_Position = vpMatrix * worldMatrix * BoneTransform * vec4(inPosition, 1.0);
 
 }
