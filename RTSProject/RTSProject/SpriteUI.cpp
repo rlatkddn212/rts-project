@@ -38,7 +38,7 @@ void SpriteUI::SetTexture(std::string & name)
 	mTexture->Load(name);
 }
 
-void SpriteUI::Render(Camera * camera)
+void SpriteUI::Render(std::shared_ptr<Camera> camera)
 {
 	mSpriteVerts->SetActive();
 	mTexture->SetActive();

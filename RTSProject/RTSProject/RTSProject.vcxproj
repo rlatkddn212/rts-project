@@ -135,6 +135,7 @@
     <ClInclude Include="Magician.h" />
     <ClInclude Include="MapObject.h" />
     <ClInclude Include="Math3D.h" />
+    <ClInclude Include="MiniMap.h" />
     <ClInclude Include="MoveController.h" />
     <ClInclude Include="RTSObject.h" />
     <ClInclude Include="SpriteUI.h" />
@@ -168,6 +169,7 @@
     <ClCompile Include="Magician.cpp" />
     <ClCompile Include="MapObject.cpp" />
     <ClCompile Include="Math3D.cpp" />
+    <ClCompile Include="MiniMap.cpp" />
     <ClCompile Include="MoveController.cpp" />
     <ClCompile Include="RTSObject.cpp" />
     <ClCompile Include="SpriteUI.cpp" />
