@@ -41,7 +41,6 @@ void Patch::CreateMesh(HeightMap & hm, SDL_FRect source)
 			glm::vec2 auv = glm::vec2(x / (float)hm.mSize.x, z / (float)hm.mSize.y);
 			glm::vec3 normal = glm::vec3(0.0, 1.0, 0.0);
 			
-			//Set make_shared<vertex
 			if ((z0 * (width + 1) + x0)  > nrVert)
 			{
 				printf("over");
