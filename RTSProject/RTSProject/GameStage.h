@@ -11,6 +11,7 @@
 #include "Building.h"
 #include "MoveController.h"
 #include "FogOfWar.h"
+#include "MiniMap.h"
 
 enum PlayerState
 {
@@ -22,7 +23,7 @@ enum PlayerState
 class GameStage : public WindowGroup
 {
 public:
-	GameStage();
+											GameStage();
 	virtual								   ~GameStage();
 
 	virtual void							Initialize(GLFWwindow* window, int w, int h);
@@ -35,7 +36,6 @@ public:
 	virtual void							MouseButton(int button, int action);
 	virtual void							MouseWheel(double yPos);
 
-
 	std::shared_ptr<MoveController>			mMoveController;
 	std::vector<std::shared_ptr<Building>>	mBuildings;
 	std::shared_ptr<Building>				mBuildingToPlace;
@@ -45,6 +45,7 @@ public:
 	std::vector<std::shared_ptr<Unit> >		mUnits;
 	std::shared_ptr<AxisObject>				mAxis;
 	std::shared_ptr<FogOfWar>				mFogOfWar;
+	std::shared_ptr<MiniMap>				mMiniMap;
 
 	bool									mIsLeftPress;
 	PlayerState								playerState;

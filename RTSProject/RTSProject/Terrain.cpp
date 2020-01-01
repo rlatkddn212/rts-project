@@ -160,6 +160,10 @@ void Terrain::GenerateRandomTerrain(int numPatches)
 	}
 
 	CreatePath();
+	
+	mMapTexture = make_shared<Texture>();
+	mMapTexture->CreateTexture(1024, 768, 0);
+	CreateMapTexture();
 }
 
 void Terrain::AddObject(int type, glm::ivec2 p)
@@ -612,4 +616,83 @@ void Terrain::Render(std::shared_ptr<Camera> camera)
 		mModelList[i]->Render(camera);
 	}
 	glActiveTexture(GL_TEXTURE0);
+}
+
+void Terrain::CreateMapTexture()
+{
+	glm::mat4 proj = glm::ortho(-49.5f, 49.5f, -49.5f, 49.5f, -1000.0f, 1000.0f);
+	glm::mat4 view = glm::lookAt(glm::vec3(49.5f, 100.0f, -49.5f), glm::vec3(49.5f, 0.0f, -49.5f), glm::vec3(0.0f, 0.0f, 1.0f));
+
+	glm::mat4 mat = proj * view;
+
+	glm::vec4 pos = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+	glm::vec4 newp = mat * pos;
+
+	// frame Buffer 생성
+	GLuint frameBuffer;
+	glGenFramebuffers(1, &frameBuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mMapTexture->GetTextureID(), 0);
+
+	// Frame buffer 완전성 위배
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+	{
+		return;
+	}
+
+	static const GLfloat black[] = { 1.0f, 1.0f, 0.0f, 1.0f };
+	glClearBufferfv(GL_COLOR, 0, black);
+
+	glActiveTexture(GL_TEXTURE0);
+	grass->SetActive();
+	glActiveTexture(GL_TEXTURE1);
+	mountain->SetActive();
+	glActiveTexture(GL_TEXTURE2);
+	snow->SetActive();
+	glActiveTexture(GL_TEXTURE3);
+	alpha->SetActive();
+	glActiveTexture(GL_TEXTURE4);
+
+	shared_ptr<Texture> voidTexture = make_shared<Texture>();
+	voidTexture->CreateTexture(100, 100, 255);
+	voidTexture->SetActive();
+	
+	for (int i = 0; i < (int)mPatches.size(); ++i)
+	{
+		mPatches[i]->Render(mat);
+	}
+
+	glActiveTexture(GL_TEXTURE0);
+	PrintScreen(frameBuffer, "Maptexture.bmp");
+	glDeleteFramebuffers(1, &frameBuffer);
+}
+
+void Terrain::PrintScreen(GLuint framebuffer, const std::string& str)
+{
+	unsigned char* bytes = new unsigned char[1024 * 1024 * 3];
+	GLuint drawFrameBuffer;
+	glGenFramebuffers(1, &drawFrameBuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, drawFrameBuffer);
+
+	// create a color attachment texture
+	std::shared_ptr<Texture> textureColorbuffer2 = std::make_shared<Texture>();
+	textureColorbuffer2->CreateTexture(1024, 1024, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer2->GetTextureID(), 0);
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+	{
+		printf("frame buffer 완전성 위배");
+	}
+
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, drawFrameBuffer);
+	glBlitFramebuffer(0, 0, 1024, 768, 0, 0, 1024, 1024, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+	glBindFramebuffer(GL_FRAMEBUFFER, drawFrameBuffer);
+	glReadPixels(0, 0, 1024, 1024, GL_RGB, GL_UNSIGNED_BYTE, bytes);
+
+	SOIL_save_image(str.c_str(), SOIL_SAVE_TYPE_BMP, 1024, 1024, 3, bytes);
+
+	delete[] bytes;
+	glDeleteFramebuffers(1, &drawFrameBuffer);
 }

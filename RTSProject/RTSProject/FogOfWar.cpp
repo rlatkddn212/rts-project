@@ -60,7 +60,7 @@ FogOfWar::FogOfWar()
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 
 	mSightTexture = std::make_shared<Texture>();
-	mSightTexture->CreateTexture(1024, 768);
+	mSightTexture->CreateTexture(1024, 768, 0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mSightTexture->GetTextureID(), 0);
 
 	// Frame buffer 완전성 위배
@@ -85,46 +85,20 @@ FogOfWar::FogOfWar()
 
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
-	unsigned char* bytes = new unsigned char[10000 * 3];
-	GLuint framebuffer2;
-	glGenFramebuffers(1, &framebuffer2);
-	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer2);
-
-	// create a color attachment texture
-
-	std::shared_ptr<Texture> textureColor = std::make_shared<Texture>();
-	textureColor->CreateTexture(100, 100);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColor->GetTextureID(), 0);
-
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-	{
-		printf("no");
-	}
-
-	glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebuffer2);
-	glBlitFramebuffer(0, 0, 1024, 768, 0, 0, 100, 100, GL_COLOR_BUFFER_BIT, GL_LINEAR);
-	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer2);
-	glReadPixels(0, 0, 100, 100, GL_RGB, GL_UNSIGNED_BYTE, bytes);
-
-	SOIL_save_image("hello.bmp", SOIL_SAVE_TYPE_BMP, 100, 100, 3, bytes);
-	delete[] bytes;
-
 	glDeleteFramebuffers(1, &framebuffer);
-	
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 
 	mVisibleTexture = std::make_shared<Texture>();
-	mVisibleTexture->CreateTexture(1024, 768);
+	mVisibleTexture->CreateTexture(1024, 768, 0);
 
 	// 방문 텍스쳐 생성
 	mVisitedTexture  = std::make_shared<Texture>();
-	mVisitedTexture->CreateTexture(1024, 768);
+	mVisitedTexture->CreateTexture(1024, 768, 0);
 	
 	// Fog 텍스쳐 생성
 	mFogTexture = std::make_shared<Texture>();
-	mFogTexture->CreateTexture(1024, 768);
+	mFogTexture->CreateTexture(1024, 768, 0);
 
 
 	// 유닛 시야
@@ -306,7 +280,7 @@ void FogOfWar::PrintScreen(GLuint framebuffer, const std::string& str)
 
 	// create a color attachment texture
 	std::shared_ptr<Texture> textureColorbuffer2 = std::make_shared<Texture>();
-	textureColorbuffer2->CreateTexture(1024, 1024);
+	textureColorbuffer2->CreateTexture(1024, 1024, 0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer2->GetTextureID(), 0);
 	
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)

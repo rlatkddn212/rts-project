@@ -120,6 +120,10 @@ public:
 
 	void									SetFogTexture(std::shared_ptr<Texture> texture) { mFogTexture = texture; }
 
+	void									CreateMapTexture();
+	std::shared_ptr<Texture>				GetMapTexture() { return mMapTexture; }
+	void									PrintScreen(GLuint framebuffer, const std::string& str);
+
 private:
 
 	// 배열 크기는 고정, 조절 필요
@@ -136,4 +140,6 @@ private:
 	std::shared_ptr<HeightMap>				mHeightMap;
 	std::vector<std::shared_ptr<Patch> >	mPatches;
 	std::vector<std::shared_ptr<MapObject> > mModelList;
+
+	std::shared_ptr<Texture>				mMapTexture;
 };

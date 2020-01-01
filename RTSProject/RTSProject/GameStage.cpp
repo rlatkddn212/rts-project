@@ -49,8 +49,11 @@ void GameStage::Initialize(GLFWwindow* window, int w, int h)
 
 	// °Ç¹°
 	mBuildingToPlace = nullptr;
-
 	mFogOfWar = make_shared<FogOfWar>();
+
+	mMiniMap = make_shared<MiniMap>();
+	mMiniMap->SetMapTexture(mTerrain->GetMapTexture());
+	
 }
 
 void GameStage::Terminate()
@@ -77,6 +80,9 @@ void GameStage::Update(float deltaTime)
 	mMoveController->Update(deltaTime);
 
 	mFogOfWar->Update(deltaTime, mUnits);
+	mMiniMap->SetFogTexture(mFogOfWar->GetFogTexture());
+
+	//mMiniMap->Update(deltaTime, mUnits);
 }
 
 void GameStage::Render()

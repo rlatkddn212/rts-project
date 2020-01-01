@@ -13,7 +13,7 @@ public:
 
 	bool									CreateFromRawData(unsigned char* image, int w, int h, int channels = 4);
 	void									CreateFromSurface(struct SDL_Surface* surface);
-	void									CreateTexture(int w, int h);
+	void									CreateTexture(int w, int h, unsigned char byte);
 
 	void									SetActive();
 

@@ -94,11 +94,11 @@ void Texture::CreateFromSurface(SDL_Surface* surface)
 	// SOIL_save_image("image.TGA", SOIL_SAVE_TYPE_TGA, mWidth, mHeight, 4, (const unsigned char*)(surface->pixels));
 }
 
-void Texture::CreateTexture(int w, int h)
+void Texture::CreateTexture(int w, int h, unsigned char byte)
 {
 	mWidth = w;
 	mHeight = h;
-
+	std::vector<GLubyte> emptyData(w * h * 4, byte);
 	glGenTextures(1, &mTextureID);
 	glBindTexture(GL_TEXTURE_2D, mTextureID);
 
@@ -107,7 +107,7 @@ void Texture::CreateTexture(int w, int h)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_BGRA,
-		GL_UNSIGNED_BYTE, NULL);
+		GL_UNSIGNED_BYTE, &emptyData[0]);
 }
 
 void Texture::SetActive()
