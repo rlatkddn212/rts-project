@@ -5,6 +5,7 @@
 #include "Camera.h"
 #include "Shader.h"
 #include "VertexArray.h"
+#include "Unit.h"
 
 class MiniMap
 {
@@ -12,7 +13,7 @@ public:
 											MiniMap();
 										   ~MiniMap();
 
-	void									Update(float deltaTime);
+	void									Update(float deltaTime, std::vector<std::shared_ptr<Unit>> unit);
 	void									Render(std::shared_ptr<Camera> camera);
 
 	void									SetMapTexture(std::shared_ptr<Texture> texture) { mMapTexture = texture; }
@@ -21,6 +22,8 @@ public:
 	// UnitTexture »ý¼º
 	void									SetUnitTexture() {}
 
+	std::shared_ptr<Texture>				mPositionTexture;
+	GLuint									mFrameBuffer;
 	GLuint									mVao;
 	std::shared_ptr<Shader>					mShader;
 	std::shared_ptr<Texture>				mMapTexture;

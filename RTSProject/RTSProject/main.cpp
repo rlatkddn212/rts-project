@@ -90,7 +90,7 @@ public:
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 		// window »ý¼º
-		window = glfwCreateWindow(screenW, screenH, "ShaderToy Viewer", NULL, NULL);
+		window = glfwCreateWindow(screenW, screenH, "RTS", NULL, NULL);
 
 		if (window == NULL)
 		{

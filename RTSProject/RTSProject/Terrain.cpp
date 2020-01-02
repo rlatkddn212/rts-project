@@ -621,7 +621,7 @@ void Terrain::Render(std::shared_ptr<Camera> camera)
 void Terrain::CreateMapTexture()
 {
 	glm::mat4 proj = glm::ortho(-49.5f, 49.5f, -49.5f, 49.5f, -1000.0f, 1000.0f);
-	glm::mat4 view = glm::lookAt(glm::vec3(49.5f, 100.0f, -49.5f), glm::vec3(49.5f, 0.0f, -49.5f), glm::vec3(0.0f, 0.0f, 1.0f));
+	glm::mat4 view = glm::lookAt(glm::vec3(49.5f, 100.0f, -49.5f), glm::vec3(49.5f, 0.0f, -49.5f), glm::vec3(0.0f, 0.0f, -1.0f));
 
 	glm::mat4 mat = proj * view;
 
