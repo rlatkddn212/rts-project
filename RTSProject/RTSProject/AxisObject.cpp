@@ -62,10 +62,11 @@ void AxisObject::MakeModel()
 
 void AxisObject::Render(std::shared_ptr<Camera> camera)
 {
+	glBindVertexArray(mVertexArray);
 	mMeshShader->SetActive();
 	glm::mat4 mat = camera->GetProjectionMatrix() * camera->GetViewMatrix();
 	mMeshShader->SetMatrixUniform("vpMatrix", mat);
-	glBindVertexArray(mVertexArray);
+	mMeshShader->SetMatrixUniform("worldMatrix", glm::mat4(1.0f));
 	glLineWidth(2.f);
 	glDrawArrays(GL_LINES, 0, 6);
 }

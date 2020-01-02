@@ -51,7 +51,7 @@ void GameStage::Initialize(GLFWwindow* window, int w, int h)
 	mBuildingToPlace = nullptr;
 	mFogOfWar = make_shared<FogOfWar>();
 
-	mMiniMap = make_shared<MiniMap>();
+	mMiniMap = make_shared<MiniMap>(w, h, w * 3.0f / 10.0f, h * 3.0f / 10.0f);
 	mMiniMap->SetMapTexture(mTerrain->GetMapTexture());
 	
 }
@@ -237,49 +237,33 @@ void GameStage::MouseButton(int button, int action)
 	// 왼쪽 마우스 클릭시
 	else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
 	{
-		// 기본 상태일 경우 유닛 선택 확인
-		if (playerState == PLAYER_NONE)
+		// 미니맵 클릭시
+		if (mMiniMap->IsXYInMiniMap(mMouseX, mMouseY))
 		{
-			ray.SetRay(camera, mMouseX, mMouseY);
-			for (int i = 0; i < 10; ++i)
+			// 미니맵을 클릭
+			
+			// 좌표계산
+			glm::vec2 pos = mMiniMap->GetTerrainPos(mMouseX, mMouseY);
+			assert(0.0f < pos.x || pos.x <= 100.0f);
+			assert(0.0f < pos.y || pos.y <= 100.0f);
+			// 카메라를 계산된 좌표를 보도록 위치 수정
+			camera->SetPos(pos);
+		}
+		else
+		{
+			// 기본 상태일 경우 유닛 선택 확인
+			if (playerState == PLAYER_NONE)
 			{
-				mUnits[i]->UnSelect();
-			}
+				IsSelectUnit();
 
-			bool isSelect = false;
-			for (int i = 0; i < 10; ++i)
-			{
-				if (mUnits[i]->Intersect(ray))
-				{
-					mUnits[i]->Select();
-					isSelect = true;
-
-					break;
-				}
 			}
-			if (!isSelect)
+			// 건물 짓기 준비 상태일 경우
+			else if (playerState == PLAYER_BUILDING)
 			{
-				mMouse->SetStartXY(mMouseX, mMouseY);
-				mIsLeftPress = true;
+				CreateBuilding();
 			}
 		}
-		// 건물 짓기 준비 상태일 경우
-		else if (playerState == PLAYER_BUILDING)
-		{
-			ray.SetRay(camera, mMouseX, mMouseY);
-			glm::ivec2 pos;
-			mBox.clear();
-			if (mTerrain->Intersect(ray, pos))
-			{
-				// 만약 건설 가능한 구역이라면 건물 추가
-				if (mBuildingToPlace->isPossibleBuild(mTerrain, pos.x, pos.y))
-				{
-					shared_ptr<Building> building = make_shared<Building>(mBuildingToPlace->GetType());
-					building->BuildOnTerrain(mTerrain, pos.x, pos.y);
-					mBuildings.push_back(building);
-				}
-			}
-		}
+		
 	}
 	else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)
 	{
@@ -303,6 +287,49 @@ void GameStage::MouseButton(int button, int action)
 			mIsLeftPress = false;
 			mMouse->VisiableDragBox(false);
 		}
+	}
+}
+
+void GameStage::CreateBuilding()
+{
+	ray.SetRay(camera, mMouseX, mMouseY);
+	glm::ivec2 pos;
+	mBox.clear();
+	if (mTerrain->Intersect(ray, pos))
+	{
+		// 만약 건설 가능한 구역이라면 건물 추가
+		if (mBuildingToPlace->isPossibleBuild(mTerrain, pos.x, pos.y))
+		{
+			shared_ptr<Building> building = make_shared<Building>(mBuildingToPlace->GetType());
+			building->BuildOnTerrain(mTerrain, pos.x, pos.y);
+			mBuildings.push_back(building);
+		}
+	}
+}
+
+void GameStage::IsSelectUnit()
+{
+	ray.SetRay(camera, mMouseX, mMouseY);
+	for (int i = 0; i < 10; ++i)
+	{
+		mUnits[i]->UnSelect();
+	}
+
+	bool isSelect = false;
+	for (int i = 0; i < 10; ++i)
+	{
+		if (mUnits[i]->Intersect(ray))
+		{
+			mUnits[i]->Select();
+			isSelect = true;
+
+			break;
+		}
+	}
+	if (!isSelect)
+	{
+		mMouse->SetStartXY(mMouseX, mMouseY);
+		mIsLeftPress = true;
 	}
 }
 

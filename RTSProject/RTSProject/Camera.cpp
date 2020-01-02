@@ -197,3 +197,12 @@ glm::mat4 Camera::GetProjectionMatrix()
 	
 	return matProj;
 }
+
+void Camera::SetPos(glm::vec2 pos)
+{
+	// 현재 카메라가 보고 있는 위치와 이동할 위치의 차
+	glm::vec2 d = glm::vec2(mFocus.x - pos.x, mFocus.z - pos.y);
+	// mFocus가 보는 위치를 고려하자.
+	mFocus = glm::vec3(pos.x, mFocus.y, pos.y);
+	mEye = glm::vec3(mEye.x - d.x, mEye.y, mEye.z - d.y);
+}

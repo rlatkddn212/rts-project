@@ -36,6 +36,9 @@ public:
 	virtual void							MouseButton(int button, int action);
 	virtual void							MouseWheel(double yPos);
 
+	void									CreateBuilding();
+	void									IsSelectUnit();
+
 	std::shared_ptr<MoveController>			mMoveController;
 	std::vector<std::shared_ptr<Building>>	mBuildings;
 	std::shared_ptr<Building>				mBuildingToPlace;

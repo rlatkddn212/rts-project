@@ -1,8 +1,13 @@
 #include "Precompiled.h"
 #include "MiniMap.h"
 
-MiniMap::MiniMap()
+MiniMap::MiniMap(int winSizeX, int winSizeY, int miniX, int miniY)
 {
+	mWinX = winSizeX;
+	mWinY = winSizeY;
+	mMiniMapX = miniX;
+	mMiniMapY = miniY;
+
 	static const GLfloat vertexBufferData[] =
 	{
 		-1.0f, -1.0f, 0.0f,
@@ -126,9 +131,9 @@ void MiniMap::Update(float deltaTime, std::vector<std::shared_ptr<Unit>> unit, s
 {
 	Ray ray[4];
 	ray[0].SetRay(camera, 0, 0);
-	ray[1].SetRay(camera, 1024, 0);
-	ray[2].SetRay(camera, 1024, 768);
-	ray[3].SetRay(camera, 0, 768);
+	ray[1].SetRay(camera, mWinX, 0);
+	ray[2].SetRay(camera, mWinX, mWinY);
+	ray[3].SetRay(camera, 0, mWinY);
 
 	std::vector<glm::vec3> pos;
 	for (int i = 0; i < 4; ++i)
@@ -160,7 +165,6 @@ void MiniMap::Update(float deltaTime, std::vector<std::shared_ptr<Unit>> unit, s
 		glBindBuffer(GL_ARRAY_BUFFER, mVertexBuffer);
 		glBufferData(GL_ARRAY_BUFFER, 4 * vertexSize, &verts[0], GL_STATIC_DRAW);
 	}
-
 
 	glBindFramebuffer(GL_FRAMEBUFFER, mFrameBuffer);
 	// visible 텍스쳐 생성
@@ -210,13 +214,14 @@ void MiniMap::Render(std::shared_ptr<Camera> camera)
 	glBindVertexArray(mVertexArray);
 	glLineWidth(2.f);
 	glEnable(GL_SCISSOR_TEST);
-	glScissor(1024.0f * 7.0f / 10.0f, 0.0f, 1024.0f * 3.0f / 10.0f, 768.0f * 3.0f / 10.0f);
+	glScissor(mWinX - mMiniMapX, 0.0f, mMiniMapX, mMiniMapY);
 	glDrawArrays(GL_LINE_LOOP, 0, 4);
 	
 	glDisable(GL_SCISSOR_TEST);
 	glEnable(GL_DEPTH_TEST);
 }
 
+// https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-plane-and-ray-disk-intersection
 bool MiniMap::RayIntersectPlane(glm::vec3 n, glm::vec3 p0, glm::vec3 org, glm::vec3 dir, float* t)
 {
  	float denom = glm::dot(n, dir);
@@ -227,4 +232,25 @@ bool MiniMap::RayIntersectPlane(glm::vec3 n, glm::vec3 p0, glm::vec3 org, glm::v
 	}
 
 	return false;
+}
+
+bool MiniMap::IsXYInMiniMap(int mouseX, int mouseY)
+{
+	 
+	if (mWinX - mMiniMapX < mouseX && mouseX < mWinX
+		&& mWinY - mMiniMapY < mouseY && mouseY < mWinY)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+glm::vec2 MiniMap::GetTerrainPos(int mouseX, int mouseY)
+{
+	// terrain size가 100인것을 가정한다
+	float posX = (float)(mouseX - (mWinX - mMiniMapX)) / (float)mMiniMapX * 100.0f;
+	float posY = (float)(mouseY - (mWinY - mMiniMapY)) / (float)mMiniMapY * 100.0f;
+
+	return glm::vec2(posX, - (100.0f - posY));
 }

@@ -23,6 +23,8 @@ public:
 	glm::mat4								GetViewMatrix();
 	glm::mat4								GetProjectionMatrix();
 
+	void									SetPos(glm::vec2 pos);
+
 	GLfloat									mX;
 	GLfloat									mY;
 
