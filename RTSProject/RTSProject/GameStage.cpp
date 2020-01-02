@@ -80,9 +80,9 @@ void GameStage::Update(float deltaTime)
 	mMoveController->Update(deltaTime);
 
 	mFogOfWar->Update(deltaTime, mUnits);
-	mMiniMap->SetFogTexture(mFogOfWar->GetFogTexture());
 
-	mMiniMap->Update(deltaTime, mUnits);
+	mMiniMap->SetFogTexture(mFogOfWar->GetFogTexture());
+	mMiniMap->Update(deltaTime, mUnits, camera);
 }
 
 void GameStage::Render()

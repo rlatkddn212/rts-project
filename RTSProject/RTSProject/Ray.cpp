@@ -25,9 +25,6 @@ void Ray::SetRay(std::shared_ptr<Camera> camera, int x, int y)
 
 	float width = camera->mWidth;
 	float height = camera->mHeight;
-	float angleX2 = (((2.0f * x) / width) - 1.0f) / p0;
-	float angleY2 = (1.0f - (2.0f * y) / height) / p1;
-
 	float angleX = (((2.0f * x) / width) - 1.0f);
 	float angleY = (1.0f - (2.0f * y) / height);
 

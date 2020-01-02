@@ -123,6 +123,7 @@ void Mouse::Render(std::shared_ptr<Camera> camera)
 	if (isVisiableDragBox)
 	{
 		mMeshShader->SetActive();
+		mMeshShader->SetMatrixUniform("mMatrix", glm::mat4(1.0f));
 		glBindVertexArray(mVertexArray);
 		glLineWidth(2.f);
 		glDrawArrays(GL_LINE_LOOP, 0, 4);

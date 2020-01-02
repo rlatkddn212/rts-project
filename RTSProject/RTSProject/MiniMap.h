@@ -13,7 +13,7 @@ public:
 											MiniMap();
 										   ~MiniMap();
 
-	void									Update(float deltaTime, std::vector<std::shared_ptr<Unit>> unit);
+	void									Update(float deltaTime, std::vector<std::shared_ptr<Unit>> unit, std::shared_ptr<Camera> camera);
 	void									Render(std::shared_ptr<Camera> camera);
 
 	void									SetMapTexture(std::shared_ptr<Texture> texture) { mMapTexture = texture; }
@@ -21,10 +21,15 @@ public:
 	
 	// UnitTexture »ý¼º
 	void									SetUnitTexture() {}
+	bool									RayIntersectPlane(glm::vec3 n, glm::vec3 p0, glm::vec3 org, glm::vec3 dir, float* t);
 
 	std::shared_ptr<Texture>				mPositionTexture;
 	GLuint									mFrameBuffer;
 	GLuint									mVao;
+	GLuint									mVertexArray;
+	GLuint									mVertexBuffer;
+
+	std::shared_ptr<Shader>					mLineShader;
 	std::shared_ptr<Shader>					mShader;
 	std::shared_ptr<Texture>				mMapTexture;
 	std::shared_ptr<Texture>				mFogTexture;
