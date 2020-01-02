@@ -268,7 +268,7 @@ void FogOfWar::Update(float deltaTime, std::vector<std::shared_ptr<Unit>> unit)
 
 void FogOfWar::Render()
 {
-
+	// 만들어진 Fog Texture는 Terrain이나 Unit에 Texture로 활용됨
 }
 
 void FogOfWar::PrintScreen(GLuint framebuffer, const std::string& str)

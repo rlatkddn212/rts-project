@@ -115,6 +115,8 @@ void GameStage::Render()
 	{
 		mBuildings[i]->Render(camera);
 	}
+
+	mMiniMap->Render(camera);
 }
 
 void GameStage::PressKey(bool* keys)

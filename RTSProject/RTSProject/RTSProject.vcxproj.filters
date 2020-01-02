@@ -316,5 +316,11 @@
     <None Include="visible.frag">
       <Filter>소스 파일\Shader</Filter>
     </None>
+    <None Include="minimap.frag">
+      <Filter>소스 파일\Shader</Filter>
+    </None>
+    <None Include="minimap.vert">
+      <Filter>소스 파일\Shader</Filter>
+    </None>
   </ItemGroup>
 </Project>

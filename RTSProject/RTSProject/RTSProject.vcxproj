@@ -208,6 +208,8 @@
     <None Include="line.frag" />
     <None Include="mesh.frag" />
     <None Include="mesh.vert" />
+    <None Include="minimap.frag" />
+    <None Include="minimap.vert" />
     <None Include="sight.frag" />
     <None Include="skinned.frag" />
     <None Include="skinned.vert" />

@@ -3,6 +3,8 @@
 #include "Precompiled.h"
 #include "Texture.h"
 #include "Camera.h"
+#include "Shader.h"
+#include "VertexArray.h"
 
 class MiniMap
 {
@@ -19,6 +21,8 @@ public:
 	// UnitTexture »ý¼º
 	void									SetUnitTexture() {}
 
+	GLuint									mVao;
+	std::shared_ptr<Shader>					mShader;
 	std::shared_ptr<Texture>				mMapTexture;
 	std::shared_ptr<Texture>				mFogTexture;
 	std::shared_ptr<Texture>				mUnitTexture;
