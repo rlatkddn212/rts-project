@@ -2,6 +2,8 @@
 #include "Precompiled.h"
 #include "Terrain.h"
 #include "Unit.h"
+
+class Unit;
 class MoveController
 {
 public:
@@ -9,11 +11,11 @@ public:
 										   ~MoveController();
 
 	void									SetTerrain(std::shared_ptr<Terrain> terrain);
-	void									SetUnit(std::vector<std::shared_ptr<Unit> >& units);
+	void									SetUnit(std::shared_ptr<Unit> unit);
 	void									Update(float deltaTime);
 	glm::vec2								MoveUnit(std::shared_ptr<Unit> unit, float len);
 
 private:
 	std::shared_ptr<Terrain>				mTerrain;
-	std::vector<std::shared_ptr<Unit> >*	mpUnits;
+	std::shared_ptr<Unit>					mUnit;
 };

@@ -12,13 +12,8 @@
 #include "MoveController.h"
 #include "FogOfWar.h"
 #include "MiniMap.h"
-
-enum PlayerState
-{
-	PLAYER_NONE,
-	PLAYER_UNIT_SELECTED,
-	PLAYER_BUILDING,
-};
+#include "Player.h"
+#include "GamePlayer.h"
 
 class GameStage : public WindowGroup
 {
@@ -36,21 +31,17 @@ public:
 	virtual void							MouseButton(int button, int action);
 	virtual void							MouseWheel(double yPos);
 
-	void									CreateBuilding();
-	void									IsSelectUnit();
+	std::shared_ptr<GamePlayer>				mGamePlayers;
+	std::vector<std::shared_ptr<Player>>	mPlayers;
 
 	std::shared_ptr<MoveController>			mMoveController;
 	std::vector<std::shared_ptr<Building>>	mBuildings;
-	std::shared_ptr<Building>				mBuildingToPlace;
 	std::shared_ptr<HeightMap>				mHeightMap;
 	std::shared_ptr<Terrain>				mTerrain;
-	std::vector<std::shared_ptr<BoxObject>> mBox;
-	std::vector<std::shared_ptr<Unit> >		mUnits;
 	std::shared_ptr<AxisObject>				mAxis;
 	std::shared_ptr<FogOfWar>				mFogOfWar;
 	std::shared_ptr<MiniMap>				mMiniMap;
 
 	bool									mIsLeftPress;
-	PlayerState								playerState;
 };
 

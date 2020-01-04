@@ -43,6 +43,9 @@
     <Filter Include="소스 파일\Shader">
       <UniqueIdentifier>{a100e340-db45-4486-bf0f-36cde38f294a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Player">
+      <UniqueIdentifier>{040fdfed-6721-453c-883b-57495a84fc47}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Font.h">
@@ -123,9 +126,6 @@
     <ClInclude Include="Math3D.h">
       <Filter>소스 파일\Common</Filter>
     </ClInclude>
-    <ClInclude Include="MoveController.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
     <ClInclude Include="MapObject.h">
       <Filter>소스 파일\Object</Filter>
     </ClInclude>
@@ -140,6 +140,21 @@
     </ClInclude>
     <ClInclude Include="MiniMap.h">
       <Filter>소스 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>소스 파일\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="GamePlayer.h">
+      <Filter>소스 파일\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="AiPlayer.h">
+      <Filter>소스 파일\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="NetPlayer.h">
+      <Filter>소스 파일\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveController.h">
+      <Filter>소스 파일\Unit</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -224,9 +239,6 @@
     <ClCompile Include="Math3D.cpp">
       <Filter>소스 파일\Common</Filter>
     </ClCompile>
-    <ClCompile Include="MoveController.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="MapObject.cpp">
       <Filter>소스 파일\Object</Filter>
     </ClCompile>
@@ -241,6 +253,21 @@
     </ClCompile>
     <ClCompile Include="MiniMap.cpp">
       <Filter>소스 파일\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>소스 파일\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="AiPlayer.cpp">
+      <Filter>소스 파일\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="GamePlayer.cpp">
+      <Filter>소스 파일\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="NetPlayer.cpp">
+      <Filter>소스 파일\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="MoveController.cpp">
+      <Filter>소스 파일\Unit</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

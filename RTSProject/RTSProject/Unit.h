@@ -4,8 +4,10 @@
 #include "SkinnedMesh.h"
 #include "BoxObject.h"
 #include "Terrain.h"
+#include "MoveController.h"
 
-class Unit :public RTSObject
+class MoveController;
+class Unit :public std::enable_shared_from_this<Unit>, public RTSObject
 {
 public:
 											Unit();
@@ -43,6 +45,8 @@ public:
 	int										GetPathIdx() { return mPathIdx; }
 	void									SetPathIdx(int pathIdx) { mPathIdx = pathIdx; }
 
+	void									AttachMoveComponent(std::shared_ptr<Terrain> terrain);
+
 protected:
 	bool									mIsSelect;
 	std::shared_ptr<BoxObject>				mBoxObject;
@@ -53,6 +57,7 @@ protected:
 	float									speed;
 
 	glm::ivec2								mMovePos;
-
 	std::shared_ptr<SkinnedMesh>			mSkinnedMesh;
+
+	std::shared_ptr<MoveController>			mMoveComponent;
 };

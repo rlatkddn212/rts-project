@@ -7,6 +7,7 @@ using namespace std;
 Unit::Unit()
 {
 	speed = 3.0f;
+	mMoveComponent = nullptr;
 }
 
 Unit::~Unit()
@@ -17,8 +18,8 @@ Unit::~Unit()
 void Unit::MakeBoxObject()
 {
 	mBoxObject = std::make_shared<BoxObject>(mSkinnedMesh->GetMinPos(), mSkinnedMesh->GetMaxPos());
-	mBoxObject->SetScale(glm::vec3(0.3f, 0.3, 0.3f));
-	SetScale(glm::vec3(0.3f, 0.3, 0.3f));
+	mBoxObject->SetScale(glm::vec3(0.3f, 0.3f, 0.3f));
+	SetScale(glm::vec3(0.3f, 0.3f, 0.3f));
 }
 
 glm::vec3 Unit::GetDirection(glm::vec2 p1, glm::vec2 p2)
@@ -40,55 +41,9 @@ glm::vec3 Unit::GetDirection(glm::vec2 p1, glm::vec2 p2)
 void Unit::Update(float deltaTime)
 {
 	mSkinnedMesh->Update(deltaTime);
-	/*
-	if (!mPath.empty())
-	{
-		SetAnimation(2);
-		float len = deltaTime * speed;
-		glm::vec2 prev = glm::vec2(mPos.x, -mPos.z);
-
-		if (mPathIdx == 0)
-		{
-			mPathIdx = 1;
-		}
-
-		for (int i = mPathIdx; i < mPath.size(); ++i)
-		{
-			float d = glm::distance(prev, glm::vec2(mPath[i]));
-			len -= d;
-			
-			if (len < 0.0f)
-			{
-				glm::vec2 pos = prev + (1 - (-len / d)) * (glm::vec2(mPath[i]) - prev);
-				
-				SetRotation(GetDirection(glm::vec2(mPath[i]), prev));
-				mPos.x = pos.x;
-				mPos.z = -pos.y;
-
-				SetPosition(mPos);
-
-				break;
-			}
-			
-			++mPathIdx;
-			prev = mPath[i];
-		}
-
-		// 도착한 경우
-		if (len > 0)
-		{
-			SetAnimation(1);
-			mPos.x = mPath[mPath.size() - 1].x;
-			mPos.z = -mPath[mPath.size() - 1].y;
-			mPath.clear();
-			SetPosition(mPos);
-		}
-	}
-	else
-	{
-		SetAnimation(1);
-	}
-	*/
+	
+	if (mMoveComponent)
+		mMoveComponent->Update(deltaTime);
 }
 
 void Unit::Render(std::shared_ptr<Camera> camera)
@@ -145,9 +100,6 @@ void Unit::SetPath(const std::vector<glm::ivec2>& path)
 	mPath = path;
 }
 
-
-
-
 void Unit::SetMove(std::shared_ptr<Terrain> terrain, glm::ivec2 movePos)
 {
 	vector<glm::ivec2> ret = terrain->GetPath(RoundPosition(glm::vec2(mPos.x, -mPos.z)), movePos);
@@ -161,47 +113,14 @@ void Unit::SetMove(std::shared_ptr<Terrain> terrain, glm::ivec2 movePos)
 
 void Unit::SetPosOnTerrain(shared_ptr<Terrain> terrain, glm::vec2 p)
 {
-	// 이미 타일에 다른 오브젝트가 있다면
-	/*
-	if (terrain->IsUnitOnTile(RoundPosition(p)) || terrain->IsObjectOnTile(RoundPosition(p)))
-	{
-		// 경로가 남아 있을 경우
-		if (!mPath.empty())
-		{
-			glm::ivec2 lastPos = mPath[mPath.size() - 1];
-			
-			if (glm::distance(p, glm::vec2(lastPos)) < 2.0f 
-				&& (terrain->IsUnitOnTile(RoundPosition(lastPos)) || terrain->IsObjectOnTile(RoundPosition(lastPos))))
-			{
-				glm::ivec2 closePos;
-				if (! terrain->GetClosedPosition(lastPos, &closePos))
-				{
-					assert(0);
-				}
-
-				SetPath(terrain->GetPath(RoundPosition(p), closePos));
-			}
-			else
-			{
-				if (mPath[0] != RoundPosition(p))
-				{
-					SetPath(terrain->GetPath(RoundPosition(p), lastPos));
-				}
-			}
-		}
-		else
-		{
-			glm::ivec2 closePos;
-			if (!terrain->GetClosedPosition(RoundPosition(mMovePos), &closePos))
-			{
-				assert(0);
-			}
-			SetPath(terrain->GetPath(RoundPosition(mMovePos), closePos));
-		}
-	}
-	*/
 	terrain->SetUnitOnTile(RoundPosition(p));
 	SetPosition(glm::vec3(p.x, 0.0f, -p.y));
 	SetHeight(terrain);
+}
 
+void Unit::AttachMoveComponent(std::shared_ptr<Terrain> terrain)
+{
+	mMoveComponent = std::make_shared<MoveController>();
+	mMoveComponent->SetTerrain(terrain);
+	mMoveComponent->SetUnit(shared_from_this());
 }

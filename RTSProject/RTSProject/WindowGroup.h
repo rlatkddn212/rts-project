@@ -36,7 +36,6 @@ public:
 	std::shared_ptr<TextUI>					mText;
 	std::shared_ptr<Mouse>					mMouse;
 
-	Ray										ray;
 	int										mMouseX;
 	int										mMouseY;
 };

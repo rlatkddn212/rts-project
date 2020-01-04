@@ -126,17 +126,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AiPlayer.h" />
     <ClInclude Include="AxisObject.h" />
     <ClInclude Include="Building.h" />
     <ClInclude Include="BuildingMesh.h" />
     <ClInclude Include="Drone.h" />
     <ClInclude Include="FogOfWar.h" />
+    <ClInclude Include="GamePlayer.h" />
     <ClInclude Include="Knight.h" />
     <ClInclude Include="Magician.h" />
     <ClInclude Include="MapObject.h" />
     <ClInclude Include="Math3D.h" />
     <ClInclude Include="MiniMap.h" />
     <ClInclude Include="MoveController.h" />
+    <ClInclude Include="NetPlayer.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="RTSObject.h" />
     <ClInclude Include="SpriteUI.h" />
     <ClInclude Include="BoxObject.h" />
@@ -160,17 +164,21 @@
     <ClInclude Include="WindowGroup.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AiPlayer.cpp" />
     <ClCompile Include="AxisObject.cpp" />
     <ClCompile Include="Building.cpp" />
     <ClCompile Include="BuildingMesh.cpp" />
     <ClCompile Include="Drone.cpp" />
     <ClCompile Include="FogOfWar.cpp" />
+    <ClCompile Include="GamePlayer.cpp" />
     <ClCompile Include="Knight.cpp" />
     <ClCompile Include="Magician.cpp" />
     <ClCompile Include="MapObject.cpp" />
     <ClCompile Include="Math3D.cpp" />
     <ClCompile Include="MiniMap.cpp" />
     <ClCompile Include="MoveController.cpp" />
+    <ClCompile Include="NetPlayer.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="RTSObject.cpp" />
     <ClCompile Include="SpriteUI.cpp" />
     <ClCompile Include="BoxObject.cpp" />

@@ -17,72 +17,66 @@ void MoveController::SetTerrain(std::shared_ptr<Terrain> terrain)
 	mTerrain = terrain;
 }
 
-void MoveController::SetUnit(std::vector<std::shared_ptr<Unit>>& units)
+void MoveController::SetUnit(std::shared_ptr<Unit> units)
 {
-	mpUnits = &units;
+	mUnit = units;
 }
 
 void MoveController::Update(float deltaTime)
 {
-	if (mpUnits == nullptr) return;
-	for (int unitIdx = 0; unitIdx < mpUnits->size(); ++unitIdx)
+	if (mUnit == nullptr) return;
+	
+	if (! mUnit->GetPath().empty())
 	{
-		if ((*mpUnits)[unitIdx] == nullptr) continue;
+		mUnit->SetAnimation(2);
+		float len = deltaTime * mUnit->GetSpeed();
+		glm::vec3 pos = mUnit->GetPosition();
 
-		shared_ptr<Unit> unit = (*mpUnits)[unitIdx];
-		if (! unit->GetPath().empty())
+		mTerrain->SetUnitOnTile(RoundPosition(glm::vec2(pos.x, -pos.z)), -1);
+		glm::vec2 newPos = MoveUnit(mUnit, len);
+
+		// 길이 막힌 경우
+		if (mTerrain->IsUnitOnTile(RoundPosition(newPos)) || mTerrain->IsObjectOnTile(RoundPosition(newPos)))
 		{
-			unit->SetAnimation(2);
-			float len = deltaTime * unit->GetSpeed();
-			glm::vec3 pos = unit->GetPosition();
-
-			mTerrain->SetUnitOnTile(RoundPosition(glm::vec2(pos.x, -pos.z)), -1);
-			glm::vec2 newPos = MoveUnit(unit, len);
-
-			// 길이 막힌 경우
-			if (mTerrain->IsUnitOnTile(RoundPosition(newPos)) || mTerrain->IsObjectOnTile(RoundPosition(newPos)))
+			// 도착했는데 막힌 경우 새로운 위치를 받는다.
+			if (glm::distance(newPos, glm::vec2(mUnit->GetMove())) < 1.0f)
 			{
-				// 도착했는데 막힌 경우 새로운 위치를 받는다.
-				
-				if (glm::distance(newPos, glm::vec2(unit->GetMove())) < 1.0f)
+				glm::ivec2 closePos;
+				if (!mTerrain->GetClosedPosition(mUnit->GetMove(), &closePos))
 				{
-					glm::ivec2 closePos;
-					if (!mTerrain->GetClosedPosition(unit->GetMove(), &closePos))
-					{
-						assert(0);
-					}
+					assert(0);
+				}
 
-					//unit->SetPath(mTerrain->GetPath(RoundPosition(glm::vec2(pos.x, -pos.z)), closePos));
-					unit->SetMove(mTerrain, closePos);
-					mTerrain->SetUnitOnTile(RoundPosition(closePos));
-				}
-				else
-				{
-					// 이동중 막힌 경우
-					const std::vector<glm::ivec2>& path = mTerrain->GetPath(RoundPosition(glm::vec2(pos.x, -pos.z)), unit->GetMove());
-					if (!path.empty())
-					{
-						unit->SetPath(path);
-					}
-				}
-				
-				newPos = MoveUnit(unit, len);
+				//unit->SetPath(mTerrain->GetPath(RoundPosition(glm::vec2(pos.x, -pos.z)), closePos));
+				mUnit->SetMove(mTerrain, closePos);
+				mTerrain->SetUnitOnTile(RoundPosition(closePos));
 			}
-
-			if (RoundPosition(glm::vec2(newPos.x, newPos.y)) == unit->GetMove())
+			else
 			{
-				unit->SetPath(vector<glm::ivec2>());
+				// 이동중 막힌 경우
+				const std::vector<glm::ivec2>& path = mTerrain->GetPath(RoundPosition(glm::vec2(pos.x, -pos.z)), mUnit->GetMove());
+				if (!path.empty())
+				{
+					mUnit->SetPath(path);
+				}
 			}
-
-			unit->SetPosition(glm::vec3(newPos.x, mTerrain->GetHeight(glm::vec2(newPos.x, -newPos.y)), -newPos.y));
-			mTerrain->SetUnitOnTile(RoundPosition(newPos));
+				
+			newPos = MoveUnit(mUnit, len);
 		}
-		else
+
+		if (RoundPosition(glm::vec2(newPos.x, newPos.y)) == mUnit->GetMove())
 		{
-			glm::vec3 pos = unit->GetPosition();
-			mTerrain->SetUnitOnTile(RoundPosition(glm::vec2(pos.x, -pos.z)));
-			unit->SetAnimation(1);
+			mUnit->SetPath(vector<glm::ivec2>());
 		}
+
+		mUnit->SetPosition(glm::vec3(newPos.x, mTerrain->GetHeight(glm::vec2(newPos.x, -newPos.y)), -newPos.y));
+		mTerrain->SetUnitOnTile(RoundPosition(newPos));
+	}
+	else
+	{
+		glm::vec3 pos = mUnit->GetPosition();
+		mTerrain->SetUnitOnTile(RoundPosition(glm::vec2(pos.x, -pos.z)));
+		mUnit->SetAnimation(1);
 	}
 }
 

@@ -3,6 +3,7 @@
 
 Mouse::Mouse(GLFWwindow* window)
 {
+	isVisiableDragBox = false;
 	lastWheel = 0.0;
 	InitMouse(window);
 }

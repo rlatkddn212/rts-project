@@ -65,11 +65,7 @@ public:
 
 		glEnable(GL_CULL_FACE);
 		glEnable(GL_DEPTH_TEST);
-		//glEnable(GL_BLEND);
 		
-		//glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
-		//glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ZERO);
-
 		group = make_shared<GameStage>();
 		group->Initialize(window, screenW, screenH);
 	}
