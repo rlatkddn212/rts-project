@@ -4,10 +4,22 @@
 
 using namespace std;
 
-Unit::Unit()
+Unit::Unit(shared_ptr<UnitInfo> unitInfo)
 {
-	speed = 3.0f;
+	mUnitInfo = unitInfo;
+
+	health = mUnitInfo->GetHealth();
+	attackspeed = mUnitInfo->GetAttackSpeed();
+	range = mUnitInfo->GetAttackRange();
+	defense = mUnitInfo->GetDefense();
+	speed = mUnitInfo->GetSpeed();
+	damege = mUnitInfo->GetDamege();
+
 	mMoveComponent = nullptr;
+
+	mSkinnedMesh = std::make_shared<SkinnedMesh>();
+	mSkinnedMesh->LoadModel(mUnitInfo->GetModel());
+	MakeBoxObject();
 }
 
 Unit::~Unit()
@@ -95,6 +107,7 @@ glm::vec2 Unit::GetScreenPos(std::shared_ptr<Camera> camera)
 
 void Unit::SetPath(const std::vector<glm::ivec2>& path)
 {
+	mSkinnedMesh->mAnimTime = 0.0f;
 	mPathIdx = 0;
 	mPath.clear();
 	mPath = path;

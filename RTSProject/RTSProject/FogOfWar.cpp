@@ -3,8 +3,11 @@
 #include "Shader.h"
 #include <vector>
 
-FogOfWar::FogOfWar()
+FogOfWar::FogOfWar(int w, int h)
 {
+	mWidth = w;
+	mHeight = h;
+
 	static const GLfloat vertexBufferData[] =
 	{
 		-1.0f, -1.0f, 0.0f,
@@ -60,7 +63,7 @@ FogOfWar::FogOfWar()
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 
 	mSightTexture = std::make_shared<Texture>();
-	mSightTexture->CreateTexture(1024, 768, 0);
+	mSightTexture->CreateTexture(mWidth, mHeight, 0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mSightTexture->GetTextureID(), 0);
 
 	// Frame buffer 완전성 위배
@@ -90,15 +93,15 @@ FogOfWar::FogOfWar()
 
 
 	mVisibleTexture = std::make_shared<Texture>();
-	mVisibleTexture->CreateTexture(1024, 768, 0);
+	mVisibleTexture->CreateTexture(mWidth, mHeight, 0);
 
 	// 방문 텍스쳐 생성
 	mVisitedTexture  = std::make_shared<Texture>();
-	mVisitedTexture->CreateTexture(1024, 768, 0);
+	mVisitedTexture->CreateTexture(mWidth, mHeight, 0);
 	
 	// Fog 텍스쳐 생성
 	mFogTexture = std::make_shared<Texture>();
-	mFogTexture->CreateTexture(1024, 768, 0);
+	mFogTexture->CreateTexture(mWidth, mHeight, 0);
 
 
 	// 유닛 시야
@@ -273,6 +276,7 @@ void FogOfWar::Render()
 
 void FogOfWar::PrintScreen(GLuint framebuffer, const std::string& str)
 {
+	// 1024는 임의의 크기로 수정 가능
 	unsigned char* bytes = new unsigned char[1024 * 1024 * 3];
 	GLuint drawFrameBuffer;
 	glGenFramebuffers(1, &drawFrameBuffer);
@@ -290,9 +294,9 @@ void FogOfWar::PrintScreen(GLuint framebuffer, const std::string& str)
 
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, drawFrameBuffer);
-	glBlitFramebuffer(0, 0, 1024, 768, 0, 0, 1024, 1024, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+	glBlitFramebuffer(0, 0, mWidth, mHeight, 0, 0, 1024, 1024, GL_COLOR_BUFFER_BIT, GL_LINEAR);
 	glBindFramebuffer(GL_FRAMEBUFFER, drawFrameBuffer);
-	glReadPixels(0, 0, 1024, 1024, GL_RGB, GL_UNSIGNED_BYTE, bytes);
+	glReadPixels(0, 0, mWidth, mHeight, GL_RGB, GL_UNSIGNED_BYTE, bytes);
 
 	SOIL_save_image(str.c_str(), SOIL_SAVE_TYPE_BMP, 1024, 1024, 3, bytes);
 	

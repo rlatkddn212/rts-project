@@ -49,9 +49,9 @@ void Camera::Pitch(float f)
 		mBeta = glm::pi<float>() / 2.0f - 0.01f;
 	}
 	
-	if (mBeta < 0.3f)
+	if (mBeta < 0.5f)
 	{
-		mBeta = 0.3f;
+		mBeta = 0.5f;
 	}
 }
 
@@ -93,10 +93,10 @@ void Camera::Update(float timeDelta)
 	mRight = glm::normalize(mRight);
 	mLook = glm::normalize(mLook);
 
-	if (mX < 10)	Scroll(-mRight * mTimeDelta * (4.0f + mRadius * 0.2f));
-	if (mX > mWidth - 10) Scroll(mRight * mTimeDelta * (4.0f + mRadius * 0.2f));
-	if (mY < 10)	Scroll(-mLook * mTimeDelta * (4.0f + mRadius * 0.2f));
-	if (mY > mHeight - 10) Scroll(mLook * mTimeDelta * (4.0f + mRadius * 0.2f));
+	if (mX < 10)			Scroll(-mRight * mTimeDelta * (4.0f + mRadius * 0.2f));
+	if (mX > mWidth - 10)	Scroll(mRight * mTimeDelta * (4.0f + mRadius * 0.2f));
+	if (mY < 10)			Scroll(-mLook * mTimeDelta * (4.0f + mRadius * 0.2f));
+	if (mY > mHeight - 10)	Scroll(mLook * mTimeDelta * (4.0f + mRadius * 0.2f));
 
 	if (mWheel > 0.0)  ChangeRadius(-10.0f);
 	if (mWheel < 0.0) ChangeRadius(10.0f);

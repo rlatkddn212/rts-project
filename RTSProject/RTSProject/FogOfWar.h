@@ -7,7 +7,7 @@
 class FogOfWar
 {
 public:
-											FogOfWar();
+											FogOfWar(int w, int h);
 
 	virtual	void							Update(float deltaTime, std::vector<std::shared_ptr<Unit> > unit);
 	virtual void							Render();
@@ -16,6 +16,9 @@ public:
 	std::shared_ptr<Texture>				GetFogTexture() { return mFogTexture; }
 
 	GLuint									mVao;
+
+	int										mWidth;
+	int										mHeight;
 
 	Shader									mVisibleShader;
 	Shader									mVisitedShader;

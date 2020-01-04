@@ -209,7 +209,6 @@ void MiniMap::Render(std::shared_ptr<Camera> camera)
 	glActiveTexture(GL_TEXTURE0);
 
 	mLineShader->SetActive();
-	mShader->SetMatrixUniform("mMatrix", mat);
 	mLineShader->SetMatrixUniform("mMatrix", mat);
 	glBindVertexArray(mVertexArray);
 	glLineWidth(2.f);

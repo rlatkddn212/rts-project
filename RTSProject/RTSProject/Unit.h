@@ -5,12 +5,13 @@
 #include "BoxObject.h"
 #include "Terrain.h"
 #include "MoveController.h"
+#include "UnitInfo.h"
 
 class MoveController;
 class Unit :public std::enable_shared_from_this<Unit>, public RTSObject
 {
 public:
-											Unit();
+											Unit(std::shared_ptr<UnitInfo> unitInfo);
 										   ~Unit();
 	
 	void									MakeBoxObject();
@@ -48,13 +49,21 @@ public:
 	void									AttachMoveComponent(std::shared_ptr<Terrain> terrain);
 
 protected:
+	int										health;
+	double									attackspeed;
+	double									range;
+	double									defense;
+	double									speed;
+	double									damege;
+
 	bool									mIsSelect;
 	std::shared_ptr<BoxObject>				mBoxObject;
 
 	int										mPathIdx;
 	std::vector<glm::ivec2>					mPath;
 
-	float									speed;
+
+	std::shared_ptr<UnitInfo>				mUnitInfo;
 
 	glm::ivec2								mMovePos;
 	std::shared_ptr<SkinnedMesh>			mSkinnedMesh;

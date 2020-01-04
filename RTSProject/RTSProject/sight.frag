@@ -11,8 +11,8 @@ void main()
 	// 거리가 가까우면 값이 커짐
 	float value = ((0.5 - d) * 2);
 	
-	if(value < 0.0)value = 0.0;
-	if(value > 1.0)value = 1.0;
+	if (value < 0.0)value = 0.0;
+	if (value > 1.0)value = 1.0;
 
 	outColor = vec4(value, value, value, value);
 }

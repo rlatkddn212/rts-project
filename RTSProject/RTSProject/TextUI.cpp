@@ -49,13 +49,32 @@ void TextUI::Update()
 
 void TextUI::Render(std::shared_ptr<Camera> camera)
 {
+	glDisable(GL_CULL_FACE);
+	glDisable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+	glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
+	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ZERO);
 	mSpriteVerts->SetActive();
+	glActiveTexture(GL_TEXTURE0);
 	mTexture->SetActive();
 	mSpriteShader->SetActive();
 	glm::mat4 scaleMat = glm::scale(glm::mat4(1.f),
 		glm::vec3(static_cast<float>(mTexture->GetWidth()) * mScale,
 			static_cast<float>(mTexture->GetHeight()) * mScale,
 			1.0f));
+
+	vector<glm::vec4> poss;
+	
+	
+	glm::vec4 pos1 = glm::vec4(-0.5, -0.5, 0.0f, 1.0f);
+	glm::vec4 pos2 = glm::vec4(0.5, -0.5, 0.0f, 1.0f);
+	glm::vec4 pos3 = glm::vec4(0.5, 0.5, 0.0f, 1.0f);
+	glm::vec4 pos4 = glm::vec4(-0.5, 0.5, 0.0f, 1.0f);
+
+	poss.push_back(pos1);
+	poss.push_back(pos2);
+	poss.push_back(pos3);
+	poss.push_back(pos4);
 
 	glm::mat4 transMat = glm::translate(glm::mat4(1.f), 
 		glm::vec3(mPosX + (-camera->mWidth + static_cast<float>(mTexture->GetWidth()) * mScale) / 2,
@@ -69,10 +88,12 @@ void TextUI::Render(std::shared_ptr<Camera> camera)
 		{ 0.0f, 0.0f, 0.0f, 1.0f }
 	};
 
-	mSpriteShader->SetMatrixUniform("uViewProj", m);
-
 	glm::mat4 world = transMat * scaleMat;
+	mSpriteShader->SetMatrixUniform("uViewProj", m);
 	mSpriteShader->SetMatrixUniform("uWorldTransform", world);
 
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+	glEnable(GL_DEPTH_TEST);
+	glDisable(GL_BLEND);
+	glEnable(GL_CULL_FACE);
 }

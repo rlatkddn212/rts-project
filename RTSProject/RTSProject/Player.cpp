@@ -1,6 +1,5 @@
 #include "Precompiled.h"
 #include "Player.h"
-#include "Magician.h"
 using namespace std;
 
 Player::Player()
@@ -22,7 +21,7 @@ void Player::Initialize(shared_ptr<Terrain> terrain, int w, int h)
 	{
 		int x = rand() % 100;
 		int y = rand() % 100;
-		shared_ptr<Unit> mesh = make_shared<Magician>();
+		shared_ptr<Unit> mesh = make_shared<Unit>(make_shared<UnitInfo>());
 		mUnits.push_back(mesh);
 		mUnits[i]->SetPosOnTerrain(mTerrain, glm::ivec2(x, y));
 		mUnits[i]->AttachMoveComponent(terrain);

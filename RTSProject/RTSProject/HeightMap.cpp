@@ -36,6 +36,7 @@ HeightMap::~HeightMap()
 	}
 }
 
+// 맵 파일을 읽음 (현재 자동생성)
 bool HeightMap::LoadFromFile(const std::string& fileName)
 {
 	memset(mHeightMap, 0, sizeof(float) * mSize.x * mSize.y);

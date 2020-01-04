@@ -1,6 +1,5 @@
 #include "Precompiled.h"
 #include "GameStage.h"
-#include "Magician.h"
 #include "Math3D.h"
 #include "FogOfWar.h"
 #include "GamePlayer.h"
@@ -30,7 +29,6 @@ void GameStage::Initialize(GLFWwindow* window, int w, int h)
 
 	// ÁÂÇ¥°è
 	mAxis = make_shared<AxisObject>();
-	mIsLeftPress = false;
 
 	shared_ptr<Player> player = make_shared<GamePlayer>();
 	mGamePlayers = dynamic_pointer_cast<GamePlayer>(player);
@@ -38,7 +36,7 @@ void GameStage::Initialize(GLFWwindow* window, int w, int h)
 	player->Initialize(mTerrain, w, h);
 	mPlayers.push_back(player);
 
-	mFogOfWar = make_shared<FogOfWar>();
+	mFogOfWar = make_shared<FogOfWar>(w, h);
 
 	mMiniMap = make_shared<MiniMap>(w, h, w * 3.0f / 10.0f, h * 3.0f / 10.0f);
 	mMiniMap->SetMapTexture(mTerrain->GetMapTexture());
@@ -69,6 +67,7 @@ void GameStage::Update(float deltaTime)
 void GameStage::Render()
 {
 	WindowGroup::Render();
+
 	mAxis->Render(camera);
 	shared_ptr<Texture> fog = mFogOfWar->GetFogTexture();
 

@@ -130,11 +130,8 @@
     <ClInclude Include="AxisObject.h" />
     <ClInclude Include="Building.h" />
     <ClInclude Include="BuildingMesh.h" />
-    <ClInclude Include="Drone.h" />
     <ClInclude Include="FogOfWar.h" />
     <ClInclude Include="GamePlayer.h" />
-    <ClInclude Include="Knight.h" />
-    <ClInclude Include="Magician.h" />
     <ClInclude Include="MapObject.h" />
     <ClInclude Include="Math3D.h" />
     <ClInclude Include="MiniMap.h" />
@@ -159,6 +156,7 @@
     <ClInclude Include="TextUI.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Unit.h" />
+    <ClInclude Include="UnitInfo.h" />
     <ClInclude Include="VertexArray.h" />
     <ClInclude Include="VertexArrayAlpha.h" />
     <ClInclude Include="WindowGroup.h" />
@@ -168,11 +166,8 @@
     <ClCompile Include="AxisObject.cpp" />
     <ClCompile Include="Building.cpp" />
     <ClCompile Include="BuildingMesh.cpp" />
-    <ClCompile Include="Drone.cpp" />
     <ClCompile Include="FogOfWar.cpp" />
     <ClCompile Include="GamePlayer.cpp" />
-    <ClCompile Include="Knight.cpp" />
-    <ClCompile Include="Magician.cpp" />
     <ClCompile Include="MapObject.cpp" />
     <ClCompile Include="Math3D.cpp" />
     <ClCompile Include="MiniMap.cpp" />
@@ -201,6 +196,7 @@
     <ClCompile Include="TextUI.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Unit.cpp" />
+    <ClCompile Include="UnitInfo.cpp" />
     <ClCompile Include="VertexArray.cpp" />
     <ClCompile Include="VertexArrayAlpha.cpp" />
     <ClCompile Include="WindowGroup.cpp" />

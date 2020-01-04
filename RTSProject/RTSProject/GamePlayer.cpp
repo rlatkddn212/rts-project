@@ -1,6 +1,5 @@
 #include "Precompiled.h"
 #include "GamePlayer.h"
-#include "Magician.h"
 
 using namespace std;
 

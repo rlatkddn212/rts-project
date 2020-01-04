@@ -27,8 +27,6 @@ SpriteUI::SpriteUI()
 	mTexture = std::make_shared<Texture>();
 }
 
-
-
 SpriteUI::~SpriteUI()
 {
 }
@@ -40,7 +38,9 @@ void SpriteUI::SetTexture(std::string & name)
 
 void SpriteUI::Render(std::shared_ptr<Camera> camera)
 {
+	glDisable(GL_CULL_FACE);
 	mSpriteVerts->SetActive();
+	glActiveTexture(GL_TEXTURE0);
 	mTexture->SetActive();
 	mSpriteShader->SetActive();
 	glm::mat4 scaleMat = glm::scale(glm::mat4(1.f), glm::vec3(1.0f, 1.0f, 1.0f));
@@ -62,4 +62,5 @@ void SpriteUI::Render(std::shared_ptr<Camera> camera)
 	mSpriteShader->SetMatrixUniform("uWorldTransform", world);
 
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+	glEnable(GL_CULL_FACE);
 }
