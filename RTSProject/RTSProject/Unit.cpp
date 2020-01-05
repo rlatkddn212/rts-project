@@ -124,16 +124,14 @@ void Unit::SetMove(std::shared_ptr<Terrain> terrain, glm::ivec2 movePos)
 	}
 }
 
-void Unit::SetPosOnTerrain(shared_ptr<Terrain> terrain, glm::vec2 p)
+void Unit::InitPosOnTerrain(shared_ptr<Terrain> terrain, glm::vec2 p)
 {
-	terrain->SetUnitOnTile(RoundPosition(p));
+	terrain->SetTileState(RoundPosition(p), TileState::StaticObject);
 	SetPosition(glm::vec3(p.x, 0.0f, -p.y));
 	SetHeight(terrain);
 }
 
-void Unit::AttachMoveComponent(std::shared_ptr<Terrain> terrain)
+void Unit::AttachMoveComponent(std::shared_ptr<MoveController> moveControl)
 {
-	mMoveComponent = std::make_shared<MoveController>();
-	mMoveComponent->SetTerrain(terrain);
-	mMoveComponent->SetUnit(shared_from_this());
+	mMoveComponent = moveControl;
 }

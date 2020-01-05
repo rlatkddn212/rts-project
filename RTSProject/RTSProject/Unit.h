@@ -8,7 +8,7 @@
 #include "UnitInfo.h"
 
 class MoveController;
-class Unit :public std::enable_shared_from_this<Unit>, public RTSObject
+class Unit : public RTSObject
 {
 public:
 											Unit(std::shared_ptr<UnitInfo> unitInfo);
@@ -40,13 +40,13 @@ public:
 	glm::ivec2								GetMove() { return mMovePos; }
 
 	void									SetAnimation(int idx) { mSkinnedMesh->mAnimationIdx = idx; };
-	void									SetPosOnTerrain(std::shared_ptr<Terrain> terrain, glm::vec2 p);
+	void									InitPosOnTerrain(std::shared_ptr<Terrain> terrain, glm::vec2 p);
 	float									GetSpeed() { return speed; }
 
 	int										GetPathIdx() { return mPathIdx; }
 	void									SetPathIdx(int pathIdx) { mPathIdx = pathIdx; }
 
-	void									AttachMoveComponent(std::shared_ptr<Terrain> terrain);
+	void									AttachMoveComponent(std::shared_ptr<MoveController> moveControl);
 
 protected:
 	int										health;

@@ -92,11 +92,14 @@ void GamePlayer::MouseButton(shared_ptr<Mouse> mouse, std::shared_ptr<Camera> ca
 		glm::ivec2 pos;
 		if (mTerrain->Intersect(ray, pos))
 		{
-			for (int i = 0; i < 10; ++i)
+			if (mTerrain->IsMovableTile(pos))
 			{
-				if (mUnits[i]->isSelected())
+				for (int i = 0; i < 10; ++i)
 				{
-					mUnits[i]->SetMove(mTerrain, pos);
+					if (mUnits[i]->isSelected())
+					{
+						mUnits[i]->SetMove(mTerrain, pos);
+					}
 				}
 			}
 		}

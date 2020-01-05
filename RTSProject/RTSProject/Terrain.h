@@ -27,6 +27,15 @@ private:
 	bool reverse;
 };
 
+
+enum TileState
+{
+	None,
+	StaticObject,
+	MoveObject,
+	StopObject,
+};
+
 struct Tile
 {
 	glm::ivec2 xy;
@@ -37,17 +46,15 @@ struct Tile
 	float f;
 	float g;
 
-	int mTileObject;
-	int mUnitObject;
-
+	TileState mTileState;
+	
 	Tile* parent;
 	Tile* neigbors[8];
 
 	Tile()
 	{
-		mTileObject = -1;
-		mUnitObject = -1;
-
+		mTileState = None;
+		
 		cost = 0.0f;
 		isMovable = true;
 		isOpen = false;
@@ -110,12 +117,12 @@ public:
 	
 	bool									GetClosedPosition(glm::ivec2 p1, glm::ivec2* closePos);
 
-	void									InitUnitTile();
-	void									SetUnitOnTile(glm::ivec2 p, int type = 1) { mTile[p.y][p.x].mUnitObject = type; }
-	void									SetObjectOnTile(glm::ivec2 p, int type = 1) { mTile[p.y][p.x].mTileObject = type; }
+	void									InitTileState();
+	void									SetTileState(glm::ivec2 p, TileState type) { if (mTile[p.y][p.x].mTileState != StaticObject) mTile[p.y][p.x].mTileState = type; }
 
-	bool									IsUnitOnTile(glm::ivec2 p) { return (mTile[p.y][p.x].mUnitObject != -1) ? true : false; };
-	bool									IsObjectOnTile(glm::ivec2 p) { return (mTile[p.y][p.x].mTileObject != -1) ? true : false; };
+	TileState								GetTileState(glm::ivec2 p) { return mTile[p.y][p.x].mTileState; };
+	bool									IsObjectOnTile(glm::ivec2 p) { return (mTile[p.y][p.x].mTileState != TileState::None) ? true : false; };
+
 	bool									IsMovableTile(glm::ivec2 p) { return mTile[p.y][p.x].isMovable; };
 
 	void									SetFogTexture(std::shared_ptr<Texture> texture) { mFogTexture = texture; }

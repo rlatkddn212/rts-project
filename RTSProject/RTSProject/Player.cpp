@@ -23,8 +23,12 @@ void Player::Initialize(shared_ptr<Terrain> terrain, int w, int h)
 		int y = rand() % 100;
 		shared_ptr<Unit> mesh = make_shared<Unit>(make_shared<UnitInfo>());
 		mUnits.push_back(mesh);
-		mUnits[i]->SetPosOnTerrain(mTerrain, glm::ivec2(x, y));
-		mUnits[i]->AttachMoveComponent(terrain);
+		mUnits[i]->InitPosOnTerrain(mTerrain, glm::ivec2(x, y));
+		
+		shared_ptr<MoveController> mMoveComponent = make_shared<MoveController>();
+		mMoveComponent->SetTerrain(terrain);
+		mMoveComponent->SetUnit(mUnits[i]);
+		mUnits[i]->AttachMoveComponent(mMoveComponent);
 	}
 }
 
@@ -37,8 +41,6 @@ void Player::Update(float deltaTime)
 	for (int i = 0; i < 10; ++i)
 	{
 		mUnits[i]->Update(deltaTime);
-		glm::vec3 unitPos = mUnits[i]->GetPosition();
-		mUnits[i]->SetPosOnTerrain(mTerrain, glm::vec2(unitPos.x, -unitPos.z));
 	}
 }
 

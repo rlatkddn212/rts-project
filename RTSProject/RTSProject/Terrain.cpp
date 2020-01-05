@@ -129,6 +129,7 @@ void Terrain::Initialize(glm::vec2 size)
 {
 	mSize = size;
 	mHeightMap = nullptr;
+	InitTileState();
 	GenerateRandomTerrain(3);
 }
 
@@ -168,7 +169,7 @@ void Terrain::GenerateRandomTerrain(int numPatches)
 
 void Terrain::AddObject(int type, glm::ivec2 p)
 {
-	SetObjectOnTile(p, type);
+	SetTileState(p, TileState::StaticObject);
 
 	glm::vec3 pos = glm::vec3((float)p.x, mHeightMap->GetHeight(p), (float)-p.y);
 	glm::vec3 rot = glm::vec3((rand() % 1000 / 1000.0f) * 3.0f, (rand() % 1000 / 1000.0f) * 0.13f, (rand() % 1000 / 1000.0f) * 0.13f);
@@ -314,7 +315,7 @@ std::vector<glm::ivec2> Terrain::GetPath(glm::ivec2 startPos, glm::ivec2 endPos,
 				ret.push_back(point->xy);
 				point = point->parent;
 			}
-
+			ret.pop_back();
 			reverse(ret.begin(), ret.end());
 
 			break;
@@ -327,7 +328,7 @@ std::vector<glm::ivec2> Terrain::GetPath(glm::ivec2 startPos, glm::ivec2 endPos,
 				Tile* neigborTile = nowTile.neigbors[i];
 				if (neigborTile->isMovable)
 				{
-					if (isObjectCollision && (neigborTile->mTileObject != -1 || neigborTile->mUnitObject != -1))
+					if (isObjectCollision && neigborTile->mTileState != TileState::None)
 					{
 						continue;
 					}
@@ -476,7 +477,7 @@ bool Terrain::GetClosedPosition(glm::ivec2 p1, glm::ivec2* closePos)
 				if (0 <= nx && nx < mSize.x)
 				{
 					glm::ivec2 newPos = glm::ivec2(nx, ny);
-					if (IsMovableTile(newPos) && !IsObjectOnTile(newPos) && !IsUnitOnTile(newPos))
+					if (IsMovableTile(newPos) && !IsObjectOnTile(newPos))
 					{
 						*closePos = newPos;
 						
@@ -493,7 +494,7 @@ bool Terrain::GetClosedPosition(glm::ivec2 p1, glm::ivec2* closePos)
 				if (0 <= ny && ny < mSize.y)
 				{
 					glm::ivec2 newPos = glm::ivec2(nx, ny);
-					if (IsMovableTile(newPos) && !IsObjectOnTile(newPos) && !IsUnitOnTile(newPos))
+					if (IsMovableTile(newPos) && !IsObjectOnTile(newPos))
 					{
 						*closePos = newPos;
 		
@@ -510,13 +511,13 @@ bool Terrain::GetClosedPosition(glm::ivec2 p1, glm::ivec2* closePos)
 	return false;
 }
 
-void Terrain::InitUnitTile()
+void Terrain::InitTileState()
 {
 	for (int i = 0; i < 100; ++i)
 	{
 		for (int j = 0; j < 100; ++j)
 		{
-			mTile[i][j].mUnitObject = -1;
+			mTile[i][j].mTileState = TileState::None;
 		}
 	}
 }

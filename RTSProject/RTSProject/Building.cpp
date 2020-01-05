@@ -46,8 +46,7 @@ bool Building::isPossibleBuild(shared_ptr<Terrain> terrain, int x, int y)
 			if (0 <= nx && nx < size.x && 0 <= ny && ny < size.y)
 			{
 				if (terrain->IsMovableTile(newPos)
-					&& !terrain->IsObjectOnTile(newPos)
-					&& !terrain->IsUnitOnTile(newPos))
+					&& ! terrain->IsObjectOnTile(newPos))
 				{
 					isBuild = true;
 				}
@@ -74,7 +73,7 @@ void Building::BuildOnTerrain(std::shared_ptr<Terrain> terrain, int x, int y)
 			int nx = x + i - 1;
 			int ny = y + j - 1;
 
-			terrain->SetObjectOnTile(glm::ivec2(x, y));
+			terrain->SetTileState(glm::ivec2(x, y), TileState::StaticObject);
 		}
 	}
 }

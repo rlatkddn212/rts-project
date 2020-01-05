@@ -22,7 +22,7 @@ void GameStage::Initialize(GLFWwindow* window, int w, int h)
 	// 지형
 	mTerrain = make_shared<Terrain>();
 	mTerrain->Initialize(glm::ivec2(100, 100));
-	
+
 	// 카메라
 	camera = make_shared<Camera>();
 	camera->Initialize(w, h);
@@ -51,7 +51,6 @@ void GameStage::Update(float deltaTime)
 {
 	WindowGroup::Update(deltaTime);
 
-	mTerrain->InitUnitTile();
 	camera->Update(deltaTime);
 
 	for (auto player : mPlayers)

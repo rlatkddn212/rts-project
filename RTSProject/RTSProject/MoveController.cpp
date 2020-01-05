@@ -32,14 +32,23 @@ void MoveController::Update(float deltaTime)
 		float len = deltaTime * mUnit->GetSpeed();
 		glm::vec3 pos = mUnit->GetPosition();
 
-		mTerrain->SetUnitOnTile(RoundPosition(glm::vec2(pos.x, -pos.z)), -1);
+		//mTerrain->SetTileState(RoundPosition(glm::vec2(pos.x, -pos.z)), TileState::MoveObject);
 		glm::vec2 newPos = MoveUnit(mUnit, len);
 
 		// 길이 막힌 경우
-		if (mTerrain->IsUnitOnTile(RoundPosition(newPos)) || mTerrain->IsObjectOnTile(RoundPosition(newPos)))
+		if (RoundPosition(glm::vec2(pos.x, -pos.z)) != RoundPosition(newPos)  && mTerrain->IsObjectOnTile(RoundPosition(newPos)))
 		{
+			// 막는 애가 이동 중이라면 잠시 기다린다.
+			if (mTerrain->GetTileState(RoundPosition(newPos)) == TileState::MoveObject)
+			{
+				glm::vec3 pos = mUnit->GetPosition();
+				mTerrain->SetTileState(RoundPosition(glm::vec2(pos.x, -pos.z)), TileState::StopObject);
+				mUnit->SetAnimation(1);
+
+				return;
+			}
 			// 도착했는데 막힌 경우 새로운 위치를 받는다.
-			if (glm::distance(newPos, glm::vec2(mUnit->GetMove())) < 1.0f)
+			else if (glm::distance(newPos, glm::vec2(mUnit->GetMove())) < 1.0f)
 			{
 				glm::ivec2 closePos;
 				if (!mTerrain->GetClosedPosition(mUnit->GetMove(), &closePos))
@@ -49,7 +58,6 @@ void MoveController::Update(float deltaTime)
 
 				//unit->SetPath(mTerrain->GetPath(RoundPosition(glm::vec2(pos.x, -pos.z)), closePos));
 				mUnit->SetMove(mTerrain, closePos);
-				mTerrain->SetUnitOnTile(RoundPosition(closePos));
 			}
 			else
 			{
@@ -64,18 +72,19 @@ void MoveController::Update(float deltaTime)
 			newPos = MoveUnit(mUnit, len);
 		}
 
-		if (RoundPosition(glm::vec2(newPos.x, newPos.y)) == mUnit->GetMove())
+		if (glm::distance(newPos, glm::vec2(mUnit->GetMove())) < 0.1f)
 		{
 			mUnit->SetPath(vector<glm::ivec2>());
 		}
 
 		mUnit->SetPosition(glm::vec3(newPos.x, mTerrain->GetHeight(glm::vec2(newPos.x, -newPos.y)), -newPos.y));
-		mTerrain->SetUnitOnTile(RoundPosition(newPos));
+		mTerrain->SetTileState(RoundPosition(glm::vec2(pos.x, -pos.z)), TileState::None);
+		mTerrain->SetTileState(RoundPosition(newPos), TileState::MoveObject);
 	}
 	else
 	{
 		glm::vec3 pos = mUnit->GetPosition();
-		mTerrain->SetUnitOnTile(RoundPosition(glm::vec2(pos.x, -pos.z)));
+		mTerrain->SetTileState(RoundPosition(glm::vec2(pos.x, -pos.z)), TileState::StopObject);
 		mUnit->SetAnimation(1);
 	}
 }
@@ -85,6 +94,11 @@ glm::vec2 MoveController::MoveUnit(shared_ptr<Unit> unit, float len)
 	glm::vec3 unitPos = unit->GetPosition();
 	glm::vec2 prev = glm::vec2(unitPos.x, -unitPos.z);
 	vector<glm::ivec2> mPath = unit->GetPath();
+
+	if (mPath.empty())
+	{
+		return prev;
+	}
 
 	int pathIdx = unit->GetPathIdx();
 	for (int i = pathIdx; i < mPath.size(); ++i)
