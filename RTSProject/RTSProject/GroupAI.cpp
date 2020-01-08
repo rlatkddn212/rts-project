@@ -42,11 +42,6 @@ void GroupAI::DoGroupAI()
 {
 }
 
-bool GroupAI::IsDead()
-{
-	return false;
-}
-
 glm::ivec2 GroupAI::GetCenter()
 {
 	return glm::ivec2();
@@ -57,13 +52,5 @@ void GroupAI::Goto(SDL_FRect mArea)
 }
 
 void GroupAI::Attack(std::vector<std::shared_ptr<Unit>>& enemies)
-{
-}
-
-void GroupAI::RetreatTo(SDL_FRect ma)
-{
-}
-
-void GroupAI::Shuffle()
 {
 }
