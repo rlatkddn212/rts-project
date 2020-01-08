@@ -8,12 +8,12 @@ Unit::Unit(shared_ptr<UnitInfo> unitInfo)
 {
 	mUnitInfo = unitInfo;
 
-	health = mUnitInfo->GetHealth();
-	attackspeed = mUnitInfo->GetAttackSpeed();
-	range = mUnitInfo->GetAttackRange();
-	defense = mUnitInfo->GetDefense();
-	speed = mUnitInfo->GetSpeed();
-	damege = mUnitInfo->GetDamege();
+	mHealth = mUnitInfo->GetHealth();
+	mAttackspeed = mUnitInfo->GetAttackSpeed();
+	mRange = mUnitInfo->GetAttackRange();
+	mDefense = mUnitInfo->GetDefense();
+	mSpeed = mUnitInfo->GetSpeed();
+	mDamege = mUnitInfo->GetDamege();
 
 	mMoveComponent = nullptr;
 

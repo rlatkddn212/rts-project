@@ -8,6 +8,27 @@
 #include "UnitInfo.h"
 
 class MoveController;
+
+enum UnitCommand
+{
+	UNITCOMMAND_NONE,
+	UNITCOMMAND_MOVE,
+	UNITCOMMAND_ATTACK_OBJECT,
+	UNITCOMMAND_ATTACK_MOVE,
+	UNITCOMMAND_PATROL,
+	UNITCOMMAND_HOLD,
+	UNITCOMMAND_SKILL,
+};
+
+enum UnitState
+{
+	UNIT_NONE,
+	UNIT_MOVE,
+	UNIT_ATTACK,
+	UNIT_SKILL,
+	UNIT_DIE,
+};
+
 class Unit : public RTSObject
 {
 public:
@@ -41,7 +62,7 @@ public:
 
 	void									SetAnimation(int idx) { mSkinnedMesh->mAnimationIdx = idx; };
 	void									InitPosOnTerrain(std::shared_ptr<Terrain> terrain, glm::vec2 p);
-	float									GetSpeed() { return speed; }
+	float									GetSpeed() { return mSpeed; }
 
 	int										GetPathIdx() { return mPathIdx; }
 	void									SetPathIdx(int pathIdx) { mPathIdx = pathIdx; }
@@ -49,12 +70,13 @@ public:
 	void									AttachMoveComponent(std::shared_ptr<MoveController> moveControl);
 
 protected:
-	int										health;
-	double									attackspeed;
-	double									range;
-	double									defense;
-	double									speed;
-	double									damege;
+	int										mHealth;
+	int										mMaxHealth;
+	double									mAttackspeed;
+	double									mRange;
+	double									mDefense;
+	double									mSpeed;
+	double									mDamege;
 
 	bool									mIsSelect;
 	std::shared_ptr<BoxObject>				mBoxObject;

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -126,13 +126,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Action.h" />
     <ClInclude Include="AiPlayer.h" />
     <ClInclude Include="AxisObject.h" />
     <ClInclude Include="Building.h" />
     <ClInclude Include="BuildingMesh.h" />
     <ClInclude Include="FogOfWar.h" />
     <ClInclude Include="GamePlayer.h" />
+    <ClInclude Include="GroupAI.h" />
     <ClInclude Include="MapObject.h" />
+    <ClInclude Include="MasterAI.h" />
     <ClInclude Include="Math3D.h" />
     <ClInclude Include="MiniMap.h" />
     <ClInclude Include="MoveController.h" />
@@ -152,6 +155,7 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="SkinnedMesh.h" />
     <ClInclude Include="SkinnedVertexArray.h" />
+    <ClInclude Include="StrategyMap.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="TextUI.h" />
     <ClInclude Include="Texture.h" />
@@ -162,13 +166,16 @@
     <ClInclude Include="WindowGroup.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Action.cpp" />
     <ClCompile Include="AiPlayer.cpp" />
     <ClCompile Include="AxisObject.cpp" />
     <ClCompile Include="Building.cpp" />
     <ClCompile Include="BuildingMesh.cpp" />
     <ClCompile Include="FogOfWar.cpp" />
     <ClCompile Include="GamePlayer.cpp" />
+    <ClCompile Include="GroupAI.cpp" />
     <ClCompile Include="MapObject.cpp" />
+    <ClCompile Include="MasterAI.cpp" />
     <ClCompile Include="Math3D.cpp" />
     <ClCompile Include="MiniMap.cpp" />
     <ClCompile Include="MoveController.cpp" />
@@ -192,6 +199,7 @@
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="SkinnedMesh.cpp" />
     <ClCompile Include="SkinnedVertexArray.cpp" />
+    <ClCompile Include="StrategyMap.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="TextUI.cpp" />
     <ClCompile Include="Texture.cpp" />

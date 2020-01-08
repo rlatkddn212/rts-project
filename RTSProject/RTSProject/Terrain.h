@@ -120,6 +120,7 @@ public:
 	void									InitTileState();
 	void									SetTileState(glm::ivec2 p, TileState type) { if (mTile[p.y][p.x].mTileState != StaticObject) mTile[p.y][p.x].mTileState = type; }
 
+	Tile*									GetTile(glm::ivec2 p) { return &(mTile[p.y][p.x]); }
 	TileState								GetTileState(glm::ivec2 p) { return mTile[p.y][p.x].mTileState; };
 	bool									IsObjectOnTile(glm::ivec2 p) { return (mTile[p.y][p.x].mTileState != TileState::None) ? true : false; };
 

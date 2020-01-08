@@ -46,6 +46,9 @@
     <Filter Include="소스 파일\Player">
       <UniqueIdentifier>{040fdfed-6721-453c-883b-57495a84fc47}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\AI">
+      <UniqueIdentifier>{3c04a8cd-583b-4038-94fb-70e05562f50c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Font.h">
@@ -149,6 +152,18 @@
     </ClInclude>
     <ClInclude Include="UnitInfo.h">
       <Filter>소스 파일\Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="GroupAI.h">
+      <Filter>소스 파일\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="MasterAI.h">
+      <Filter>소스 파일\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="StrategyMap.h">
+      <Filter>소스 파일\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Action.h">
+      <Filter>소스 파일\AI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -256,6 +271,18 @@
     </ClCompile>
     <ClCompile Include="UnitInfo.cpp">
       <Filter>소스 파일\Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="GroupAI.cpp">
+      <Filter>소스 파일\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="MasterAI.cpp">
+      <Filter>소스 파일\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="StrategyMap.cpp">
+      <Filter>소스 파일\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="Action.cpp">
+      <Filter>소스 파일\AI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
