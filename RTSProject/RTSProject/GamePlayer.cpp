@@ -34,22 +34,79 @@ void GamePlayer::Render(std::shared_ptr<Camera> camera)
 	Player::Render(camera);
 }
 
+bool GamePlayer::PressUnitCommand(bool * keys)
+{
+	if (keys[GLFW_KEY_A] == true)
+	{
+		
+	}
+	else if (keys[GLFW_KEY_S] == true)
+	{
+
+	}
+	else if (keys[GLFW_KEY_H] == true)
+	{
+
+	}
+	else if (keys[GLFW_KEY_P] == true)
+	{
+
+	}
+	else if (keys[GLFW_KEY_Q] == true)
+	{
+
+	}
+	else if (keys[GLFW_KEY_W] == true)
+	{
+
+	}
+	else if (keys[GLFW_KEY_E] == true)
+	{
+
+	}
+	else if (keys[GLFW_KEY_R] == true)
+	{
+
+	}
+	else
+	{
+		return false;
+	}
+
+	return true;
+}
+
 void GamePlayer::PressKey(bool * keys)
 {
-	// 건물 위치 지정
-	if (keys[GLFW_KEY_1] == true)
+	if (playerState == PLAYER_UNIT_SELECTED)
 	{
-		BuildingToPlace(0);
+		if (PressUnitCommand(keys))
+		{
+			playerState = PLAYER_UNIT_COMMAND;
+		}
 	}
-	else if (keys[GLFW_KEY_2] == true)
+	else
 	{
-		BuildingToPlace(1);
+		// 건물 위치 지정
+		if (keys[GLFW_KEY_1] == true)
+		{
+			BuildingToPlace(0);
+		}
+		else if (keys[GLFW_KEY_2] == true)
+		{
+			BuildingToPlace(1);
+		}
+		else if (keys[GLFW_KEY_3] == true)
+		{
+			BuildingToPlace(2);
+		}
+		else if (keys[GLFW_KEY_ESCAPE] == true)
+		{
+			NoneState();
+		}
 	}
-	else if (keys[GLFW_KEY_3] == true)
-	{
-		BuildingToPlace(2);
-	}
-	else if (keys[GLFW_KEY_ESCAPE] == true)
+
+	if (keys[GLFW_KEY_ESCAPE] == true)
 	{
 		NoneState();
 	}
@@ -167,6 +224,7 @@ void GamePlayer::SelectUnit(std::shared_ptr<Mouse> mouse, std::shared_ptr<Camera
 		if (mouse->IsDragBoxPos(p))
 		{
 			mUnits[i]->Select();
+			mSelectedUnit.push_back(mUnits[i]);
 		}
 	}
 }
@@ -178,15 +236,15 @@ bool GamePlayer::IsSelectUnit(shared_ptr<Mouse> mouse, std::shared_ptr<Camera> c
 	for (int i = 0; i < 10; ++i)
 	{
 		mUnits[i]->UnSelect();
+		mSelectedUnit.clear();
 	}
 
-	bool isSelect = false;
 	for (int i = 0; i < 10; ++i)
 	{
 		if (mUnits[i]->Intersect(ray))
 		{
 			mUnits[i]->Select();
-			isSelect = true;
+			mSelectedUnit.push_back(mUnits[i]);
 
 			return true;
 		}
