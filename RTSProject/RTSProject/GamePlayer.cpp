@@ -15,6 +15,12 @@ GamePlayer::~GamePlayer()
 void GamePlayer::Initialize(shared_ptr<Terrain> terrain, int w, int h)
 {
 	Player::Initialize(terrain, w, h);
+
+	for (int i = 0; i < 10; ++i)
+	{
+		mUnits[i]->SetColor(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+	}
+
 	mWidth = w;
 	mHeight = h;
 
@@ -161,14 +167,11 @@ void GamePlayer::MouseButton(std::shared_ptr<Camera> camera, int button, int act
 		glm::ivec2 pos;
 		if (mTerrain->Intersect(ray, pos))
 		{
-			if (mTerrain->IsMovableTile(pos))
+			for (int i = 0; i < 10; ++i)
 			{
-				for (int i = 0; i < 10; ++i)
+				if (mUnits[i]->isSelected())
 				{
-					if (mUnits[i]->isSelected())
-					{
-						mUnits[i]->SetMove(mTerrain, pos);
-					}
+					mUnits[i]->SetMove(mTerrain, pos);
 				}
 			}
 		}
@@ -303,12 +306,12 @@ std::shared_ptr<RTSObject> GamePlayer::IsSelectEmeryUnit(std::shared_ptr<Camera>
 {
 	Ray ray;
 	ray.SetRay(camera, mMouseX, mMouseY);
-
 	for (int i = 0; i < 10; ++i)
 	{
-		if (mEmeryUnits[i]->Intersect(ray))
+		shared_ptr<Unit> unit = mEmeryUnits[i].lock();
+		if (unit != nullptr && unit->Intersect(ray))
 		{
-			return mEmeryUnits[i];
+			return unit;
 		}
 	}
 

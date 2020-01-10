@@ -8,6 +8,8 @@ public:
 											AiPlayer();
 	virtual								   ~AiPlayer();
 
+	virtual void							Initialize(std::shared_ptr<Terrain> terrain, int w, int h);
+	virtual void							Terminate();
 protected:
 
 	std::shared_ptr<MasterAI>				mMasterAI;

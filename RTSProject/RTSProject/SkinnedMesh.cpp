@@ -10,6 +10,8 @@ SkinnedMesh::SkinnedMesh()
 	mAnimationIdx = 0;
 	mMinPos = glm::vec3(2000.0f, 2000.0f, 2000.0f);
 	mMaxPos = glm::vec3(-2000.0f, -2000.0f, -2000.0f);
+
+	mTeamColor = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
 }
 
 SkinnedMesh::~SkinnedMesh()
@@ -61,7 +63,7 @@ void SkinnedMesh::RenderModel(std::shared_ptr<Camera> camera)
 	mMeshShader->SetActive();
 
 	mMeshShader->SetVectorUniform("lightDir", glm::vec3(0.0f, 1.0f, 0.0f));
-	mMeshShader->SetVector4Uniform("teamColor", glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+	mMeshShader->SetVector4Uniform("teamColor", mTeamColor);
 	mMeshShader->SetMatrixUniform("vpMatrix", mat);
 	mMeshShader->SetMatrixUniform("worldMatrix", model);
 

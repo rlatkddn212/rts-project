@@ -78,6 +78,8 @@ public:
 	void									SetStopCommand();
 	void									SetHoldCommand();
 
+	void									SetColor(glm::vec4 color) { mSkinnedMesh->SetColor(color); }
+
 protected:
 	int										mHealth;
 	int										mMaxHealth;

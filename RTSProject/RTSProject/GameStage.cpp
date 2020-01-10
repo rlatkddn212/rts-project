@@ -3,6 +3,7 @@
 #include "Math3D.h"
 #include "FogOfWar.h"
 #include "GamePlayer.h"
+#include "AiPlayer.h"
 
 using namespace std;
 
@@ -35,6 +36,10 @@ void GameStage::Initialize(GLFWwindow* window, int w, int h)
 
 	player->Initialize(mTerrain, w, h);
 	mPlayers.push_back(player);
+
+	shared_ptr<Player> aiPlayer = make_shared<AiPlayer>();
+	aiPlayer->Initialize(mTerrain, w, h);
+	mPlayers.push_back(aiPlayer);
 
 	mFogOfWar = make_shared<FogOfWar>(w, h);
 
@@ -107,6 +112,7 @@ void GameStage::CursorPos(double xPos, double yPos)
 	{
 		yPos = mHeight;
 	}
+	
 	glfwSetCursorPos(win, xPos, yPos);
 
 	mMouseX = xPos;
@@ -141,8 +147,6 @@ void GameStage::MouseButton(int button, int action)
 		// ¹Ì´Ï¸Ê Å¬¸¯½Ã
 		if (mMiniMap->IsXYInMiniMap(mMouseX, mMouseY))
 		{
-			// ¹Ì´Ï¸ÊÀ» Å¬¸¯
-			
 			// ÁÂÇ¥°è»ê
 			glm::vec2 pos = mMiniMap->GetTerrainPos(mMouseX, mMouseY);
 			assert(0.0f < pos.x || pos.x <= 100.0f);

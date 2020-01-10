@@ -7,7 +7,7 @@ using namespace std;
 Unit::Unit(shared_ptr<UnitInfo> unitInfo)
 {
 	mUnitInfo = unitInfo;
-
+	mIsSelect = false;
 	mHealth = mUnitInfo->GetHealth();
 	mAttackspeed = mUnitInfo->GetAttackSpeed();
 	mRange = mUnitInfo->GetAttackRange();
@@ -115,6 +115,11 @@ void Unit::SetPath(const std::vector<glm::ivec2>& path)
 
 void Unit::SetMove(std::shared_ptr<Terrain> terrain, glm::ivec2 movePos)
 {
+	if (!terrain->IsMovableTile(movePos) || terrain->IsObjectOnTile(movePos))
+	{
+		terrain->GetClosedPosition(movePos, &movePos);
+	}
+
 	vector<glm::ivec2> ret = terrain->GetPath(RoundPosition(glm::vec2(mPos.x, -mPos.z)), movePos);
 	SetPath(ret);
 
@@ -135,7 +140,6 @@ void Unit::AttachMoveComponent(std::shared_ptr<MoveController> moveControl)
 {
 	mMoveComponent = moveControl;
 }
-
 
 void Unit::AttackObjectCommand(shared_ptr<RTSObject> obj)
 {

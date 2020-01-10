@@ -3,6 +3,7 @@
 
 BoxObject::BoxObject(glm::vec3 minV, glm::vec3 maxV)
 {
+	isVisiable = false;
 	mMaxV = maxV;
 	mMinV = minV;
 	MakeModel(minV, maxV);

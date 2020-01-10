@@ -76,7 +76,9 @@ public:
 	void									ReadNodeHeirarchy(const aiAnimation* pAnimation, float AnimationTime, const aiNode* pNode, const glm::mat4& ParentTransform);
 	void									BoneTransform();
 
+	void									SetColor(glm::vec4 color) { mTeamColor = color; }
 
+	glm::vec4								mTeamColor;
 	// box Object
 	glm::vec3								mMinPos;
 	glm::vec3								mMaxPos;

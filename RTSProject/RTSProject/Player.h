@@ -31,5 +31,5 @@ protected:
 	std::vector<std::shared_ptr<Building>>	mBuildings;
 	std::vector<std::shared_ptr<Unit> >		mUnits;
 
-	std::vector<std::shared_ptr<Unit> >		mEmeryUnits;
+	std::vector<std::weak_ptr<Unit> >		mEmeryUnits;
 };

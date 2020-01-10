@@ -98,7 +98,7 @@ void Camera::Update(float timeDelta)
 	if (mY < 10)			Scroll(-mLook * mTimeDelta * (4.0f + mRadius * 0.2f));
 	if (mY > mHeight - 10)	Scroll(mLook * mTimeDelta * (4.0f + mRadius * 0.2f));
 
-	if (mWheel > 0.0)  ChangeRadius(-10.0f);
+	if (mWheel > 0.0) ChangeRadius(-10.0f);
 	if (mWheel < 0.0) ChangeRadius(10.0f);
 
 	if (state != NULL)
@@ -120,19 +120,19 @@ void Camera::Update(float timeDelta)
 			Scroll(-mLook * mTimeDelta  * 20.0f);
 		}
 
-		if (state[GLFW_KEY_A])
+		if (state[GLFW_KEY_KP_4])
 		{
 			Yaw(-mTimeDelta);
 		}
-		if (state[GLFW_KEY_D])
+		if (state[GLFW_KEY_KP_6])
 		{
 			Yaw(mTimeDelta);
 		}
-		if (state[GLFW_KEY_W])
+		if (state[GLFW_KEY_KP_8])
 		{
 			Pitch(mTimeDelta);
 		}
-		if (state[GLFW_KEY_S])
+		if (state[GLFW_KEY_KP_5])
 		{
 			Pitch(-mTimeDelta);
 		}

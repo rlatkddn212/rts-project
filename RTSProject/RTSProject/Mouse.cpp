@@ -68,6 +68,28 @@ void Mouse::SetCursorImage(int type)
 	image.pixels = mPixel[type];
 	cursor = glfwCreateCursor(&image, 0, 0);
 	glfwSetCursor(mWindow, cursor);
+
+	switch (type)
+	{
+	case 0:
+		mCursorUI->SetUV(0.0f, 0.0f, 20.0f / 64.0f, 20.0f / 64.0f);
+		break;
+	case 1:
+		mCursorUI->SetUV(0.0f, 20.0f / 64.0f, 20.0f / 64.0f, 40.0f / 64.0f);
+		break;
+	case 2:
+		mCursorUI->SetUV(20.0f / 64.0f, 20.0f / 64.0f, 40.0f / 64.0f, 40.0f / 64.0f);
+		break;
+	case 3:
+		mCursorUI->SetUV(0.0f, 40.0f / 64.0f, 20.0f / 64.0f, 60.0f / 64.0f);
+		break;
+	case 4:
+		mCursorUI->SetUV(20.0f / 64.0f, 40.0f / 64.0f, 40.0f / 64.0f, 60.0f / 64.0f);
+		break;
+	default:
+		mCursorUI->SetUV(0.0f, 0.0f, 20.0f / 64.0f, 20.0f / 64.0f);
+		break;
+	}
 }
 
 void Mouse::SetEndXY(double x, double y)
