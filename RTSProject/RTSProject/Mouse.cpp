@@ -15,53 +15,9 @@ Mouse::~Mouse()
 
 void Mouse::InitMouse()
 {
-	int channels = 0;
-	int mHeight;
-	int mWidth;
-	unsigned char* cursorImage = SOIL_load_image("Cursor/cursor.dds", &mWidth, &mHeight, &channels, SOIL_LOAD_AUTO);
-
-
-	for (int i = 0; i < 20; ++i)
-	{
-		for (int j = 0; j < 20; ++j)
-		{
-			mPixel[0][i * 20 * channels + j * channels + 0] = cursorImage[i * mWidth * channels + j * channels + 0];
-			mPixel[0][i * 20 * channels + j * channels + 1] = cursorImage[i * mWidth * channels + j * channels + 1];
-			mPixel[0][i * 20 * channels + j * channels + 2] = cursorImage[i * mWidth * channels + j * channels + 2];
-			mPixel[0][i * 20 * channels + j * channels + 3] = cursorImage[i * mWidth * channels + j * channels + 3];
-		}
-	}
-
-	for (int k = 0; k < 4; ++k)
-	{
-		int x = k / 2;
-		int y = k % 2 + 1;
-
-		for (int i = 0; i < 20; ++i)
-		{
-			for (int j = 0; j < 20; ++j)
-			{
-				mPixel[k + 1][i * 20 * channels + j * channels + 0] = cursorImage[(i + 20 * y) * mWidth  * channels + j * channels + 0 + channels * 20 * x];
-				mPixel[k + 1][i * 20 * channels + j * channels + 1] = cursorImage[(i + 20 * y) * mWidth  * channels + j * channels + 1 + channels * 20 * x];
-				mPixel[k + 1][i * 20 * channels + j * channels + 2] = cursorImage[(i + 20 * y) * mWidth  * channels + j * channels + 2 + channels * 20 * x];
-				mPixel[k + 1][i * 20 * channels + j * channels + 3] = cursorImage[(i + 20 * y) * mWidth  * channels + j * channels + 3 + channels * 20 * x];
-			}
-		}
-	}
-
-	GLFWimage image;
-	image.width = 20;
-	image.height = 20;
-	image.pixels = mPixel[0];
-	cursor = glfwCreateCursor(&image, 0, 0);
-	glfwSetCursor(mWindow, cursor);
-
-	glfwGetWindowSize(mWindow, &mW, &mH);
-	glfwSetCursorPos(mWindow, mW / 2, mH / 2);
-	mX = mW / 2;
-	mY = mH / 2;
-
-	SOIL_free_image_data(cursorImage);
+	UseGLFWCursor();
+	UseRenderCursor();
+	glfwSetInputMode(mWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	glGenVertexArrays(1, &mVertexArray);
 	glBindVertexArray(mVertexArray);
@@ -124,16 +80,16 @@ void Mouse::SetEndXY(double x, double y)
 
 	float verts[] =
 	{
-		-1.0f + 2 * mPrevX / mW, 1.0f - 2 * mPrevY / mH, 0.0f,
+		-1.0f + 2 * mPrevX / mWidth, 1.0f - 2 * mPrevY / mHeight, 0.0f,
 		0.0f, 1.0f, 0.0f, 1.0f,
 
-		-1.0f + 2 * mPrevX / mW, 1.0f - 2 * mY / mH, 0.0f,
+		-1.0f + 2 * mPrevX / mWidth, 1.0f - 2 * mY / mHeight, 0.0f,
 		0.0f, 1.0f, 0.0f, 1.0f,
 
-		-1.0f + 2 * mX / mW, 1.0f - 2 * mY / mH, 0.0f,
+		-1.0f + 2 * mX / mWidth, 1.0f - 2 * mY / mHeight, 0.0f,
 		0.0f, 1.0f, 0.0f, 1.0f,
 
-		-1.0f + 2 * mX / mW, 1.0f - 2 * mPrevY / mH, 0.0f,
+		-1.0f + 2 * mX / mWidth, 1.0f - 2 * mPrevY / mHeight, 0.0f,
 		0.0f, 1.0f, 0.0f, 1.0f,
 	};
 
@@ -149,13 +105,17 @@ void Mouse::SetStartXY(double x, double y)
 
 void Mouse::Render(std::shared_ptr<Camera> camera)
 {
+	mCursorUI->Render(camera);
+
 	if (isVisiableDragBox)
 	{
+		glDisable(GL_DEPTH_TEST);
 		mMeshShader->SetActive();
 		mMeshShader->SetMatrixUniform("mMatrix", glm::mat4(1.0f));
 		glBindVertexArray(mVertexArray);
 		glLineWidth(2.f);
 		glDrawArrays(GL_LINE_LOOP, 0, 4);
+		glEnable(GL_DEPTH_TEST);
 	}
 }
 
@@ -173,4 +133,68 @@ bool Mouse::IsDragBoxPos(glm::vec2 p)
 	}
 
 	return false;
+}
+
+void Mouse::UseGLFWCursor()
+{
+	int channels = 0;
+	int height;
+	int width;
+	unsigned char* cursorImage = SOIL_load_image("Cursor/cursor.dds", &width, &height, &channels, SOIL_LOAD_AUTO);
+
+	for (int i = 0; i < 20; ++i)
+	{
+		for (int j = 0; j < 20; ++j)
+		{
+			mPixel[0][i * 20 * channels + j * channels + 0] = cursorImage[i * width * channels + j * channels + 0];
+			mPixel[0][i * 20 * channels + j * channels + 1] = cursorImage[i * width * channels + j * channels + 1];
+			mPixel[0][i * 20 * channels + j * channels + 2] = cursorImage[i * width * channels + j * channels + 2];
+			mPixel[0][i * 20 * channels + j * channels + 3] = cursorImage[i * width * channels + j * channels + 3];
+		}
+	}
+
+	for (int k = 0; k < 4; ++k)
+	{
+		int x = k / 2;
+		int y = k % 2 + 1;
+
+		for (int i = 0; i < 20; ++i)
+		{
+			for (int j = 0; j < 20; ++j)
+			{
+				mPixel[k + 1][i * 20 * channels + j * channels + 0] = cursorImage[(i + 20 * y) * width  * channels + j * channels + 0 + channels * 20 * x];
+				mPixel[k + 1][i * 20 * channels + j * channels + 1] = cursorImage[(i + 20 * y) * width  * channels + j * channels + 1 + channels * 20 * x];
+				mPixel[k + 1][i * 20 * channels + j * channels + 2] = cursorImage[(i + 20 * y) * width  * channels + j * channels + 2 + channels * 20 * x];
+				mPixel[k + 1][i * 20 * channels + j * channels + 3] = cursorImage[(i + 20 * y) * width  * channels + j * channels + 3 + channels * 20 * x];
+			}
+		}
+	}
+
+	GLFWimage image;
+	image.width = 20;
+	image.height = 20;
+	image.pixels = mPixel[0];
+	cursor = glfwCreateCursor(&image, 0, 0);
+	glfwSetCursor(mWindow, cursor);
+
+	glfwGetWindowSize(mWindow, &mWidth, &mHeight);
+	glfwSetCursorPos(mWindow, mWidth / 2, mHeight / 2);
+	mX = mWidth / 2;
+	mY = mHeight / 2;
+
+	SOIL_free_image_data(cursorImage);
+}
+
+void Mouse::UseRenderCursor()
+{
+	mCursorUI = std::make_shared<SpriteUI>();
+	mCursorUI->SetTexture("Cursor/cursor.dds");
+	
+	mCursorUI->SetScale(glm::vec2(0.2f, 0.2f));
+	mCursorUI->SetUV(0.0f, 0.0f, 20.0f/ 64.0f, 20.0f / 64.0f);
+}
+
+void Mouse::SetCursorPos(glm::vec2 pos)
+{
+	mCursorUI->SetPos(pos);
 }

@@ -12,14 +12,16 @@ TextUI::TextUI()
 	mFont->Initialize();
 	mTexture = nullptr;
 
-	float vertices[] = {
+	float vertices[] = 
+	{
 	-0.5f, 0.5f, 0.f, 0.f, 0.f, 0.0f, 0.f, 0.f, // top left
 	0.5f, 0.5f, 0.f, 0.f, 0.f, 0.0f, 1.f, 0.f, // top right
 	0.5f,-0.5f, 0.f, 0.f, 0.f, 0.0f, 1.f, 1.f, // bottom right
 	-0.5f,-0.5f, 0.f, 0.f, 0.f, 0.0f, 0.f, 1.f  // bottom left
 	};
 
-	unsigned int indices[] = {
+	unsigned int indices[] = 
+	{
 		0, 1, 2,
 		2, 3, 0
 	};
@@ -64,8 +66,8 @@ void TextUI::Render(std::shared_ptr<Camera> camera)
 			1.0f));
 
 	glm::mat4 transMat = glm::translate(glm::mat4(1.f), 
-		glm::vec3(mPosX + (-camera->mWidth + static_cast<float>(mTexture->GetWidth()) * mScale) / 2,
-			mPosY + (camera->mHeight - static_cast<float>(mTexture->GetHeight()) * mScale) / 2,
+		glm::vec3(mPosX + (-camera->mWidth + static_cast<float>(mTexture->GetWidth())) / 2,
+			mPosY + (camera->mHeight - static_cast<float>(mTexture->GetHeight())) / 2,
 			0.0f));
 	
 	glm::mat4 m = {

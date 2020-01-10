@@ -19,6 +19,7 @@ enum UnitCommand
 	UNITCOMMAND_STOP,
 	UNITCOMMAND_HOLD,
 	UNITCOMMAND_SKILL,
+	UNITCOMMAND_BUILD
 };
 
 enum UnitState
@@ -28,6 +29,7 @@ enum UnitState
 	UNIT_ATTACK,
 	UNIT_SKILL,
 	UNIT_DIE,
+	UNIT_BUILD,
 };
 
 class Unit : public RTSObject
@@ -84,6 +86,8 @@ protected:
 	double									mDefense;
 	double									mSpeed;
 	double									mDamege;
+
+
 
 	bool									mIsSelect;
 	std::shared_ptr<BoxObject>				mBoxObject;

@@ -37,7 +37,7 @@ void WindowGroup::Update(float deltaTime)
 
 void WindowGroup::Render()
 {
-	mText->Render(camera);
+	mText->Render(mCamera);
 }
 
 void WindowGroup::PressKey(bool* keys)
@@ -46,7 +46,6 @@ void WindowGroup::PressKey(bool* keys)
 
 void WindowGroup::CursorPos(double xPos, double yPos)
 {
-
 }
 
 void WindowGroup::MouseButton(int button, int action)

@@ -32,7 +32,7 @@ public:
 	int										mWidth;
 	int										mHeight;
 
-	std::shared_ptr<Camera>					camera;
+	std::shared_ptr<Camera>					mCamera;
 	std::shared_ptr<TextUI>					mText;
 	std::shared_ptr<Mouse>					mMouse;
 

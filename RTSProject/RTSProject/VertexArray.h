@@ -10,6 +10,8 @@ public:
 	unsigned int							GetNumIndices() const { return mNumIndices; }
 	unsigned int							GetNumVerts() const { return mNumVerts; }
 
+	void									SetVertexBuffer(const float* verts, unsigned int numVerts);
+	
 private:
 	unsigned int							mNumVerts;
 	unsigned int							mNumIndices;

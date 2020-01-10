@@ -3,6 +3,7 @@
 #include "Texture.h"
 #include "Shader.h"
 #include "Camera.h"
+#include "SpriteUI.h"
 
 enum RightState
 {
@@ -41,10 +42,14 @@ public:
 	bool									IsDragBoxPos(glm::vec2 p);
 	bool									IsDragBox() { return isVisiableDragBox; }
 
+	void									SetCursorPos(glm::vec2 pos);
+	void									UseGLFWCursor();
+	void									UseRenderCursor();
+
 	GLFWwindow*								mWindow;
 	bool									isVisiableDragBox;
-	int										mW;
-	int										mH;
+	int										mWidth;
+	int										mHeight;
 
 	std::shared_ptr<Shader>					mMeshShader;
 
@@ -61,7 +66,8 @@ public:
 
 	GLFWcursor*								cursor;
 
-	unsigned char							mPixel[6][20 * 20 * 4];
+	unsigned char							mPixel[5][20 * 20 * 4];
 
+	std::shared_ptr<SpriteUI>				mCursorUI;
 };
 

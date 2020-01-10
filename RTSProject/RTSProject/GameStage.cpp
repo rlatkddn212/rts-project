@@ -24,8 +24,8 @@ void GameStage::Initialize(GLFWwindow* window, int w, int h)
 	mTerrain->Initialize(glm::ivec2(100, 100));
 
 	// 카메라
-	camera = make_shared<Camera>();
-	camera->Initialize(w, h);
+	mCamera = make_shared<Camera>();
+	mCamera->Initialize(w, h);
 
 	// 좌표계
 	mAxis = make_shared<AxisObject>();
@@ -51,7 +51,7 @@ void GameStage::Update(float deltaTime)
 {
 	WindowGroup::Update(deltaTime);
 
-	camera->Update(deltaTime);
+	mCamera->Update(deltaTime);
 
 	for (auto player : mPlayers)
 	{
@@ -60,39 +60,58 @@ void GameStage::Update(float deltaTime)
 
 	mFogOfWar->Update(deltaTime, mPlayers[0]->GetUnit());
 	mMiniMap->SetFogTexture(mFogOfWar->GetFogTexture());
-	mMiniMap->Update(deltaTime, mPlayers[0]->GetUnit(), camera);
+	mMiniMap->Update(deltaTime, mPlayers[0]->GetUnit(), mCamera);
 }
 
 void GameStage::Render()
 {
-	WindowGroup::Render();
-
-	mAxis->Render(camera);
+	mAxis->Render(mCamera);
 	shared_ptr<Texture> fog = mFogOfWar->GetFogTexture();
 
 	for (auto player : mPlayers)
 	{
 		player->SetFogTexture(fog);
-		player->Render(camera);
+		player->Render(mCamera);
 	}
 
 	mTerrain->SetFogTexture(fog);
-	mTerrain->Render(camera);
-	mMouse->Render(camera);
+	mTerrain->Render(mCamera);
 
-	mMiniMap->Render(camera);
+	mMiniMap->Render(mCamera);
+	mMouse->Render(mCamera);
+	WindowGroup::Render();
+
 }
 
 void GameStage::PressKey(bool* keys)
 {
-	camera->PressKey(keys);
+	mCamera->PressKey(keys);
 	mGamePlayers->PressKey(keys);
 }
 
 void GameStage::CursorPos(double xPos, double yPos)
 {
+	if (xPos < 0)
+	{
+		xPos = 0;
+	}
+	if (mWidth < xPos)
+	{
+		xPos = mWidth;
+	}
+	if (yPos < 0)
+	{
+		yPos = 0;
+	}
+	if (mHeight < yPos)
+	{
+		yPos = mHeight;
+	}
+	glfwSetCursorPos(win, xPos, yPos);
+
 	mMouseX = xPos;
 	mMouseY = yPos;
+	mMouse->SetCursorPos(glm::vec2(mMouseX, mMouseY));
 
 	if (mMouse->IsDragBox())
 	{
@@ -100,8 +119,8 @@ void GameStage::CursorPos(double xPos, double yPos)
 	}
 	else
 	{
-		mGamePlayers->CursorPos(camera, xPos, yPos);
-		camera->MouseXY(xPos, yPos);
+		mGamePlayers->CursorPos(mCamera, xPos, yPos);
+		mCamera->MouseXY(xPos, yPos);
 	}
 }
 
@@ -129,7 +148,7 @@ void GameStage::MouseButton(int button, int action)
 			assert(0.0f < pos.x || pos.x <= 100.0f);
 			assert(0.0f < pos.y || pos.y <= 100.0f);
 			// 카메라를 계산된 좌표를 보도록 위치 수정
-			camera->SetPos(pos);
+			mCamera->SetPos(pos);
 			
 			return;
 		}
@@ -144,17 +163,17 @@ void GameStage::MouseButton(int button, int action)
 	{
 		if (mMouse->IsDragBox())
 		{
-			mGamePlayers->SelectUnitInRect(camera);
+			mGamePlayers->SelectUnitInRect(mCamera);
 		}
 
 		mMouse->VisiableDragBox(false);
 	}
 
 	// UI가 클릭된 경우 게임 화면에 마우스 클릭 무시
-	mGamePlayers->MouseButton(camera, button, action);
+	mGamePlayers->MouseButton(mCamera, button, action);
 }
 
 void GameStage::MouseWheel(double yPos)
 {
-	camera->MouseWheel(yPos);
+	mCamera->MouseWheel(yPos);
 }

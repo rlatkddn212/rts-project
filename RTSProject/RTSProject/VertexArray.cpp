@@ -41,3 +41,10 @@ void VertexArray::SetActive()
 {
 	glBindVertexArray(mVertexArray);
 }
+
+void VertexArray::SetVertexBuffer(const float* verts, unsigned int numVerts)
+{
+	glBindVertexArray(mVertexArray);
+	glBindBuffer(GL_ARRAY_BUFFER, mVertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, numVerts * 8 * sizeof(float), verts, GL_STATIC_DRAW);
+}

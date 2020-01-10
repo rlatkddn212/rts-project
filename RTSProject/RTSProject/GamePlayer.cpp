@@ -126,7 +126,7 @@ void GamePlayer::CursorPos(std::shared_ptr<Camera> camera, double xPos, double y
 {
 	mMouseX = xPos;
 	mMouseY = yPos;
-
+	
 	if (mPlayerState == PLAYER_BUILDING)
 	{
 		Ray ray;
@@ -192,8 +192,10 @@ void GamePlayer::MouseButton(std::shared_ptr<Camera> camera, int button, int act
 		// 건물 짓기 준비 상태일 경우
 		else if (mPlayerState == PLAYER_BUILDING)
 		{
-			CreateBuilding(camera);
-			mPlayerState = PLAYER_NONE;
+			if (CreateBuilding(camera))
+			{
+				NoneState();
+			}
 		}
 		else if (mPlayerState == PLAYER_UNIT_COMMAND)
 		{
