@@ -30,4 +30,6 @@ protected:
 	std::shared_ptr<Terrain>				mTerrain;
 	std::vector<std::shared_ptr<Building>>	mBuildings;
 	std::vector<std::shared_ptr<Unit> >		mUnits;
+
+	std::vector<std::shared_ptr<Unit> >		mEmeryUnits;
 };

@@ -14,6 +14,7 @@ public:
 	void									SetUnit(std::shared_ptr<Unit> unit);
 	void									Update(float deltaTime);
 	glm::vec2								MoveUnit(std::shared_ptr<Unit> unit, float len);
+	void									Arrive();
 
 private:
 	std::shared_ptr<Terrain>				mTerrain;

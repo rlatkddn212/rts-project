@@ -135,3 +135,31 @@ void Unit::AttachMoveComponent(std::shared_ptr<MoveController> moveControl)
 {
 	mMoveComponent = moveControl;
 }
+
+
+void Unit::AttackObjectCommand(shared_ptr<RTSObject> obj)
+{
+	mUnitCommand = UNITCOMMAND_ATTACK_OBJECT;
+}
+
+void Unit::SetAttackCommand(std::shared_ptr<Terrain> terrain, glm::ivec2 pos)
+{
+	SetMove(terrain, pos);
+	mUnitCommand = UNITCOMMAND_ATTACK_MOVE;
+}
+
+void Unit::SetPatrolCommand(std::shared_ptr<Terrain> terrain, glm::ivec2 pos)
+{
+	SetMove(terrain, pos);
+	mUnitCommand = UNITCOMMAND_PATROL;
+}
+
+void Unit::SetStopCommand()
+{
+	mUnitCommand = UNITCOMMAND_STOP;
+}
+
+void Unit::SetHoldCommand()
+{
+	mUnitCommand = UNITCOMMAND_HOLD;
+}

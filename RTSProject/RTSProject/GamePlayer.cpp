@@ -3,8 +3,9 @@
 
 using namespace std;
 
-GamePlayer::GamePlayer()
+GamePlayer::GamePlayer(shared_ptr<Mouse> mouse)
 {
+	mMouse = mouse;
 }
 
 GamePlayer::~GamePlayer()
@@ -17,7 +18,7 @@ void GamePlayer::Initialize(shared_ptr<Terrain> terrain, int w, int h)
 	mWidth = w;
 	mHeight = h;
 
-	playerState = PLAYER_NONE;
+	mPlayerState = PLAYER_NONE;
 }
 
 void GamePlayer::Terminate()
@@ -36,22 +37,35 @@ void GamePlayer::Render(std::shared_ptr<Camera> camera)
 
 bool GamePlayer::PressUnitCommand(bool * keys)
 {
+	// 유닛 명령
 	if (keys[GLFW_KEY_A] == true)
 	{
-		
+		mMouse->SetCursorImage(1);
+		mCommandState = PressA;
 	}
 	else if (keys[GLFW_KEY_S] == true)
 	{
+		for (int i = 0; i < mSelectedUnit.size(); ++i)
+		{
+			mSelectedUnit[i]->SetStopCommand();
+		}
 
+		return false;
 	}
 	else if (keys[GLFW_KEY_H] == true)
 	{
+		for (int i = 0; i < mSelectedUnit.size(); ++i)
+		{
+			mSelectedUnit[i]->SetHoldCommand();
+		}
 
+		return false;
 	}
 	else if (keys[GLFW_KEY_P] == true)
 	{
-
+		mCommandState = PressP;
 	}
+	// 스킬
 	else if (keys[GLFW_KEY_Q] == true)
 	{
 
@@ -78,11 +92,11 @@ bool GamePlayer::PressUnitCommand(bool * keys)
 
 void GamePlayer::PressKey(bool * keys)
 {
-	if (playerState == PLAYER_UNIT_SELECTED)
+	if (mPlayerState == PLAYER_UNIT_SELECTED)
 	{
 		if (PressUnitCommand(keys))
 		{
-			playerState = PLAYER_UNIT_COMMAND;
+			mPlayerState = PLAYER_UNIT_COMMAND;
 		}
 	}
 	else
@@ -100,10 +114,6 @@ void GamePlayer::PressKey(bool * keys)
 		{
 			BuildingToPlace(2);
 		}
-		else if (keys[GLFW_KEY_ESCAPE] == true)
-		{
-			NoneState();
-		}
 	}
 
 	if (keys[GLFW_KEY_ESCAPE] == true)
@@ -112,12 +122,12 @@ void GamePlayer::PressKey(bool * keys)
 	}
 }
 
-void GamePlayer::CursorPos(shared_ptr<Mouse> mouse, std::shared_ptr<Camera> camera, double xPos, double yPos)
+void GamePlayer::CursorPos(std::shared_ptr<Camera> camera, double xPos, double yPos)
 {
 	mMouseX = xPos;
 	mMouseY = yPos;
 
-	if (playerState == PLAYER_BUILDING)
+	if (mPlayerState == PLAYER_BUILDING)
 	{
 		Ray ray;
 		ray.SetRay(camera, mMouseX, mMouseY);
@@ -139,11 +149,13 @@ void GamePlayer::CursorPos(shared_ptr<Mouse> mouse, std::shared_ptr<Camera> came
 	}
 }
 
-void GamePlayer::MouseButton(shared_ptr<Mouse> mouse, std::shared_ptr<Camera> camera, int button, int action)
+void GamePlayer::MouseButton(std::shared_ptr<Camera> camera, int button, int action)
 {
 	// 오른쪽 마우스 클릭시 유닛 이동
 	if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
 	{
+		mMouse->SetCursorImage(2);
+
 		Ray ray;
 		ray.SetRay(camera, mMouseX, mMouseY);
 		glm::ivec2 pos;
@@ -163,23 +175,31 @@ void GamePlayer::MouseButton(shared_ptr<Mouse> mouse, std::shared_ptr<Camera> ca
 	}
 	else if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_RELEASE)
 	{
-
+		mMouse->SetCursorImage(0);
 	}
 	// 왼쪽 마우스 클릭시
 	else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
 	{
 		// 기본 상태일 경우 유닛 선택 확인
-		if (playerState == PLAYER_NONE)
+		if (mPlayerState == PLAYER_NONE | mPlayerState == PLAYER_UNIT_SELECTED)
 		{
-			if (IsSelectUnit(mouse, camera))
+			if (IsSelectUnit(camera))
 			{
-				mouse->VisiableDragBox(true);
+				mPlayerState = PLAYER_UNIT_SELECTED;
+				//mMouse->VisiableDragBox(true);
 			}
 		}
 		// 건물 짓기 준비 상태일 경우
-		else if (playerState == PLAYER_BUILDING)
+		else if (mPlayerState == PLAYER_BUILDING)
 		{
-			CreateBuilding(mouse, camera);
+			CreateBuilding(camera);
+			mPlayerState = PLAYER_NONE;
+		}
+		else if (mPlayerState == PLAYER_UNIT_COMMAND)
+		{
+			CommandUnit(camera);
+			mPlayerState = PLAYER_UNIT_SELECTED;
+			mMouse->SetCursorImage(0);
 		}
 	}
 	else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)
@@ -188,11 +208,34 @@ void GamePlayer::MouseButton(shared_ptr<Mouse> mouse, std::shared_ptr<Camera> ca
 	}
 }
 
-void GamePlayer::MouseWheel(std::shared_ptr<Mouse> mouse, std::shared_ptr<Camera> camera, double yPos)
+
+void GamePlayer::CommandUnit(std::shared_ptr<Camera> camera)
+{
+	Ray ray;
+	ray.SetRay(camera, mMouseX, mMouseY);
+	glm::ivec2 pos;
+	
+	if (mTerrain->Intersect(ray, pos))
+	{
+		for (int i = 0; i < mSelectedUnit.size(); ++i)
+		{
+			if (mCommandState == PressA)
+			{
+				mSelectedUnit[i]->SetAttackCommand(mTerrain, pos);
+			}
+			else if (mCommandState == PressP)
+			{
+				mSelectedUnit[i]->SetPatrolCommand(mTerrain, pos);
+			}
+		}
+	}
+}
+
+void GamePlayer::MouseWheel(std::shared_ptr<Camera> camera, double yPos)
 {
 }
 
-bool GamePlayer::CreateBuilding(std::shared_ptr<Mouse> mouse, std::shared_ptr<Camera> camera)
+bool GamePlayer::CreateBuilding(std::shared_ptr<Camera> camera)
 {
 	Ray ray;
 	ray.SetRay(camera, mMouseX, mMouseY);
@@ -213,7 +256,7 @@ bool GamePlayer::CreateBuilding(std::shared_ptr<Mouse> mouse, std::shared_ptr<Ca
 	return false;
 }
 
-void GamePlayer::SelectUnit(std::shared_ptr<Mouse> mouse, std::shared_ptr<Camera> camera)
+void GamePlayer::SelectUnitInRect(std::shared_ptr<Camera> camera)
 {
 	for (int i = 0; i < 10; ++i)
 	{
@@ -221,15 +264,16 @@ void GamePlayer::SelectUnit(std::shared_ptr<Mouse> mouse, std::shared_ptr<Camera
 		p.x = p.x * (mWidth / 2) + mWidth / 2;
 		p.y = -p.y * (mHeight / 2) + mHeight / 2;
 
-		if (mouse->IsDragBoxPos(p))
+		if (mMouse->IsDragBoxPos(p))
 		{
+			mPlayerState = PLAYER_UNIT_SELECTED;
 			mUnits[i]->Select();
 			mSelectedUnit.push_back(mUnits[i]);
 		}
 	}
 }
 
-bool GamePlayer::IsSelectUnit(shared_ptr<Mouse> mouse, std::shared_ptr<Camera> camera)
+bool GamePlayer::IsSelectUnit(std::shared_ptr<Camera> camera)
 {
 	Ray ray;
 	ray.SetRay(camera, mMouseX, mMouseY);
@@ -253,6 +297,22 @@ bool GamePlayer::IsSelectUnit(shared_ptr<Mouse> mouse, std::shared_ptr<Camera> c
 	return false;
 }
 
+std::shared_ptr<RTSObject> GamePlayer::IsSelectEmeryUnit(std::shared_ptr<Camera> camera)
+{
+	Ray ray;
+	ray.SetRay(camera, mMouseX, mMouseY);
+
+	for (int i = 0; i < 10; ++i)
+	{
+		if (mEmeryUnits[i]->Intersect(ray))
+		{
+			return mEmeryUnits[i];
+		}
+	}
+
+	return nullptr;
+}
+
 void GamePlayer::BuildingToPlace(int type)
 {
 	for (int i = 0; i < 10; ++i)
@@ -260,12 +320,12 @@ void GamePlayer::BuildingToPlace(int type)
 		mUnits[i]->UnSelect();
 	}
 
-	playerState = PLAYER_BUILDING;
+	mPlayerState = PLAYER_BUILDING;
 	mBuildingToPlace = std::make_shared<Building>(type);
 }
 
 void GamePlayer::NoneState()
 {
-	playerState = PLAYER_NONE;
+	mPlayerState = PLAYER_NONE;
 	mBuildingToPlace = nullptr;
 }

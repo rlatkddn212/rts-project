@@ -3,47 +3,65 @@
 
 Mouse::Mouse(GLFWwindow* window)
 {
+	mWindow = window;
 	isVisiableDragBox = false;
 	lastWheel = 0.0;
-	InitMouse(window);
+	InitMouse();
 }
 
 Mouse::~Mouse()
 {
 }
 
-void Mouse::InitMouse(GLFWwindow* window)
+void Mouse::InitMouse()
 {
 	int channels = 0;
 	int mHeight;
 	int mWidth;
-	unsigned char* image2 = SOIL_load_image("Cursor/cursor.dds", &mWidth, &mHeight, &channels, SOIL_LOAD_AUTO);
+	unsigned char* cursorImage = SOIL_load_image("Cursor/cursor.dds", &mWidth, &mHeight, &channels, SOIL_LOAD_AUTO);
 
-	unsigned char pixel[20 * 20 * 4];
+
 	for (int i = 0; i < 20; ++i)
 	{
 		for (int j = 0; j < 20; ++j)
 		{
-			pixel[i * 20 * channels + j * channels + 0] = image2[i * mWidth  * channels + j * channels + 0];
-			pixel[i * 20 * channels + j * channels + 1] = image2[i * mWidth  * channels + j * channels + 1];
-			pixel[i * 20 * channels + j * channels + 2] = image2[i * mWidth  * channels + j * channels + 2];
-			pixel[i * 20 * channels + j * channels + 3] = image2[i * mWidth  * channels + j * channels + 3];
+			mPixel[0][i * 20 * channels + j * channels + 0] = cursorImage[i * mWidth * channels + j * channels + 0];
+			mPixel[0][i * 20 * channels + j * channels + 1] = cursorImage[i * mWidth * channels + j * channels + 1];
+			mPixel[0][i * 20 * channels + j * channels + 2] = cursorImage[i * mWidth * channels + j * channels + 2];
+			mPixel[0][i * 20 * channels + j * channels + 3] = cursorImage[i * mWidth * channels + j * channels + 3];
+		}
+	}
+
+	for (int k = 0; k < 4; ++k)
+	{
+		int x = k / 2;
+		int y = k % 2 + 1;
+
+		for (int i = 0; i < 20; ++i)
+		{
+			for (int j = 0; j < 20; ++j)
+			{
+				mPixel[k + 1][i * 20 * channels + j * channels + 0] = cursorImage[(i + 20 * y) * mWidth  * channels + j * channels + 0 + channels * 20 * x];
+				mPixel[k + 1][i * 20 * channels + j * channels + 1] = cursorImage[(i + 20 * y) * mWidth  * channels + j * channels + 1 + channels * 20 * x];
+				mPixel[k + 1][i * 20 * channels + j * channels + 2] = cursorImage[(i + 20 * y) * mWidth  * channels + j * channels + 2 + channels * 20 * x];
+				mPixel[k + 1][i * 20 * channels + j * channels + 3] = cursorImage[(i + 20 * y) * mWidth  * channels + j * channels + 3 + channels * 20 * x];
+			}
 		}
 	}
 
 	GLFWimage image;
 	image.width = 20;
 	image.height = 20;
-	image.pixels = pixel;
+	image.pixels = mPixel[0];
 	cursor = glfwCreateCursor(&image, 0, 0);
-	glfwSetCursor(window, cursor);
+	glfwSetCursor(mWindow, cursor);
 
-	glfwGetWindowSize(window, &mW, &mH);
-	glfwSetCursorPos(window, mW / 2, mH / 2);
+	glfwGetWindowSize(mWindow, &mW, &mH);
+	glfwSetCursorPos(mWindow, mW / 2, mH / 2);
 	mX = mW / 2;
 	mY = mH / 2;
 
-	SOIL_free_image_data(image2);
+	SOIL_free_image_data(cursorImage);
 
 	glGenVertexArrays(1, &mVertexArray);
 	glBindVertexArray(mVertexArray);
@@ -84,6 +102,16 @@ void Mouse::InitMouse(GLFWwindow* window)
 	shaderCodies.push_back(make_pair(ReadShaderFile("color.frag"), GL_FRAGMENT_SHADER));
 	mMeshShader = std::make_shared<Shader>();
 	mMeshShader->BuildShader(shaderCodies);
+}
+
+void Mouse::SetCursorImage(int type)
+{
+	GLFWimage image;
+	image.width = 20;
+	image.height = 20;
+	image.pixels = mPixel[type];
+	cursor = glfwCreateCursor(&image, 0, 0);
+	glfwSetCursor(mWindow, cursor);
 }
 
 void Mouse::SetEndXY(double x, double y)

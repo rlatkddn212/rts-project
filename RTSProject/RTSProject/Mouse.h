@@ -32,8 +32,8 @@ public:
 											Mouse(GLFWwindow* window);
 										   ~Mouse();
 
-	void									InitMouse(GLFWwindow* window);
-	
+	void									InitMouse();
+	void									SetCursorImage(int type);
 	void									SetEndXY(double x, double y);
 	void									SetStartXY(double x, double y);
 	void									VisiableDragBox(bool t) { isVisiableDragBox = t;  }
@@ -41,6 +41,7 @@ public:
 	bool									IsDragBoxPos(glm::vec2 p);
 	bool									IsDragBox() { return isVisiableDragBox; }
 
+	GLFWwindow*								mWindow;
 	bool									isVisiableDragBox;
 	int										mW;
 	int										mH;
@@ -59,5 +60,8 @@ public:
 	double									lastWheel;
 
 	GLFWcursor*								cursor;
+
+	unsigned char							mPixel[6][20 * 20 * 4];
+
 };
 

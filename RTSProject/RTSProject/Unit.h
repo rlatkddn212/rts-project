@@ -16,6 +16,7 @@ enum UnitCommand
 	UNITCOMMAND_ATTACK_OBJECT,
 	UNITCOMMAND_ATTACK_MOVE,
 	UNITCOMMAND_PATROL,
+	UNITCOMMAND_STOP,
 	UNITCOMMAND_HOLD,
 	UNITCOMMAND_SKILL,
 };
@@ -68,6 +69,12 @@ public:
 	void									SetPathIdx(int pathIdx) { mPathIdx = pathIdx; }
 
 	void									AttachMoveComponent(std::shared_ptr<MoveController> moveControl);
+	void									AttackObjectCommand(std::shared_ptr<RTSObject> obj);
+
+	void									SetAttackCommand(std::shared_ptr<Terrain> terrain, glm::ivec2 pos);
+	void									SetPatrolCommand(std::shared_ptr<Terrain> terrain, glm::ivec2 pos);
+	void									SetStopCommand();
+	void									SetHoldCommand();
 
 protected:
 	int										mHealth;
@@ -91,4 +98,11 @@ protected:
 	std::shared_ptr<SkinnedMesh>			mSkinnedMesh;
 
 	std::shared_ptr<MoveController>			mMoveComponent;
+
+	UnitCommand								mUnitCommand;
+
+	glm::ivec2								mAttackPos;
+
+	int										mPatrolCount;
+	glm::ivec2								mPatrolPos[2];
 };

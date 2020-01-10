@@ -30,7 +30,7 @@ void GameStage::Initialize(GLFWwindow* window, int w, int h)
 	// 좌표계
 	mAxis = make_shared<AxisObject>();
 
-	shared_ptr<Player> player = make_shared<GamePlayer>();
+	shared_ptr<Player> player = make_shared<GamePlayer>(mMouse);
 	mGamePlayers = dynamic_pointer_cast<GamePlayer>(player);
 
 	player->Initialize(mTerrain, w, h);
@@ -100,7 +100,7 @@ void GameStage::CursorPos(double xPos, double yPos)
 	}
 	else
 	{
-		mGamePlayers->CursorPos(mMouse, camera, xPos, yPos);
+		mGamePlayers->CursorPos(camera, xPos, yPos);
 		camera->MouseXY(xPos, yPos);
 	}
 }
@@ -144,14 +144,14 @@ void GameStage::MouseButton(int button, int action)
 	{
 		if (mMouse->IsDragBox())
 		{
-			mGamePlayers->SelectUnit(mMouse, camera);
+			mGamePlayers->SelectUnitInRect(camera);
 		}
 
 		mMouse->VisiableDragBox(false);
 	}
 
 	// UI가 클릭된 경우 게임 화면에 마우스 클릭 무시
-	mGamePlayers->MouseButton(mMouse, camera, button, action);
+	mGamePlayers->MouseButton(camera, button, action);
 }
 
 void GameStage::MouseWheel(double yPos)

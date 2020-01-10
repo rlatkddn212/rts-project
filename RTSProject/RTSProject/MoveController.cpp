@@ -74,7 +74,7 @@ void MoveController::Update(float deltaTime)
 
 		if (glm::distance(newPos, glm::vec2(mUnit->GetMove())) < 0.1f)
 		{
-			mUnit->SetPath(vector<glm::ivec2>());
+			Arrive();
 		}
 
 		mUnit->SetPosition(glm::vec3(newPos.x, mTerrain->GetHeight(glm::vec2(newPos.x, -newPos.y)), -newPos.y));
@@ -118,4 +118,11 @@ glm::vec2 MoveController::MoveUnit(shared_ptr<Unit> unit, float len)
 	}
 
 	return glm::vec2(mPath[mPath.size() - 1]);
+}
+
+void MoveController::Arrive()
+{
+	mUnit->SetPath(vector<glm::ivec2>());
+
+	// 패트롤 상태 일 경우 다른 경로 탐색
 }
