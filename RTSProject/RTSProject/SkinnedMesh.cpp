@@ -247,7 +247,7 @@ void SkinnedMesh::ReadNodeHeirarchy(const aiAnimation* pAnimation, float Animati
 	for (size_t i = 0; i < pAnimation->mNumChannels; ++i)
 	{
 		pNodeAnim = pAnimation->mChannels[i];
-		if (std::string(pNodeAnim->mNodeName.data) == NodeName)
+		if (pNodeAnim->mNodeName.data == NodeName)
 		{
 			isFind = true;
 			break;

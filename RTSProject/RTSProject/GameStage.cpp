@@ -37,9 +37,9 @@ void GameStage::Initialize(GLFWwindow* window, int w, int h)
 	player->Initialize(mTerrain, w, h);
 	mPlayers.push_back(player);
 
-	//shared_ptr<Player> aiPlayer = make_shared<AiPlayer>();
-	//aiPlayer->Initialize(mTerrain, w, h);
-	//mPlayers.push_back(aiPlayer);
+	shared_ptr<Player> aiPlayer = make_shared<AiPlayer>();
+	aiPlayer->Initialize(mTerrain, w, h);
+	mPlayers.push_back(aiPlayer);
 
 	mFogOfWar = make_shared<FogOfWar>(w, h);
 

@@ -162,6 +162,13 @@
     <ClInclude Include="Unit.h" />
     <ClInclude Include="UnitInfo.h" />
     <ClInclude Include="UnitState.h" />
+    <ClInclude Include="UnitStateAttack.h" />
+    <ClInclude Include="UnitStateBuild.h" />
+    <ClInclude Include="UnitStateDie.h" />
+    <ClInclude Include="UnitStateGotoObj.h" />
+    <ClInclude Include="UnitStateMove.h" />
+    <ClInclude Include="UnitStateNone.h" />
+    <ClInclude Include="UnitStateSkill.h" />
     <ClInclude Include="VertexArray.h" />
     <ClInclude Include="VertexArrayAlpha.h" />
     <ClInclude Include="WindowGroup.h" />
@@ -207,6 +214,13 @@
     <ClCompile Include="Unit.cpp" />
     <ClCompile Include="UnitInfo.cpp" />
     <ClCompile Include="UnitState.cpp" />
+    <ClCompile Include="UnitStateAttack.cpp" />
+    <ClCompile Include="UnitStateBuild.cpp" />
+    <ClCompile Include="UnitStateDie.cpp" />
+    <ClCompile Include="UnitStateGotoObj.cpp" />
+    <ClCompile Include="UnitStateMove.cpp" />
+    <ClCompile Include="UnitStateNone.cpp" />
+    <ClCompile Include="UnitStateSkill.cpp" />
     <ClCompile Include="VertexArray.cpp" />
     <ClCompile Include="VertexArrayAlpha.cpp" />
     <ClCompile Include="WindowGroup.cpp" />

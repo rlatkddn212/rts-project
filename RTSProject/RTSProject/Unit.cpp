@@ -2,6 +2,14 @@
 #include "Unit.h"
 #include "Math3D.h"
 
+#include "UnitStateNone.h"
+#include "UnitStateAttack.h"
+#include "UnitStateBuild.h"
+#include "UnitStateDie.h"
+#include "UnitStateGotoObj.h"
+#include "UnitStateMove.h"
+#include "UnitStateSkill.h"
+
 using namespace std;
 
 Unit::Unit(shared_ptr<UnitInfo> unitInfo)
@@ -14,8 +22,12 @@ Unit::Unit(shared_ptr<UnitInfo> unitInfo)
 	mDefense = mUnitInfo->GetDefense();
 	mSpeed = mUnitInfo->GetSpeed();
 	mDamege = mUnitInfo->GetDamege();
+	mSight = mUnitInfo->GetSight();
 
 	mMoveComponent = nullptr;
+
+	mUnitCommand = UNITCOMMAND_NONE;
+	mUnitState = std::make_shared<UnitStateNone>();
 
 	mSkinnedMesh = std::make_shared<SkinnedMesh>();
 	mSkinnedMesh->LoadModel(mUnitInfo->GetModel());
@@ -54,6 +66,7 @@ void Unit::Update(float deltaTime)
 {
 	mSkinnedMesh->Update(deltaTime);
 	
+	mUnitState->Update(this, deltaTime);
 	if (mMoveComponent)
 		mMoveComponent->Update(deltaTime);
 }
@@ -148,6 +161,7 @@ void Unit::AttackObjectCommand(shared_ptr<RTSObject> obj)
 
 void Unit::SetAttackCommand(std::shared_ptr<Terrain> terrain, glm::ivec2 pos)
 {
+	mUnitState = make_shared<UnitStateNone>();
 	SetMove(terrain, pos);
 	mUnitCommand = UNITCOMMAND_ATTACK_MOVE;
 }
@@ -170,34 +184,9 @@ void Unit::SetHoldCommand()
 
 bool Unit::FindEnemyInRange(std::shared_ptr<Terrain> terrain, std::vector<std::weak_ptr<RTSObject>>& mEnemy)
 {
-	// 멈춰 있거나, 이동 공격, 패트롤 중에 적을 발견한 경우
-	shared_ptr<RTSObject> tempUnit = nullptr;
-	float minRange = 100.0f;
-	glm::vec3 pos2 = GetPosition();
-
-	for (int i = 0; i < mEnemy.size(); ++i) 
+	if (mUnitState->FindEnemyInRange(this, terrain, mEnemy, mUnitCommand))
 	{
-		shared_ptr<RTSObject> enemyUnit = mEnemy[i].lock();
-		if (enemyUnit)
-		{
-			glm::vec3 pos1 = enemyUnit->GetPosition();
 
-			float dist = glm::distance(pos1, pos2);
-			if (dist < mRange)
-			{
-				if (dist < minRange)
-				{
-					minRange = dist;
-					tempUnit = enemyUnit;
-				}
-			}
-		}
-	}
-
-	if (tempUnit)
-	{
-		glm::vec3 tempPos = tempUnit->GetPosition();
-		SetMove(terrain, glm::ivec2(tempPos.x, -tempPos.z));
 	}
 	
 	return false;

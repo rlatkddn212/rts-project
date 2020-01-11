@@ -1,6 +1,6 @@
 #include "Precompiled.h"
 #include "GamePlayer.h"
-
+#include "UnitStateMove.h"
 using namespace std;
 
 GamePlayer::GamePlayer(shared_ptr<Mouse> mouse)
@@ -170,6 +170,8 @@ void GamePlayer::MouseButton(std::shared_ptr<Camera> camera, int button, int act
 			{
 				if (mUnits[i]->IsSelected())
 				{
+					mUnits[i]->SetState(std::make_shared<UnitStateMove>());
+					mUnits[i]->SetCommand(UNITCOMMAND_MOVE);
 					mUnits[i]->SetMove(mTerrain, pos);
 				}
 			}

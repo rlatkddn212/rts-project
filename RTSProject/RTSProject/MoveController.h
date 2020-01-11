@@ -18,5 +18,5 @@ public:
 
 private:
 	std::shared_ptr<Terrain>				mTerrain;
-	std::shared_ptr<Unit>					mUnit;
+	std::weak_ptr<Unit>						mUnit;
 };

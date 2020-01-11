@@ -15,6 +15,7 @@ public:
 	void									SetDefense(double d) { damege = d; }
 	void									SetAttackRange(double r) { range = r; }
 	void									SetAttackSpeed(double s) { attackspeed = s; }
+	void									SetSight(double s) { sight = s; }
 
 	int										GetHealth() { return health; }
 	double									GetDamege() { return damege; }
@@ -22,11 +23,13 @@ public:
 	double									GetDefense() { return defense; }
 	double									GetAttackRange() { return range; }
 	double									GetAttackSpeed() { return attackspeed; }
+	double									GetSight() { return sight; }
 
 private:
 	int										type;
 	int										health;
 	double									attackspeed;
+	double									sight;
 	double									range;
 	double									defense;
 	double									speed;

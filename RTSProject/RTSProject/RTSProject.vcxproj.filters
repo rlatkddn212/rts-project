@@ -171,6 +171,27 @@
     <ClInclude Include="UnitState.h">
       <Filter>소스 파일\UnitState</Filter>
     </ClInclude>
+    <ClInclude Include="UnitStateMove.h">
+      <Filter>소스 파일\UnitState</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitStateAttack.h">
+      <Filter>소스 파일\UnitState</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitStateBuild.h">
+      <Filter>소스 파일\UnitState</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitStateDie.h">
+      <Filter>소스 파일\UnitState</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitStateGotoObj.h">
+      <Filter>소스 파일\UnitState</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitStateNone.h">
+      <Filter>소스 파일\UnitState</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitStateSkill.h">
+      <Filter>소스 파일\UnitState</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Font.cpp">
@@ -291,6 +312,27 @@
       <Filter>소스 파일\AI</Filter>
     </ClCompile>
     <ClCompile Include="UnitState.cpp">
+      <Filter>소스 파일\UnitState</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitStateMove.cpp">
+      <Filter>소스 파일\UnitState</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitStateSkill.cpp">
+      <Filter>소스 파일\UnitState</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitStateNone.cpp">
+      <Filter>소스 파일\UnitState</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitStateGotoObj.cpp">
+      <Filter>소스 파일\UnitState</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitStateDie.cpp">
+      <Filter>소스 파일\UnitState</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitStateBuild.cpp">
+      <Filter>소스 파일\UnitState</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitStateAttack.cpp">
       <Filter>소스 파일\UnitState</Filter>
     </ClCompile>
   </ItemGroup>

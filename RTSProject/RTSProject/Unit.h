@@ -6,7 +6,7 @@
 #include "Terrain.h"
 #include "MoveController.h"
 #include "UnitInfo.h"
-
+#include "UnitState.h"
 class MoveController;
 
 enum UnitCommand
@@ -21,17 +21,7 @@ enum UnitCommand
 	UNITCOMMAND_SKILL,
 	UNITCOMMAND_BUILD
 };
-
-enum UnitState
-{
-	UNIT_NONE,
-	UNIT_MOVE,
-	UNIT_GOTO_OBJ,
-	UNIT_ATTACK,
-	UNIT_SKILL,
-	UNIT_DIE,
-	UNIT_BUILD,
-};
+class UnitState;
 
 class Unit : public RTSObject
 {
@@ -78,9 +68,21 @@ public:
 	void									SetStopCommand();
 	void									SetHoldCommand();
 
+	UnitCommand								GetCommand() { return mUnitCommand; }
+	void									SetCommand(UnitCommand command) { mUnitCommand = command; }
+
 	void									SetColor(glm::vec4 color) { mSkinnedMesh->SetColor(color); }
 
 	bool									FindEnemyInRange(std::shared_ptr<Terrain> terrain, std::vector<std::weak_ptr<RTSObject> >& mEnemy);
+
+	double									GetRange() { return mRange; }
+	double									GetSight() { return mSight; }
+
+	void									SetTarget(std::shared_ptr<RTSObject> unit) { mTargetUnit = unit; }
+	std::shared_ptr<RTSObject>				GetTarget() { return mTargetUnit.lock(); }
+
+	void									SetState(std::shared_ptr<UnitState> state) { mUnitState = state; }
+	std::shared_ptr<UnitState>				GetState() { return mUnitState; }
 
 protected:
 	int										mHealth;
@@ -90,13 +92,13 @@ protected:
 	double									mDefense;
 	double									mSpeed;
 	double									mDamege;
+	double									mSight;
 
 	bool									mIsSelect;
 	std::shared_ptr<BoxObject>				mBoxObject;
 
 	int										mPathIdx;
 	std::vector<glm::ivec2>					mPath;
-
 
 	std::shared_ptr<UnitInfo>				mUnitInfo;
 
@@ -111,4 +113,6 @@ protected:
 
 	int										mPatrolCount;
 	glm::ivec2								mPatrolPos[2];
+
+	std::weak_ptr<RTSObject>				mTargetUnit;
 };
