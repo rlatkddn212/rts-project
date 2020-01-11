@@ -38,7 +38,15 @@ void Player::Terminate()
 
 void Player::Update(float deltaTime)
 {
-	for (int i = 0; i < 10; ++i)
+	for (int i = 0; i < mUnits.size(); ++i)
+	{
+		if (mUnits[i]->FindEnemyInRange(mTerrain, mEmeryUnits))
+		{
+
+		}
+	}
+
+	for (int i = 0; i < mUnits.size(); ++i)
 	{
 		mUnits[i]->Update(deltaTime);
 	}
@@ -46,7 +54,7 @@ void Player::Update(float deltaTime)
 
 void Player::Render(std::shared_ptr<Camera> camera)
 {
-	for (int i = 0; i < 10; ++i)
+	for (int i = 0; i < mUnits.size(); ++i)
 	{
 		mUnits[i]->Render(camera);
 	}
@@ -64,7 +72,7 @@ void Player::Render(std::shared_ptr<Camera> camera)
 
 void Player::SetPosOnTerrain(shared_ptr<Texture> fog)
 {
-	for (int i = 0; i < 10; ++i)
+	for (int i = 0; i < mUnits.size(); ++i)
 	{
 		mUnits[i]->SetFogTexture(fog);
 	}
@@ -72,9 +80,19 @@ void Player::SetPosOnTerrain(shared_ptr<Texture> fog)
 
 void Player::SetFogTexture(std::shared_ptr<Texture> fog)
 {
-	for (int i = 0; i < 10; ++i)
+	for (int i = 0; i < mUnits.size(); ++i)
 	{
 		mUnits[i]->SetFogTexture(fog);
+	}
+}
+
+void Player::SetEnemy(std::vector<std::shared_ptr<RTSObject>>& enemy)
+{
+	mEmeryUnits.clear();
+	mEmeryUnits.reserve(enemy.size());
+	for (int i = 0; i < enemy.size(); ++i)
+	{
+		mEmeryUnits.push_back(enemy[i]);
 	}
 }
 

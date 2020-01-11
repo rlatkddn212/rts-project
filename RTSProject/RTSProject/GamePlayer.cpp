@@ -16,14 +16,13 @@ void GamePlayer::Initialize(shared_ptr<Terrain> terrain, int w, int h)
 {
 	Player::Initialize(terrain, w, h);
 
-	for (int i = 0; i < 10; ++i)
+	for (int i = 0; i < mUnits.size(); ++i)
 	{
 		mUnits[i]->SetColor(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
 	}
 
 	mWidth = w;
 	mHeight = h;
-
 	mPlayerState = PLAYER_NONE;
 }
 
@@ -167,9 +166,9 @@ void GamePlayer::MouseButton(std::shared_ptr<Camera> camera, int button, int act
 		glm::ivec2 pos;
 		if (mTerrain->Intersect(ray, pos))
 		{
-			for (int i = 0; i < 10; ++i)
+			for (int i = 0; i < mUnits.size(); ++i)
 			{
-				if (mUnits[i]->isSelected())
+				if (mUnits[i]->IsSelected())
 				{
 					mUnits[i]->SetMove(mTerrain, pos);
 				}
@@ -191,6 +190,10 @@ void GamePlayer::MouseButton(std::shared_ptr<Camera> camera, int button, int act
 				mPlayerState = PLAYER_UNIT_SELECTED;
 				//mMouse->VisiableDragBox(true);
 			}
+			else
+			{
+				NoneState();
+			}
 		}
 		// 건물 짓기 준비 상태일 경우
 		else if (mPlayerState == PLAYER_BUILDING)
@@ -205,6 +208,10 @@ void GamePlayer::MouseButton(std::shared_ptr<Camera> camera, int button, int act
 			CommandUnit(camera);
 			mPlayerState = PLAYER_UNIT_SELECTED;
 			mMouse->SetCursorImage(0);
+		}
+		else
+		{
+			NoneState();
 		}
 	}
 	else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)
@@ -263,7 +270,7 @@ bool GamePlayer::CreateBuilding(std::shared_ptr<Camera> camera)
 
 void GamePlayer::SelectUnitInRect(std::shared_ptr<Camera> camera)
 {
-	for (int i = 0; i < 10; ++i)
+	for (int i = 0; i < mUnits.size(); ++i)
 	{
 		glm::vec2 p = mUnits[i]->GetScreenPos(camera);
 		p.x = p.x * (mWidth / 2) + mWidth / 2;
@@ -282,13 +289,13 @@ bool GamePlayer::IsSelectUnit(std::shared_ptr<Camera> camera)
 {
 	Ray ray;
 	ray.SetRay(camera, mMouseX, mMouseY);
-	for (int i = 0; i < 10; ++i)
+	for (int i = 0; i < mUnits.size(); ++i)
 	{
 		mUnits[i]->UnSelect();
 		mSelectedUnit.clear();
 	}
 
-	for (int i = 0; i < 10; ++i)
+	for (int i = 0; i < mUnits.size(); ++i)
 	{
 		if (mUnits[i]->Intersect(ray))
 		{
@@ -306,9 +313,9 @@ std::shared_ptr<RTSObject> GamePlayer::IsSelectEmeryUnit(std::shared_ptr<Camera>
 {
 	Ray ray;
 	ray.SetRay(camera, mMouseX, mMouseY);
-	for (int i = 0; i < 10; ++i)
+	for (int i = 0; i < mEmeryUnits.size(); ++i)
 	{
-		shared_ptr<Unit> unit = mEmeryUnits[i].lock();
+		shared_ptr<RTSObject> unit = mEmeryUnits[i].lock();
 		if (unit != nullptr && unit->Intersect(ray))
 		{
 			return unit;
@@ -320,7 +327,7 @@ std::shared_ptr<RTSObject> GamePlayer::IsSelectEmeryUnit(std::shared_ptr<Camera>
 
 void GamePlayer::BuildingToPlace(int type)
 {
-	for (int i = 0; i < 10; ++i)
+	for (int i = 0; i < mUnits.size(); ++i)
 	{
 		mUnits[i]->UnSelect();
 	}

@@ -49,6 +49,9 @@
     <Filter Include="소스 파일\AI">
       <UniqueIdentifier>{3c04a8cd-583b-4038-94fb-70e05562f50c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\UnitState">
+      <UniqueIdentifier>{f07ca74b-404b-4dac-9827-11da1213e5dd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Font.h">
@@ -164,6 +167,9 @@
     </ClInclude>
     <ClInclude Include="Action.h">
       <Filter>소스 파일\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitState.h">
+      <Filter>소스 파일\UnitState</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -283,6 +289,9 @@
     </ClCompile>
     <ClCompile Include="Action.cpp">
       <Filter>소스 파일\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitState.cpp">
+      <Filter>소스 파일\UnitState</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

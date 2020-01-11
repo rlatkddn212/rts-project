@@ -37,9 +37,9 @@ void GameStage::Initialize(GLFWwindow* window, int w, int h)
 	player->Initialize(mTerrain, w, h);
 	mPlayers.push_back(player);
 
-	shared_ptr<Player> aiPlayer = make_shared<AiPlayer>();
-	aiPlayer->Initialize(mTerrain, w, h);
-	mPlayers.push_back(aiPlayer);
+	//shared_ptr<Player> aiPlayer = make_shared<AiPlayer>();
+	//aiPlayer->Initialize(mTerrain, w, h);
+	//mPlayers.push_back(aiPlayer);
 
 	mFogOfWar = make_shared<FogOfWar>(w, h);
 
@@ -60,6 +60,16 @@ void GameStage::Update(float deltaTime)
 
 	for (auto player : mPlayers)
 	{
+		vector<shared_ptr<RTSObject> > obj;
+		for (int i = 0; i < mPlayers.size(); ++i)
+		{
+			if (player != mPlayers[i])
+			{
+				vector<shared_ptr<Unit> > unitObj = mPlayers[i]->GetUnit();
+				obj.insert(obj.begin(), unitObj.begin(), unitObj.end());
+			}
+		}
+		player->SetEnemy(obj);
 		player->Update(deltaTime);
 	}
 

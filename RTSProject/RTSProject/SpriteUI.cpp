@@ -9,10 +9,10 @@ SpriteUI::SpriteUI()
 	mScaleY = 0.0f;
 
 	float vertices[] = {
-	-1.0f, 1.0f, 0.f, 0.f, 0.f, 0.0f, 0.f, 0.f, // top left
-	1.0f, 1.0f, 0.f, 0.f, 0.f, 0.0f, 1.f, 0.f, // top right
-	1.0f,-1.0f, 0.f, 0.f, 0.f, 0.0f, 1.f, 1.f, // bottom right
-	-1.0f,-1.0f, 0.f, 0.f, 0.f, 0.0f, 0.f, 1.f  // bottom left
+		-1.0f, 1.0f, 0.f, 0.f, 0.f, 0.0f, 0.f, 0.f, // top left
+		1.0f, 1.0f, 0.f, 0.f, 0.f, 0.0f, 1.f, 0.f, // top right
+		1.0f,-1.0f, 0.f, 0.f, 0.f, 0.0f, 1.f, 1.f, // bottom right
+		-1.0f,-1.0f, 0.f, 0.f, 0.f, 0.0f, 0.f, 1.f  // bottom left
 	};
 
 	unsigned int indices[] = {
@@ -46,6 +46,7 @@ void SpriteUI::Render(std::shared_ptr<Camera> camera)
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
 	glEnable(GL_BLEND);
+
 	glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
 	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ZERO);
 	mSpriteVerts->SetActive();
@@ -72,6 +73,7 @@ void SpriteUI::Render(std::shared_ptr<Camera> camera)
 	mSpriteShader->SetMatrixUniform("uWorldTransform", world);
 
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
 	glEnable(GL_CULL_FACE);

@@ -167,3 +167,38 @@ void Unit::SetHoldCommand()
 {
 	mUnitCommand = UNITCOMMAND_HOLD;
 }
+
+bool Unit::FindEnemyInRange(std::shared_ptr<Terrain> terrain, std::vector<std::weak_ptr<RTSObject>>& mEnemy)
+{
+	// 멈춰 있거나, 이동 공격, 패트롤 중에 적을 발견한 경우
+	shared_ptr<RTSObject> tempUnit = nullptr;
+	float minRange = 100.0f;
+	glm::vec3 pos2 = GetPosition();
+
+	for (int i = 0; i < mEnemy.size(); ++i) 
+	{
+		shared_ptr<RTSObject> enemyUnit = mEnemy[i].lock();
+		if (enemyUnit)
+		{
+			glm::vec3 pos1 = enemyUnit->GetPosition();
+
+			float dist = glm::distance(pos1, pos2);
+			if (dist < mRange)
+			{
+				if (dist < minRange)
+				{
+					minRange = dist;
+					tempUnit = enemyUnit;
+				}
+			}
+		}
+	}
+
+	if (tempUnit)
+	{
+		glm::vec3 tempPos = tempUnit->GetPosition();
+		SetMove(terrain, glm::ivec2(tempPos.x, -tempPos.z));
+	}
+	
+	return false;
+}

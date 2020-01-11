@@ -22,6 +22,8 @@ public:
 	void									SetPosOnTerrain(std::shared_ptr<Texture> fog);
 	void									SetFogTexture(std::shared_ptr<Texture> fog);
 
+	void									SetEnemy(std::vector<std::shared_ptr<RTSObject> >& enemy);
+
 protected:
 
 	int										mWidth;
@@ -31,5 +33,5 @@ protected:
 	std::vector<std::shared_ptr<Building>>	mBuildings;
 	std::vector<std::shared_ptr<Unit> >		mUnits;
 
-	std::vector<std::weak_ptr<Unit> >		mEmeryUnits;
+	std::vector<std::weak_ptr<RTSObject> >	mEmeryUnits;
 };

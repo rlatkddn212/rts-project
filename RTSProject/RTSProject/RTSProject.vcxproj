@@ -161,6 +161,7 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Unit.h" />
     <ClInclude Include="UnitInfo.h" />
+    <ClInclude Include="UnitState.h" />
     <ClInclude Include="VertexArray.h" />
     <ClInclude Include="VertexArrayAlpha.h" />
     <ClInclude Include="WindowGroup.h" />
@@ -205,6 +206,7 @@
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Unit.cpp" />
     <ClCompile Include="UnitInfo.cpp" />
+    <ClCompile Include="UnitState.cpp" />
     <ClCompile Include="VertexArray.cpp" />
     <ClCompile Include="VertexArrayAlpha.cpp" />
     <ClCompile Include="WindowGroup.cpp" />

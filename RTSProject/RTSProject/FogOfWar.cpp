@@ -154,7 +154,7 @@ void FogOfWar::Update(float deltaTime, std::vector<std::shared_ptr<Unit>> unit)
 		}
 
 		std::vector<float> posData(unit.size() * 3);
-		for (int i = 0; i < 10; ++i)
+		for (int i = 0; i < unit.size(); ++i)
 		{
 			glm::vec3 pos = unit[i]->GetPosition();
 			posData[i * 3] = pos.x;
