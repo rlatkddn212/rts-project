@@ -88,7 +88,7 @@ EffectFireBall::EffectFireBall(glm::vec3& bonePos, std::shared_ptr<RTSObject> _t
 	mTarget = _target;
 	mAttacker = _attacker;
 	mColor.w = 0.0f;
-	mSpeed = 3.0f;
+	mSpeed = 10.0f;
 	mDamage = mAttacker->GetDamege();
 	mPrc = 0.0f;
 	mTime = 0.0f;
@@ -161,10 +161,10 @@ void EffectFireBall::Render(std::shared_ptr<Camera> camera)
 								glm::vec3(0.0f, 0.0f, glm::pi<float>() * 0.5f) };
 
 	glm::vec3 positions[] = { GetPosition(mPrc),
-								GetPosition(mPrc - (0.15f / mLength)),
-								GetPosition(mPrc - (0.25f / mLength)),
-								GetPosition(mPrc - (0.35f / mLength)),
-								GetPosition(mPrc - (0.40f / mLength)) };
+								GetPosition(mPrc - (0.3f / mLength)),
+								GetPosition(mPrc - (0.6f / mLength)),
+								GetPosition(mPrc - (0.8f / mLength)),
+								GetPosition(mPrc - (1.f / mLength)) };
 
 	glm::vec3 scales[] = { mTransMat.mScale,
 							mTransMat.mScale * 0.8f,

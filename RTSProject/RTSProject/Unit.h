@@ -56,7 +56,8 @@ public:
 	void									SetMove(std::shared_ptr<Terrain> terrain, glm::ivec2 movePos);
 	glm::ivec2								GetMove() { return mMovePos; }
 
-	void									SetAnimation(int idx) { mSkinnedMesh->mAnimationIdx = idx; };
+	void									SetAnimationSpeed(float speed) { mSkinnedMesh->mAniSpeed = speed; }
+	void									SetAnimation(int idx);// {if (mSkinnedMesh->mAnimationIdx != idx) { mSkinnedMesh->mAnimTime = 0.0f; } mSkinnedMesh->mAnimationIdx = idx; };
 	void									InitPosOnTerrain(std::shared_ptr<Terrain> terrain, glm::vec2 p);
 	float									GetSpeed() { return mSpeed; }
 
@@ -66,6 +67,7 @@ public:
 	void									AttachMoveComponent(std::shared_ptr<MoveController> moveControl);
 	void									AttackObjectCommand(std::shared_ptr<RTSObject> obj);
 
+	void									SetMoveCommand(std::shared_ptr<Terrain> terrain, glm::ivec2 movePos);
 	void									SetAttackCommand(std::shared_ptr<Terrain> terrain, glm::ivec2 pos);
 	void									SetPatrolCommand(std::shared_ptr<Terrain> terrain, glm::ivec2 pos);
 	void									SetStopCommand();

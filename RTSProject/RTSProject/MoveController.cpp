@@ -30,11 +30,9 @@ void MoveController::Update(float deltaTime)
 	
 	if (! moveUnit->GetPath().empty())
 	{
-		//moveUnit->SetAnimation(2);
 		float len = deltaTime * moveUnit->GetSpeed();
 		glm::vec3 pos = moveUnit->GetPosition();
 
-		//mTerrain->SetTileState(RoundPosition(glm::vec2(pos.x, -pos.z)), TileState::MoveObject);
 		glm::vec2 newPos = MoveUnit(moveUnit, len);
 
 		// 길이 막힌 경우
@@ -45,7 +43,6 @@ void MoveController::Update(float deltaTime)
 			{
 				glm::vec3 pos = moveUnit->GetPosition();
 				mTerrain->SetTileState(RoundPosition(glm::vec2(pos.x, -pos.z)), TileState::StopObject);
-				//moveUnit->SetAnimation(1);
 
 				return;
 			}
@@ -58,7 +55,6 @@ void MoveController::Update(float deltaTime)
 					assert(0);
 				}
 
-				//unit->SetPath(mTerrain->GetPath(RoundPosition(glm::vec2(pos.x, -pos.z)), closePos));
 				moveUnit->SetMove(mTerrain, closePos);
 			}
 			else
@@ -87,8 +83,6 @@ void MoveController::Update(float deltaTime)
 	{
 		glm::vec3 pos = moveUnit->GetPosition();
 		mTerrain->SetTileState(RoundPosition(glm::vec2(pos.x, -pos.z)), TileState::StopObject);
-		
-		//moveUnit->SetAnimation(1);
 	}
 }
 

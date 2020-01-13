@@ -105,6 +105,7 @@ public:
 	glm::mat4								perspect;
 	glm::mat4								view;
 	float									mAnimTime;
+	float									mAniSpeed;
 
 	int										mAnimationIdx;
 

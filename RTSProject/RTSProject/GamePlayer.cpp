@@ -170,9 +170,8 @@ void GamePlayer::MouseButton(std::shared_ptr<Camera> camera, int button, int act
 			{
 				if (mUnits[i]->IsSelected())
 				{
-					mUnits[i]->SetState(std::make_shared<UnitStateMove>());
-					mUnits[i]->SetCommand(UNITCOMMAND_MOVE);
-					mUnits[i]->SetMove(mTerrain, pos);
+					
+					mUnits[i]->SetMoveCommand(mTerrain, pos);
 				}
 			}
 		}

@@ -27,12 +27,12 @@ public:
 	void									SetAttackTime(double time) { mAttackTime = time; }
 	double									GetAttackTime() { return mAttackTime; }
 
-	double									GetAttackSpeed() { return mAttackspeed; }
+	double									GetAttackSpeed() { return mAttackSpeed; }
 
 protected:
 	int										mHealth;
 	int										mMaxHealth;
-	double									mAttackspeed;
+	double									mAttackSpeed;
 	double									mRange;
 	double									mDefense;
 	double									mSpeed;

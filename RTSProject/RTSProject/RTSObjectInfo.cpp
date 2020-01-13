@@ -5,7 +5,7 @@ RTSObjectInfo::RTSObjectInfo()
 {
 	type = 0;
 	health = 100;
-	attackspeed = 10.0;
+	attackspeed = 0.6;
 	range = 10.0;
 	defense = 5.0;
 	speed = 3.0;

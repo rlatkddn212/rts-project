@@ -16,10 +16,11 @@ void UnitStateAttack::Update(Unit * ownUnit, float deltaTime)
 
 	if (target)
 	{
-		
 		double time = ownUnit->GetAttackTime();
 		if (time == 0.0)
 		{
+			ownUnit->SetAnimationSpeed(ownUnit->GetAttackSpeed());
+
 			std::shared_ptr<EffectFireBall> ball = std::make_shared<EffectFireBall>(pos1, target, ownUnit);
 			ownUnit->AddEffect(ball);
 			ownUnit->SetAttackTime(time + deltaTime);

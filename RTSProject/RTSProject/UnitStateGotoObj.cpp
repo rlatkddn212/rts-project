@@ -8,6 +8,7 @@ using namespace std;
 // 공격 가능한 오브젝트에게 달려간다.
 void UnitStateGotoObj::Update(Unit * ownUnit, float deltaTime)
 {
+	ownUnit->SetAnimation(2);
 	shared_ptr<Unit> target = dynamic_pointer_cast<Unit>(ownUnit->GetTarget());
 	glm::vec3 pos1 = ownUnit->GetPosition();
 
@@ -16,7 +17,7 @@ void UnitStateGotoObj::Update(Unit * ownUnit, float deltaTime)
 		shared_ptr<UnitStateDie> targetDie = dynamic_pointer_cast<UnitStateDie>(target->GetState());
 		// 타겟이 죽었다면
 		if (targetDie)
-		{
+		{			
 			ownUnit->SetState(std::make_shared<UnitStateNone>());
 		}
 		else
@@ -48,7 +49,7 @@ bool UnitStateGotoObj::FindEnemyInRange(Unit * ownUnit, std::shared_ptr<Terrain>
 			glm::vec3 pos1 = enemyUnit->GetPosition();
 
 			float dist = glm::distance(pos1, pos2);
-			if (dist < ownUnit->GetRange())
+			if (dist < ownUnit->GetSight())
 			{
 				if (dist < minRange)
 				{
@@ -62,10 +63,20 @@ bool UnitStateGotoObj::FindEnemyInRange(Unit * ownUnit, std::shared_ptr<Terrain>
 	// 공격 범위에 타겟
 	if (tempUnit)
 	{
-		glm::vec3 tempPos = tempUnit->GetPosition();
-		ownUnit->SetAttackTime(0.0f);
-		ownUnit->SetState(std::make_shared<UnitStateAttack>());
-		ownUnit->SetPath(vector<glm::ivec2>());
+		if (minRange < ownUnit->GetRange())
+		{
+			glm::vec3 tempPos = tempUnit->GetPosition();
+			ownUnit->SetAttackTime(0.0f);
+			ownUnit->SetState(std::make_shared<UnitStateAttack>());
+			ownUnit->SetPath(vector<glm::ivec2>());
+		}
+		else
+		{
+			glm::vec3 tempPos = tempUnit->GetPosition();
+			ownUnit->SetMove(terrain, glm::ivec2(tempPos.x, -tempPos.z));
+			ownUnit->SetState(make_shared<UnitStateGotoObj>());
+			ownUnit->SetTarget(tempUnit);
+		}
 		
 		return true;
 	}

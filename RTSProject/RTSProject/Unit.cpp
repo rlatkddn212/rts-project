@@ -17,7 +17,7 @@ Unit::Unit(shared_ptr<RTSObjectInfo> unitInfo)
 	mUnitInfo = unitInfo;
 	mIsSelect = false;
 	mHealth = mUnitInfo->GetHealth();
-	mAttackspeed = mUnitInfo->GetAttackSpeed();
+	mAttackSpeed = mUnitInfo->GetAttackSpeed();
 	mRange = mUnitInfo->GetAttackRange();
 	mDefense = mUnitInfo->GetDefense();
 	mSpeed = mUnitInfo->GetSpeed();
@@ -145,7 +145,6 @@ glm::vec2 Unit::GetScreenPos(std::shared_ptr<Camera> camera)
 
 void Unit::SetPath(const std::vector<glm::ivec2>& path)
 {
-	mSkinnedMesh->mAnimTime = 0.0f;
 	mPathIdx = 0;
 	mPath.clear();
 	mPath = path;
@@ -167,6 +166,16 @@ void Unit::SetMove(std::shared_ptr<Terrain> terrain, glm::ivec2 movePos)
 	}
 }
 
+void Unit::SetAnimation(int idx)
+{
+	if (mSkinnedMesh->mAnimationIdx != idx) 
+	{ 
+		mSkinnedMesh->mAnimTime = 0.0f; 
+	} 
+	
+	mSkinnedMesh->mAnimationIdx = idx;
+}
+
 void Unit::InitPosOnTerrain(shared_ptr<Terrain> terrain, glm::vec2 p)
 {
 	terrain->SetTileState(RoundPosition(p), TileState::StaticObject);
@@ -177,6 +186,22 @@ void Unit::InitPosOnTerrain(shared_ptr<Terrain> terrain, glm::vec2 p)
 void Unit::AttachMoveComponent(std::shared_ptr<MoveController> moveControl)
 {
 	mMoveComponent = moveControl;
+}
+
+void Unit::SetMoveCommand(std::shared_ptr<Terrain> terrain, glm::ivec2 movePos)
+{
+	SetMove(terrain, movePos);
+
+	if (!mPath.empty())
+	{
+		SetState(std::make_shared<UnitStateMove>());
+		mUnitCommand = UNITCOMMAND_MOVE;
+	}
+	else
+	{
+		SetState(std::make_shared<UnitStateNone>());
+		mUnitCommand = UNITCOMMAND_NONE;
+	}
 }
 
 void Unit::AttackObjectCommand(shared_ptr<RTSObject> obj)

@@ -8,6 +8,7 @@ SkinnedMesh::SkinnedMesh()
 	m_angle = 0.0f;
 	mNumBones = 0;
 	mAnimationIdx = 0;
+	mAniSpeed = 1.0f;
 	mMinPos = glm::vec3(2000.0f, 2000.0f, 2000.0f);
 	mMaxPos = glm::vec3(-2000.0f, -2000.0f, -2000.0f);
 
@@ -238,7 +239,7 @@ void SkinnedMesh::LoadMaterials(const aiScene * scene)
 	}
 }
 
-void SkinnedMesh::ReadNodeHeirarchy(const aiAnimation* pAnimation, float AnimationTime, const aiNode * pNode, const glm::mat4 & ParentTransform)
+void SkinnedMesh::ReadNodeHeirarchy(const aiAnimation* pAnimation, float animationTime, const aiNode * pNode, const glm::mat4 & ParentTransform)
 {
 	std::string NodeName(pNode->mName.data);
 	const aiNodeAnim* pNodeAnim = nullptr;
@@ -253,8 +254,12 @@ void SkinnedMesh::ReadNodeHeirarchy(const aiAnimation* pAnimation, float Animati
 			break;
 		}
 	}
-	if (!isFind)pNodeAnim = nullptr;
 	
+	if (!isFind)
+	{
+		pNodeAnim = nullptr;
+	}
+
 	glm::mat4 NodeTransformation = glm::identity<glm::mat4>();
 	memcpy(&NodeTransformation, &pNode->mTransformation, sizeof(NodeTransformation));
 	NodeTransformation = glm::transpose(NodeTransformation);
@@ -264,10 +269,10 @@ void SkinnedMesh::ReadNodeHeirarchy(const aiAnimation* pAnimation, float Animati
 		aiVector3D Scaling;
 		int frame = 0;
 		
-		// 스케일
+		// 스케일 보간 처리
 		for (size_t i = 0; i < pNodeAnim->mNumScalingKeys - 1; ++i) 
 		{
-			if (AnimationTime < (float)pNodeAnim->mScalingKeys[i + 1].mTime) 
+			if (animationTime < (float)pNodeAnim->mScalingKeys[i + 1].mTime) 
 			{
 				frame = i;
 				break;
@@ -275,15 +280,16 @@ void SkinnedMesh::ReadNodeHeirarchy(const aiAnimation* pAnimation, float Animati
 		}
 
 		float DeltaTime = pNodeAnim->mPositionKeys[frame + 1].mTime - pNodeAnim->mPositionKeys[frame].mTime;
-		float Factor = (AnimationTime - (float)pNodeAnim->mPositionKeys[frame].mTime) / DeltaTime;
+		float Factor = (animationTime - (float)pNodeAnim->mPositionKeys[frame].mTime) / DeltaTime;
 		aiVector3D p1 = pNodeAnim->mScalingKeys[frame].mValue;
 		aiVector3D p2 = pNodeAnim->mScalingKeys[frame + 1].mValue;
 		
 		glm::mat4 ScalingM = glm::scale(glm::mat4(1.0f), glm::lerp(glm::vec3(p1.x, p1.y, p1.z), glm::vec3(p2.x, p2.y, p2.z), Factor));
 	
-		for (size_t i = 0; i < pNodeAnim->mNumPositionKeys - 1; i++)
+		// 이동 보간 처리
+		for (size_t i = 0; i < pNodeAnim->mNumPositionKeys - 1; ++i)
 		{
-			if (AnimationTime < (float)pNodeAnim->mPositionKeys[i + 1].mTime)
+			if (animationTime < (float)pNodeAnim->mPositionKeys[i + 1].mTime)
 			{
 				frame = i;
 				break;
@@ -291,16 +297,16 @@ void SkinnedMesh::ReadNodeHeirarchy(const aiAnimation* pAnimation, float Animati
 		}
 
 		DeltaTime = pNodeAnim->mPositionKeys[frame + 1].mTime - pNodeAnim->mPositionKeys[frame].mTime;
-		Factor = (AnimationTime - (float)pNodeAnim->mPositionKeys[frame].mTime) / DeltaTime;
+		Factor = (animationTime - (float)pNodeAnim->mPositionKeys[frame].mTime) / DeltaTime;
 		p1 = pNodeAnim->mPositionKeys[frame].mValue;
 		p2 = pNodeAnim->mPositionKeys[frame + 1].mValue;
 
 		glm::mat4 TranslationM = glm::translate(glm::mat4(1.0f), glm::lerp(glm::vec3(p1.x, p1.y, p1.z), glm::vec3(p2.x, p2.y, p2.z), Factor));
 
-		// 회전
-		for (size_t i = 0; i < pNodeAnim->mNumRotationKeys - 1; i++)
+		// 회전 보간 처리
+		for (size_t i = 0; i < pNodeAnim->mNumRotationKeys - 1; ++i)
 		{
-			if (AnimationTime < (float)pNodeAnim->mRotationKeys[i + 1].mTime)
+			if (animationTime < (float)pNodeAnim->mRotationKeys[i + 1].mTime)
 			{
 				frame = i;
 				break;
@@ -308,13 +314,12 @@ void SkinnedMesh::ReadNodeHeirarchy(const aiAnimation* pAnimation, float Animati
 		}
 
 		DeltaTime = pNodeAnim->mPositionKeys[frame + 1].mTime - pNodeAnim->mPositionKeys[frame].mTime;
-		Factor = (AnimationTime - (float)pNodeAnim->mPositionKeys[frame].mTime) / DeltaTime;
+		Factor = (animationTime - (float)pNodeAnim->mPositionKeys[frame].mTime) / DeltaTime;
 		aiQuaternion q1 = pNodeAnim->mRotationKeys[frame].mValue;
 		aiQuaternion q2 = pNodeAnim->mRotationKeys[frame + 1].mValue;
 		glm::quat q = glm::slerp(glm::quat(q1.w, q1.x, q1.y, q1.z), glm::quat(q2.w, q2.x, q2.y, q2.z), Factor);
 		glm::mat4 RotationM = glm::toMat4(q);
 
-		// Combine the above transformations
 		NodeTransformation = TranslationM * RotationM * ScalingM;
 	}
 
@@ -326,9 +331,9 @@ void SkinnedMesh::ReadNodeHeirarchy(const aiAnimation* pAnimation, float Animati
 		Transforms[BoneIndex] = mGlobalInvBindPoses * GlobalTransformation * mBoneInfo[BoneIndex].mBindPose;
 	}
 
-	for (size_t i = 0; i < pNode->mNumChildren; i++) 
+	for (size_t i = 0; i < pNode->mNumChildren; ++i)
 	{
-		ReadNodeHeirarchy(pAnimation, AnimationTime, pNode->mChildren[i], GlobalTransformation);
+		ReadNodeHeirarchy(pAnimation, animationTime, pNode->mChildren[i], GlobalTransformation);
 	}
 }
 
@@ -336,14 +341,21 @@ void SkinnedMesh::BoneTransform()
 {
 	glm::mat4 Identity = glm::identity<glm::mat4>();
 	const aiAnimation* pAnimation = scene->mAnimations[mAnimationIdx];
+
+	// 초당 틱의 수
 	float TicksPerSecond = (float)(pAnimation->mTicksPerSecond != 0 ? pAnimation->mTicksPerSecond : 25.0f);
-	float TimeInTicks = mAnimTime * 100 * TicksPerSecond;
+	// mAnimTime : 누적 시간
+	// TicksPerSecond : 1초에 25번
+	float mSpeed = 600;
+	float TimeInTicks = mAnimTime * 1000.0f * (float)pAnimation->mDuration / (mAniSpeed * 1000.f);
+	
 	float AnimationTime = fmod(TimeInTicks, (float)pAnimation->mDuration);
 
 	Transforms.resize(100);	
 	ReadNodeHeirarchy(pAnimation, AnimationTime, scene->mRootNode, Identity);
 }
 
+// bone의 개수를 4개로 제한
 void VertexBoneData::AddBoneData(size_t BoneID, float Weight)
 {
 	for (size_t i = 0; i < 4; i++) 

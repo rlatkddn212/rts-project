@@ -203,15 +203,16 @@ public:
 
 	void UpdateGame()
 	{
-		while (!SDL_TICKS_PASSED(SDL_GetTicks(), mTicksCount + 16))
+		printf("FPS : %f\n", 1000.0f / (float)(SDL_GetTicks() - mTicksCount));
+		//while (!SDL_TICKS_PASSED(SDL_GetTicks(), mTicksCount + 16))
 			;
 
 		float deltaTime = (SDL_GetTicks() - mTicksCount) / 1000.0f;
-		if (deltaTime > 0.05f)
-		{
-			deltaTime = 0.05f;
-		}
+		mTicksCount = SDL_GetTicks();
 
+		//if (deltaTime > 0.05f)
+		//	deltaTime = 0.05f;
+		
 		group->Update(deltaTime);
 	}
 
