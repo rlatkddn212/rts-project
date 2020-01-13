@@ -129,8 +129,10 @@
     <ClInclude Include="Action.h" />
     <ClInclude Include="AiPlayer.h" />
     <ClInclude Include="AxisObject.h" />
+    <ClInclude Include="Effect.h" />
     <ClInclude Include="Building.h" />
     <ClInclude Include="BuildingMesh.h" />
+    <ClInclude Include="EffectResourcePool.h" />
     <ClInclude Include="FogOfWar.h" />
     <ClInclude Include="GamePlayer.h" />
     <ClInclude Include="GroupAI.h" />
@@ -140,8 +142,10 @@
     <ClInclude Include="MiniMap.h" />
     <ClInclude Include="MoveController.h" />
     <ClInclude Include="NetPlayer.h" />
+    <ClInclude Include="ObjectResourcePool.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="RTSObject.h" />
+    <ClInclude Include="Singleton.h" />
     <ClInclude Include="SpriteUI.h" />
     <ClInclude Include="BoxObject.h" />
     <ClInclude Include="Camera.h" />
@@ -159,8 +163,9 @@
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="TextUI.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="UIResourcePool.h" />
     <ClInclude Include="Unit.h" />
-    <ClInclude Include="UnitInfo.h" />
+    <ClInclude Include="RTSObjectInfo.h" />
     <ClInclude Include="UnitState.h" />
     <ClInclude Include="UnitStateAttack.h" />
     <ClInclude Include="UnitStateBuild.h" />
@@ -177,8 +182,10 @@
     <ClCompile Include="Action.cpp" />
     <ClCompile Include="AiPlayer.cpp" />
     <ClCompile Include="AxisObject.cpp" />
+    <ClCompile Include="Effect.cpp" />
     <ClCompile Include="Building.cpp" />
     <ClCompile Include="BuildingMesh.cpp" />
+    <ClCompile Include="EffectResourcePool.cpp" />
     <ClCompile Include="FogOfWar.cpp" />
     <ClCompile Include="GamePlayer.cpp" />
     <ClCompile Include="GroupAI.cpp" />
@@ -188,8 +195,10 @@
     <ClCompile Include="MiniMap.cpp" />
     <ClCompile Include="MoveController.cpp" />
     <ClCompile Include="NetPlayer.cpp" />
+    <ClCompile Include="ObjectResourcePool.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="RTSObject.cpp" />
+    <ClCompile Include="Singleton.cpp" />
     <ClCompile Include="SpriteUI.cpp" />
     <ClCompile Include="BoxObject.cpp" />
     <ClCompile Include="Camera.cpp" />
@@ -211,8 +220,9 @@
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="TextUI.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="UIResourcePool.cpp" />
     <ClCompile Include="Unit.cpp" />
-    <ClCompile Include="UnitInfo.cpp" />
+    <ClCompile Include="RTSObjectInfo.cpp" />
     <ClCompile Include="UnitState.cpp" />
     <ClCompile Include="UnitStateAttack.cpp" />
     <ClCompile Include="UnitStateBuild.cpp" />

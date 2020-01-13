@@ -63,6 +63,7 @@ bool UnitStateGotoObj::FindEnemyInRange(Unit * ownUnit, std::shared_ptr<Terrain>
 	if (tempUnit)
 	{
 		glm::vec3 tempPos = tempUnit->GetPosition();
+		ownUnit->SetAttackTime(0.0f);
 		ownUnit->SetState(std::make_shared<UnitStateAttack>());
 		ownUnit->SetPath(vector<glm::ivec2>());
 		

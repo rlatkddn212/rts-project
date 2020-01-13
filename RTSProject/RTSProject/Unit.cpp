@@ -12,7 +12,7 @@
 
 using namespace std;
 
-Unit::Unit(shared_ptr<UnitInfo> unitInfo)
+Unit::Unit(shared_ptr<RTSObjectInfo> unitInfo)
 {
 	mUnitInfo = unitInfo;
 	mIsSelect = false;
@@ -67,6 +67,26 @@ void Unit::Update(float deltaTime)
 	mSkinnedMesh->Update(deltaTime);
 	
 	mUnitState->Update(this, deltaTime);
+
+	std::vector<std::shared_ptr<Effect> >::iterator it;
+	for (it = mEffect.begin(); it != mEffect.end(); )
+	{
+		shared_ptr<Effect> effect = *it;
+		if (effect->IsDead())
+		{
+			it = mEffect.erase(it);
+		}
+		else
+		{
+			it++;
+		}
+	}
+
+	for (int i = 0; i < mEffect.size(); ++i)
+	{
+		mEffect[i]->Update(deltaTime);
+	}
+
 	if (mMoveComponent)
 		mMoveComponent->Update(deltaTime);
 }
@@ -80,6 +100,11 @@ void Unit::Render(std::shared_ptr<Camera> camera)
 	mSkinnedMesh->RenderModel(camera);
 
 	mBoxObject->Render(camera);
+
+	for (int i = 0; i < mEffect.size(); ++i)
+	{
+		mEffect[i]->Render(camera);	
+	}
 }
 
 void Unit::Select()

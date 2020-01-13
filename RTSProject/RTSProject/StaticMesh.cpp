@@ -106,7 +106,8 @@ void StaticMesh::LoadMesh(aiMatrix4x4 mat, aiMesh* mesh, const aiScene * scene)
 		{
 			vertices.insert(vertices.end(), { mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y });
 		}
-		else {
+		else 
+		{
 			vertices.insert(vertices.end(), { 0.0f, 0.0f });
 		}
 	}

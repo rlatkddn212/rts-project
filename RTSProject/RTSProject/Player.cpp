@@ -21,7 +21,7 @@ void Player::Initialize(shared_ptr<Terrain> terrain, int w, int h)
 	{
 		int x = rand() % 100;
 		int y = rand() % 100;
-		shared_ptr<Unit> mesh = make_shared<Unit>(make_shared<UnitInfo>());
+		shared_ptr<Unit> mesh = make_shared<Unit>(make_shared<RTSObjectInfo>());
 		mUnits.push_back(mesh);
 		mUnits[i]->InitPosOnTerrain(mTerrain, glm::ivec2(x, y));
 		

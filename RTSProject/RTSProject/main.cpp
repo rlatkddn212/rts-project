@@ -6,6 +6,9 @@
 #include "SkinnedMesh.h"
 #include "AxisObject.h"
 #include "Ray.h"
+#include "EffectResourcePool.h"
+#include "ObjectResourcePool.h"
+#include "UIResourcePool.h"
 
 using namespace std;
 
@@ -68,6 +71,10 @@ public:
 		
 		group = make_shared<GameStage>();
 		group->Initialize(window, screenW, screenH);
+
+		EffectResourcePool::GetInstance()->Initialize();
+		//ObjectResourcePool::GetInstance()->Initialize();
+		//UIResourcePool::GetInstance()->Initialize();
 	}
 
 	void InitGLFW()

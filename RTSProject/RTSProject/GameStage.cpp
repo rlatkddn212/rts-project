@@ -83,15 +83,15 @@ void GameStage::Render()
 	mAxis->Render(mCamera);
 	shared_ptr<Texture> fog = mFogOfWar->GetFogTexture();
 
+	
+
+	mTerrain->SetFogTexture(fog);
+	mTerrain->Render(mCamera);
 	for (auto player : mPlayers)
 	{
 		player->SetFogTexture(fog);
 		player->Render(mCamera);
 	}
-
-	mTerrain->SetFogTexture(fog);
-	mTerrain->Render(mCamera);
-
 	mMiniMap->Render(mCamera);
 	mMouse->Render(mCamera);
 	WindowGroup::Render();

@@ -5,8 +5,11 @@
 #include "BoxObject.h"
 #include "Terrain.h"
 #include "MoveController.h"
-#include "UnitInfo.h"
+#include "RTSObjectInfo.h"
 #include "UnitState.h"
+#include "Effect.h"
+
+class Effect;
 class MoveController;
 
 enum UnitCommand
@@ -26,7 +29,7 @@ class UnitState;
 class Unit : public RTSObject
 {
 public:
-											Unit(std::shared_ptr<UnitInfo> unitInfo);
+											Unit(std::shared_ptr<RTSObjectInfo> unitInfo);
 										   ~Unit();
 	
 	void									MakeBoxObject();
@@ -75,32 +78,22 @@ public:
 
 	bool									FindEnemyInRange(std::shared_ptr<Terrain> terrain, std::vector<std::weak_ptr<RTSObject> >& mEnemy);
 
-	double									GetRange() { return mRange; }
-	double									GetSight() { return mSight; }
-
 	void									SetTarget(std::shared_ptr<RTSObject> unit) { mTargetUnit = unit; }
 	std::shared_ptr<RTSObject>				GetTarget() { return mTargetUnit.lock(); }
 
 	void									SetState(std::shared_ptr<UnitState> state) { mUnitState = state; }
 	std::shared_ptr<UnitState>				GetState() { return mUnitState; }
 
-protected:
-	int										mHealth;
-	int										mMaxHealth;
-	double									mAttackspeed;
-	double									mRange;
-	double									mDefense;
-	double									mSpeed;
-	double									mDamege;
-	double									mSight;
+	void									AddEffect(std::shared_ptr<Effect> effect) { mEffect.push_back(effect); }
 
+protected:
 	bool									mIsSelect;
 	std::shared_ptr<BoxObject>				mBoxObject;
 
 	int										mPathIdx;
 	std::vector<glm::ivec2>					mPath;
 
-	std::shared_ptr<UnitInfo>				mUnitInfo;
+	std::shared_ptr<RTSObjectInfo>			mUnitInfo;
 
 	glm::ivec2								mMovePos;
 	std::shared_ptr<SkinnedMesh>			mSkinnedMesh;
@@ -115,4 +108,6 @@ protected:
 	glm::ivec2								mPatrolPos[2];
 
 	std::weak_ptr<RTSObject>				mTargetUnit;
+
+	std::vector<std::shared_ptr<Effect> >	mEffect;
 };

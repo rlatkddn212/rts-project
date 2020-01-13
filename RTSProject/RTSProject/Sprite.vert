@@ -11,8 +11,6 @@ out vec2 fragTexCoord;
 
 void main()
 {
-	vec4 pos = uViewProj * uWorldTransform * vec4(inPosition, 1.0);
-	gl_Position =   pos;
-
+	gl_Position = uViewProj * uWorldTransform * vec4(inPosition, 1.0);
 	fragTexCoord = inTexCoord;
 }

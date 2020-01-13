@@ -20,7 +20,26 @@ public:
 	virtual bool							Intersect(Ray ray) { return false;  }
 	void									SetFogTexture(std::shared_ptr<Texture> texture) { mFogTexture = texture; }
 
+
+	double									GetRange() { return mRange; }
+	double									GetSight() { return mSight; }
+	double									GetDamege() { return mDamege; }
+	void									SetAttackTime(double time) { mAttackTime = time; }
+	double									GetAttackTime() { return mAttackTime; }
+
+	double									GetAttackSpeed() { return mAttackspeed; }
+
 protected:
+	int										mHealth;
+	int										mMaxHealth;
+	double									mAttackspeed;
+	double									mRange;
+	double									mDefense;
+	double									mSpeed;
+	double									mDamege;
+	double									mSight;
+
+	double									mAttackTime;
 
 	std::shared_ptr<Texture>				mFogTexture;
 	glm::vec3								mPos, mRot, mSca;

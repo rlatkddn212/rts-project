@@ -52,6 +52,9 @@
     <Filter Include="소스 파일\UnitState">
       <UniqueIdentifier>{f07ca74b-404b-4dac-9827-11da1213e5dd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\ResourcePool">
+      <UniqueIdentifier>{79e9f3a2-9d12-4656-bbe7-0783daa777bc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Font.h">
@@ -153,9 +156,6 @@
     <ClInclude Include="MoveController.h">
       <Filter>소스 파일\Unit</Filter>
     </ClInclude>
-    <ClInclude Include="UnitInfo.h">
-      <Filter>소스 파일\Unit</Filter>
-    </ClInclude>
     <ClInclude Include="GroupAI.h">
       <Filter>소스 파일\AI</Filter>
     </ClInclude>
@@ -191,6 +191,24 @@
     </ClInclude>
     <ClInclude Include="UnitStateSkill.h">
       <Filter>소스 파일\UnitState</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect.h">
+      <Filter>소스 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectResourcePool.h">
+      <Filter>소스 파일\ResourcePool</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectResourcePool.h">
+      <Filter>소스 파일\ResourcePool</Filter>
+    </ClInclude>
+    <ClInclude Include="UIResourcePool.h">
+      <Filter>소스 파일\ResourcePool</Filter>
+    </ClInclude>
+    <ClInclude Include="Singleton.h">
+      <Filter>소스 파일\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="RTSObjectInfo.h">
+      <Filter>소스 파일\Unit</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -296,9 +314,6 @@
     <ClCompile Include="MoveController.cpp">
       <Filter>소스 파일\Unit</Filter>
     </ClCompile>
-    <ClCompile Include="UnitInfo.cpp">
-      <Filter>소스 파일\Unit</Filter>
-    </ClCompile>
     <ClCompile Include="GroupAI.cpp">
       <Filter>소스 파일\AI</Filter>
     </ClCompile>
@@ -334,6 +349,24 @@
     </ClCompile>
     <ClCompile Include="UnitStateAttack.cpp">
       <Filter>소스 파일\UnitState</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect.cpp">
+      <Filter>소스 파일\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="EffectResourcePool.cpp">
+      <Filter>소스 파일\ResourcePool</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectResourcePool.cpp">
+      <Filter>소스 파일\ResourcePool</Filter>
+    </ClCompile>
+    <ClCompile Include="UIResourcePool.cpp">
+      <Filter>소스 파일\ResourcePool</Filter>
+    </ClCompile>
+    <ClCompile Include="Singleton.cpp">
+      <Filter>소스 파일\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="RTSObjectInfo.cpp">
+      <Filter>소스 파일\Unit</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

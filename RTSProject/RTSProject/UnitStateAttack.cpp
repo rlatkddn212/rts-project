@@ -3,6 +3,7 @@
 #include "UnitStateGotoObj.h"
 #include "UnitStateNone.h"
 #include "UnitStateDie.h"
+#include "Effect.h"
 
 using namespace std;
 
@@ -15,6 +16,23 @@ void UnitStateAttack::Update(Unit * ownUnit, float deltaTime)
 
 	if (target)
 	{
+		
+		double time = ownUnit->GetAttackTime();
+		if (time == 0.0)
+		{
+			std::shared_ptr<EffectFireBall> ball = std::make_shared<EffectFireBall>(pos1, target, ownUnit);
+			ownUnit->AddEffect(ball);
+			ownUnit->SetAttackTime(time + deltaTime);
+		}
+		else if (time < ownUnit->GetAttackSpeed())
+		{
+			ownUnit->SetAttackTime(time + deltaTime);
+		}
+		else
+		{
+			ownUnit->SetAttackTime(0.0);
+		}
+
 		shared_ptr<UnitStateDie> targetDie = dynamic_pointer_cast<UnitStateDie>(target->GetState());
 		if (targetDie)
 		{

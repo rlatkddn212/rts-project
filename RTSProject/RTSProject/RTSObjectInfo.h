@@ -1,10 +1,10 @@
 #pragma once
 
-class UnitInfo
+class RTSObjectInfo
 {
 public:
-											UnitInfo();
-										   ~UnitInfo();
+											RTSObjectInfo();
+										   ~RTSObjectInfo();
 
 	void									SetType(int t) { type = t;}
 	std::string								GetModel();

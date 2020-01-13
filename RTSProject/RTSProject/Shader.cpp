@@ -67,29 +67,24 @@ GLuint Shader::BuildShader(std::vector<std::pair<std::string, int> >& shaderCodi
 
 void Shader::SetActive()
 {
-	// Set this program as the active one
 	glUseProgram(mProgramID);
 }
 
 void Shader::SetMatrixUniform(const char* name, const glm::mat4& matrix)
 {
-	// Find the uniform by this name
 	GLuint loc = glGetUniformLocation(mProgramID, name);
-	// Send the matrix data to the uniform
 	glUniformMatrix4fv(loc, 1, GL_FALSE, (&matrix[0][0]));
 }
 
 void Shader::SetVectorUniform(const char* name, const glm::vec3& vector)
 {
 	GLuint loc = glGetUniformLocation(mProgramID, name);
-	// Send the vector data
 	glUniform3fv(loc, 1, &vector[0]);
 }
 
 void Shader::SetVector4Uniform(const char* name, const glm::vec4& vector)
 {
 	GLuint loc = glGetUniformLocation(mProgramID, name);
-	// Send the vector data
 	glUniform4fv(loc, 1, &vector[0]);
 }
 

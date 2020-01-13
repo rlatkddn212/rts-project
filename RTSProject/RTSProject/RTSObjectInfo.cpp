@@ -1,7 +1,7 @@
 #include "Precompiled.h"
-#include "UnitInfo.h"
+#include "RTSObjectInfo.h"
 
-UnitInfo::UnitInfo()
+RTSObjectInfo::RTSObjectInfo()
 {
 	type = 0;
 	health = 100;
@@ -13,11 +13,11 @@ UnitInfo::UnitInfo()
 	sight = 20.0;
 }
 
-UnitInfo::~UnitInfo()
+RTSObjectInfo::~RTSObjectInfo()
 {
 }
 
-std::string UnitInfo::GetModel()
+std::string RTSObjectInfo::GetModel()
 {
 	return "Assets/Model/magician.X";
 }
