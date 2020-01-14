@@ -4,6 +4,8 @@
 
 SkinnedMesh::SkinnedMesh()
 {
+	mIsAniLoop = true;
+	mIsAniEnd = false;
 	mAnimTime = 0.0f;
 	m_angle = 0.0f;
 	mNumBones = 0;
@@ -73,7 +75,7 @@ void SkinnedMesh::RenderModel(std::shared_ptr<Camera> camera)
 		char Name[128];
 		memset(Name, 0, sizeof(Name));
 		snprintf(Name, sizeof(Name), "gBones[%d]", i);
-		mMeshShader->SetMatrixUniform(Name, Transforms[i]);
+		mMeshShader->SetMatrixUniform(Name, mTransforms[i]);
 	}
 
 	for (size_t i = 0; i < meshList.size(); i++)
@@ -328,7 +330,7 @@ void SkinnedMesh::ReadNodeHeirarchy(const aiAnimation* pAnimation, float animati
 	if (mBoneMapping.find(NodeName) != mBoneMapping.end())
 	{
 		size_t BoneIndex = mBoneMapping[NodeName];
-		Transforms[BoneIndex] = mGlobalInvBindPoses * GlobalTransformation * mBoneInfo[BoneIndex].mBindPose;
+		mTransforms[BoneIndex] = mGlobalInvBindPoses * GlobalTransformation * mBoneInfo[BoneIndex].mBindPose;
 	}
 
 	for (size_t i = 0; i < pNode->mNumChildren; ++i)
@@ -349,9 +351,15 @@ void SkinnedMesh::BoneTransform()
 	float mSpeed = 600;
 	float TimeInTicks = mAnimTime * 1000.0f * (float)pAnimation->mDuration / (mAniSpeed * 1000.f);
 	
+	if (! IsLoop() && pAnimation->mDuration < TimeInTicks)
+	{
+		mIsAniEnd = true;
+		TimeInTicks = pAnimation->mDuration;
+	}
+
 	float AnimationTime = fmod(TimeInTicks, (float)pAnimation->mDuration);
 
-	Transforms.resize(100);	
+	mTransforms.resize(100);
 	ReadNodeHeirarchy(pAnimation, AnimationTime, scene->mRootNode, Identity);
 }
 

@@ -17,6 +17,8 @@ Unit::Unit(shared_ptr<RTSObjectInfo> unitInfo)
 	mUnitInfo = unitInfo;
 	mIsSelect = false;
 	mHealth = mUnitInfo->GetHealth();
+	mMaxHealth = mUnitInfo->GetHealth();
+
 	mAttackSpeed = mUnitInfo->GetAttackSpeed();
 	mRange = mUnitInfo->GetAttackRange();
 	mDefense = mUnitInfo->GetDefense();
@@ -78,7 +80,7 @@ void Unit::Update(float deltaTime)
 		}
 		else
 		{
-			it++;
+			++it;
 		}
 	}
 
@@ -170,6 +172,7 @@ void Unit::SetAnimation(int idx)
 {
 	if (mSkinnedMesh->mAnimationIdx != idx) 
 	{ 
+		mSkinnedMesh->SetAnimationEnd(false);
 		mSkinnedMesh->mAnimTime = 0.0f; 
 	} 
 	
@@ -190,6 +193,7 @@ void Unit::AttachMoveComponent(std::shared_ptr<MoveController> moveControl)
 
 void Unit::SetMoveCommand(std::shared_ptr<Terrain> terrain, glm::ivec2 movePos)
 {
+	if (IsDead()) return;
 	SetMove(terrain, movePos);
 
 	if (!mPath.empty())
@@ -206,29 +210,44 @@ void Unit::SetMoveCommand(std::shared_ptr<Terrain> terrain, glm::ivec2 movePos)
 
 void Unit::AttackObjectCommand(shared_ptr<RTSObject> obj)
 {
+	if (IsDead()) return;
 	mUnitCommand = UNITCOMMAND_ATTACK_OBJECT;
 }
 
 void Unit::SetAttackCommand(std::shared_ptr<Terrain> terrain, glm::ivec2 pos)
 {
-	mUnitState = make_shared<UnitStateNone>();
+	if (IsDead()) return;
+	
 	SetMove(terrain, pos);
+	if (!mPath.empty())
+	{
+		SetState(std::make_shared<UnitStateMove>());
+	}
+	else
+	{
+		SetState(std::make_shared<UnitStateNone>());
+	}
+	
+	mAttackPos = pos;
 	mUnitCommand = UNITCOMMAND_ATTACK_MOVE;
 }
 
 void Unit::SetPatrolCommand(std::shared_ptr<Terrain> terrain, glm::ivec2 pos)
 {
+	if (IsDead()) return;
 	SetMove(terrain, pos);
 	mUnitCommand = UNITCOMMAND_PATROL;
 }
 
 void Unit::SetStopCommand()
 {
+	if (IsDead()) return;
 	mUnitCommand = UNITCOMMAND_STOP;
 }
 
 void Unit::SetHoldCommand()
 {
+	if (IsDead()) return;
 	mUnitCommand = UNITCOMMAND_HOLD;
 }
 
@@ -240,4 +259,14 @@ bool Unit::FindEnemyInRange(std::shared_ptr<Terrain> terrain, std::vector<std::w
 	}
 	
 	return false;
+}
+
+void Unit::TakeDamege(double damege)
+{
+	mHealth -= damege;
+	if (IsDead())
+	{
+		mSkinnedMesh->SetAnimationLoop(false);
+		mUnitState = std::make_shared<UnitStateDie>();
+	}
 }

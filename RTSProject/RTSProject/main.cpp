@@ -203,7 +203,7 @@ public:
 
 	void UpdateGame()
 	{
-		printf("FPS : %f\n", 1000.0f / (float)(SDL_GetTicks() - mTicksCount));
+		//printf("FPS : %f\n", 1000.0f / (float)(SDL_GetTicks() - mTicksCount));
 		//while (!SDL_TICKS_PASSED(SDL_GetTicks(), mTicksCount + 16))
 			;
 

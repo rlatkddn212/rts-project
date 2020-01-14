@@ -82,11 +82,11 @@ bool EffectSpell::IsDead()
 	return false;
 }
 
-EffectFireBall::EffectFireBall(glm::vec3& bonePos, std::shared_ptr<RTSObject> _target, RTSObject* _attacker)
+EffectFireBall::EffectFireBall(glm::vec3& bonePos, std::shared_ptr<RTSObject> target, RTSObject* attacker)
 {
 	mSrcBone = bonePos + glm::vec3(0.0f, 1.0f, 0.0f);;
-	mTarget = _target;
-	mAttacker = _attacker;
+	mTarget = target;
+	mAttacker = attacker;
 	mColor.w = 0.0f;
 	mSpeed = 10.0f;
 	mDamage = mAttacker->GetDamege();
@@ -126,6 +126,8 @@ void EffectFireBall::Update(float timeDelta)
 		// mTransMat.mScale += glm::vec3(1.0f, 1.0f, 1.0f) * timeDelta;
 		if (mPrc >= 1.0f && mTarget != nullptr)
 		{
+			
+			mTarget->TakeDamege(mAttacker->GetDamege());
 			// 공격 받음
 		}
 	}

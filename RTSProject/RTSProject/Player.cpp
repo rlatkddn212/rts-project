@@ -38,6 +38,20 @@ void Player::Terminate()
 
 void Player::Update(float deltaTime)
 {
+	std::vector<std::shared_ptr<Unit> >::iterator it;
+	for (it = mUnits.begin(); it != mUnits.end(); )
+	{
+		shared_ptr<Unit> unit = *it;
+		if (unit->IsDead() && unit->IsAnimationEnd())
+		{
+			it = mUnits.erase(it);
+		}
+		else
+		{
+			++it;
+		}
+	}
+
 	for (int i = 0; i < mUnits.size(); ++i)
 	{
 		if (mUnits[i]->FindEnemyInRange(mTerrain, mEmeryUnits))

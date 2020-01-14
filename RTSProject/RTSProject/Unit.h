@@ -65,8 +65,8 @@ public:
 	void									SetPathIdx(int pathIdx) { mPathIdx = pathIdx; }
 
 	void									AttachMoveComponent(std::shared_ptr<MoveController> moveControl);
-	void									AttackObjectCommand(std::shared_ptr<RTSObject> obj);
 
+	void									AttackObjectCommand(std::shared_ptr<RTSObject> obj);
 	void									SetMoveCommand(std::shared_ptr<Terrain> terrain, glm::ivec2 movePos);
 	void									SetAttackCommand(std::shared_ptr<Terrain> terrain, glm::ivec2 pos);
 	void									SetPatrolCommand(std::shared_ptr<Terrain> terrain, glm::ivec2 pos);
@@ -87,6 +87,12 @@ public:
 	std::shared_ptr<UnitState>				GetState() { return mUnitState; }
 
 	void									AddEffect(std::shared_ptr<Effect> effect) { mEffect.push_back(effect); }
+
+	virtual void							TakeDamege(double damege);
+	bool									IsDead() { return mHealth <= 0; }
+	bool									IsAnimationEnd() { return mSkinnedMesh->IsAnimationEnd(); }
+	
+	glm::ivec2								GetAttackPos() { return mAttackPos; }
 
 protected:
 	bool									mIsSelect;

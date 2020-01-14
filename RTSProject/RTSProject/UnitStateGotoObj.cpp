@@ -32,11 +32,14 @@ void UnitStateGotoObj::Update(Unit * ownUnit, float deltaTime)
 			}
 		}
 	}
+	else
+	{
+		ownUnit->SetState(std::make_shared<UnitStateNone>());
+	}
 }
 
 bool UnitStateGotoObj::FindEnemyInRange(Unit * ownUnit, std::shared_ptr<Terrain> terrain, std::vector<std::weak_ptr<RTSObject>>& mEnemy, UnitCommand command)
 {
-	// 멈춰 있거나, 이동 공격, 패트롤 중에 적을 발견한 경우
 	shared_ptr<RTSObject> tempUnit = nullptr;
 	float minRange = 100.0f;
 	glm::vec3 pos2 = ownUnit->GetPosition();
@@ -74,8 +77,15 @@ bool UnitStateGotoObj::FindEnemyInRange(Unit * ownUnit, std::shared_ptr<Terrain>
 		{
 			glm::vec3 tempPos = tempUnit->GetPosition();
 			ownUnit->SetMove(terrain, glm::ivec2(tempPos.x, -tempPos.z));
-			ownUnit->SetState(make_shared<UnitStateGotoObj>());
-			ownUnit->SetTarget(tempUnit);
+			if (ownUnit->GetPath().empty())
+			{
+				ownUnit->SetState(make_shared<UnitStateNone>());
+			}
+			else
+			{
+				ownUnit->SetState(make_shared<UnitStateGotoObj>());
+				ownUnit->SetTarget(tempUnit);
+			}
 		}
 		
 		return true;

@@ -13,13 +13,13 @@ public:
 	virtual	void							Update(float deltaTime) = 0;
 	virtual void							Render(std::shared_ptr<Camera> camera) = 0;
 
+	virtual bool							Intersect(Ray ray) { return false;  }
+
 	void									SetPosition(glm::vec3 p) { mPos = p; }
 	glm::vec3 								GetPosition() { return mPos; }
 	void									SetRotation(glm::vec3 r) { mRot = r; }
 	void									SetScale(glm::vec3 s) { mSca = s; }
-	virtual bool							Intersect(Ray ray) { return false;  }
 	void									SetFogTexture(std::shared_ptr<Texture> texture) { mFogTexture = texture; }
-
 
 	double									GetRange() { return mRange; }
 	double									GetSight() { return mSight; }
@@ -28,6 +28,11 @@ public:
 	double									GetAttackTime() { return mAttackTime; }
 
 	double									GetAttackSpeed() { return mAttackSpeed; }
+
+	void									SetHealth(int health) { mHealth = health; }
+	int										GetHealth() { return mHealth; }
+	virtual void							TakeDamege(double damege) { mHealth -= damege; }
+	bool									IsDead() { return mHealth <= 0; }
 
 protected:
 	int										mHealth;

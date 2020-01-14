@@ -77,13 +77,21 @@ public:
 	void									BoneTransform();
 
 	void									SetColor(glm::vec4 color) { mTeamColor = color; }
+	
+	void									SetAnimationLoop(bool isLoop) { mIsAniLoop = isLoop; };
+	bool									IsLoop() { return mIsAniLoop; }
+
+	void									SetAnimationEnd(bool isEnd) { mIsAniEnd = isEnd; };
+	bool									IsAnimationEnd() { return mIsAniEnd; }
+
+	
 
 	glm::vec4								mTeamColor;
 	// box Object
 	glm::vec3								mMinPos;
 	glm::vec3								mMaxPos;
 
-	std::vector<glm::mat4>					Transforms;
+	std::vector<glm::mat4>					mTransforms;
 	glm::mat4								mPos, mRot, mSca;
 
 	std::shared_ptr<Shader>					mMeshShader;
@@ -108,6 +116,8 @@ public:
 	float									mAniSpeed;
 
 	int										mAnimationIdx;
+	bool									mIsAniLoop;
+	bool									mIsAniEnd;
 
 	double									mX;
 	double									mY;

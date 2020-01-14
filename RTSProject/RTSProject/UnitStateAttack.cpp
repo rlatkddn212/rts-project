@@ -37,6 +37,7 @@ void UnitStateAttack::Update(Unit * ownUnit, float deltaTime)
 		shared_ptr<UnitStateDie> targetDie = dynamic_pointer_cast<UnitStateDie>(target->GetState());
 		if (targetDie)
 		{
+			ownUnit->SetTarget(nullptr);
 			ownUnit->SetState(std::make_shared<UnitStateNone>());
 		}
 		else
@@ -49,15 +50,12 @@ void UnitStateAttack::Update(Unit * ownUnit, float deltaTime)
 			{
 				ownUnit->SetState(std::make_shared<UnitStateGotoObj>());
 			}
-			else
-			{
-				ownUnit->SetAnimation(3);
-			}
 		}
 	}
 }
 
 bool UnitStateAttack::FindEnemyInRange(Unit * ownUnit, std::shared_ptr<Terrain> terrain, std::vector<std::weak_ptr<RTSObject>>& mEnemy, UnitCommand command)
 {
+
 	return false;
 }
