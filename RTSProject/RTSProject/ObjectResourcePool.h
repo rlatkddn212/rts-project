@@ -4,4 +4,3 @@
 class ObjectResourcePool : public Singleton<ObjectResourcePool>
 {
 };
-

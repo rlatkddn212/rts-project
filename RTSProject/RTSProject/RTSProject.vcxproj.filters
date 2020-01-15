@@ -55,6 +55,9 @@
     <Filter Include="소스 파일\ResourcePool">
       <UniqueIdentifier>{79e9f3a2-9d12-4656-bbe7-0783daa777bc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\ObjectPool">
+      <UniqueIdentifier>{e99a47cd-db1c-4316-b2d1-4ded252642e6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Font.h">
@@ -209,6 +212,9 @@
     </ClInclude>
     <ClInclude Include="RTSObjectInfo.h">
       <Filter>소스 파일\Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectPool.h">
+      <Filter>소스 파일\ObjectPool</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -368,6 +374,9 @@
     <ClCompile Include="RTSObjectInfo.cpp">
       <Filter>소스 파일\Unit</Filter>
     </ClCompile>
+    <ClCompile Include="ObjectPool.cpp">
+      <Filter>소스 파일\ObjectPool</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="color.frag">
@@ -446,6 +455,15 @@
       <Filter>소스 파일\Shader</Filter>
     </None>
     <None Include="minimap.vert">
+      <Filter>소스 파일\Shader</Filter>
+    </None>
+    <None Include="GBufferWrite.frag">
+      <Filter>소스 파일\Shader</Filter>
+    </None>
+    <None Include="GBufferGlobalLight.frag">
+      <Filter>소스 파일\Shader</Filter>
+    </None>
+    <None Include="GBufferPointLight.frag">
       <Filter>소스 파일\Shader</Filter>
     </None>
   </ItemGroup>

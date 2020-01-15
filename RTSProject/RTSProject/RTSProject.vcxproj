@@ -142,6 +142,7 @@
     <ClInclude Include="MiniMap.h" />
     <ClInclude Include="MoveController.h" />
     <ClInclude Include="NetPlayer.h" />
+    <ClInclude Include="ObjectPool.h" />
     <ClInclude Include="ObjectResourcePool.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="RTSObject.h" />
@@ -195,6 +196,7 @@
     <ClCompile Include="MiniMap.cpp" />
     <ClCompile Include="MoveController.cpp" />
     <ClCompile Include="NetPlayer.cpp" />
+    <ClCompile Include="ObjectPool.cpp" />
     <ClCompile Include="ObjectResourcePool.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="RTSObject.cpp" />
@@ -241,6 +243,9 @@
     <None Include="color.frag" />
     <None Include="color.vert" />
     <None Include="fog.frag" />
+    <None Include="GBufferGlobalLight.frag" />
+    <None Include="GBufferPointLight.frag" />
+    <None Include="GBufferWrite.frag" />
     <None Include="height.frag" />
     <None Include="height.vert" />
     <None Include="line.frag" />

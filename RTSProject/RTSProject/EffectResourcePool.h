@@ -13,7 +13,6 @@ public:
 	void								SetActiveShader() { mShader->SetActive(); }
 	std::shared_ptr<Shader>				GetShader() { return mShader; }
 
-
 	void								SetActiveTextureRunes() { mRunesTexture->SetActive(); }
 	void								SetActiveTextureCloud() { mCloudTexture->SetActive(); }
 	void								SetActiveTextureFireball() { mFireballTexture->SetActive(); }
@@ -22,7 +21,6 @@ public:
 
 private:
 	std::shared_ptr<VertexArray>		mVerts;
-	
 	std::shared_ptr<Shader>				mShader;
 
 	std::shared_ptr<Texture>			mRunesTexture;

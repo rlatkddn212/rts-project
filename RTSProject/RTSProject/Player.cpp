@@ -68,11 +68,6 @@ void Player::Update(float deltaTime)
 
 void Player::Render(std::shared_ptr<Camera> camera)
 {
-	for (int i = 0; i < mUnits.size(); ++i)
-	{
-		mUnits[i]->Render(camera);
-	}
-
 	if (mBuildingToPlace)
 	{
 		mBuildingToPlace->Render(camera);
@@ -81,6 +76,11 @@ void Player::Render(std::shared_ptr<Camera> camera)
 	for (int i = 0; i < mBuildings.size(); ++i)
 	{
 		mBuildings[i]->Render(camera);
+	}
+
+	for (int i = 0; i < mUnits.size(); ++i)
+	{
+		mUnits[i]->Render(camera);
 	}
 }
 
