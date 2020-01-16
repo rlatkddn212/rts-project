@@ -44,7 +44,6 @@ GLuint Shader::BuildShader(std::vector<std::pair<std::string, int> >& shaderCodi
 	// 링크
 	glLinkProgram(mProgramID);
 
-
 	// 프로그램 검사
 	glGetProgramiv(mProgramID, GL_LINK_STATUS, &Result);
 	glGetProgramiv(mProgramID, GL_INFO_LOG_LENGTH, &InfoLogLength);
@@ -99,7 +98,8 @@ std::string ReadShaderFile(const char* filePath)
 {
 	std::string shaderCode;
 	std::ifstream shaderStream(filePath, std::ios::in);
-	if (shaderStream.is_open()) {
+	if (shaderStream.is_open())
+	{
 		std::stringstream sstr;
 		sstr << shaderStream.rdbuf();
 		shaderCode = sstr.str();

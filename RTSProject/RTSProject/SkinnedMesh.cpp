@@ -78,7 +78,7 @@ void SkinnedMesh::RenderModel(std::shared_ptr<Camera> camera)
 		mMeshShader->SetMatrixUniform(Name, mTransforms[i]);
 	}
 
-	for (size_t i = 0; i < meshList.size(); i++)
+	for (size_t i = 0; i < meshList.size(); ++i)
 	{
 		unsigned int materialIndex = meshToTex[i];
 		if (materialIndex < textureList.size() && textureList[materialIndex])
@@ -121,7 +121,7 @@ void SkinnedMesh::LoadMesh(aiMatrix4x4 mat, aiMesh * mesh, const aiScene * scene
 	std::vector<unsigned int> indices;
 
 	std::vector<VertexBoneData> mBones(mesh->mNumVertices);
-	for (size_t i = 0; i < mesh->mNumBones; i++)
+	for (size_t i = 0; i < mesh->mNumBones; ++i)
 	{
 		size_t BoneIndex = 0;
 		
@@ -147,7 +147,8 @@ void SkinnedMesh::LoadMesh(aiMatrix4x4 mat, aiMesh * mesh, const aiScene * scene
 			BoneIndex = mBoneMapping[BoneName];
 		}
 
-		for (size_t j = 0; j < mesh->mBones[i]->mNumWeights; ++j) {
+		for (size_t j = 0; j < mesh->mBones[i]->mNumWeights; ++j) 
+		{
 			size_t VertexID = mesh->mBones[i]->mWeights[j].mVertexId;
 			float Weight = mesh->mBones[i]->mWeights[j].mWeight;
 			mBones[VertexID].AddBoneData(BoneIndex, Weight);
@@ -219,7 +220,7 @@ void SkinnedMesh::LoadMaterials(const aiScene * scene)
 {
 	textureList.resize(scene->mNumMaterials);
 
-	for (size_t i = 0; i < scene->mNumMaterials; i++)
+	for (size_t i = 0; i < scene->mNumMaterials; ++i)
 	{
 		aiMaterial* material = scene->mMaterials[i];
 		textureList[i] = nullptr;
@@ -366,7 +367,7 @@ void SkinnedMesh::BoneTransform()
 // bone의 개수를 4개로 제한
 void VertexBoneData::AddBoneData(size_t BoneID, float Weight)
 {
-	for (size_t i = 0; i < 4; i++) 
+	for (size_t i = 0; i < 4; ++i) 
 	{
 		if (Weights[i] == 0.0) 
 		{

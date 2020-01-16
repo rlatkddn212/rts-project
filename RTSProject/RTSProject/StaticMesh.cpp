@@ -77,12 +77,12 @@ void StaticMesh::ClearModel()
 void StaticMesh::LoadNode(aiNode* node, const aiScene* scene, const aiMatrix4x4& mat)
 {
 	aiMatrix4x4 localMat = mat * node->mTransformation;
-	for (size_t i = 0; i < node->mNumMeshes; i++)
+	for (size_t i = 0; i < node->mNumMeshes; ++i)
 	{
 		LoadMesh(localMat, scene->mMeshes[node->mMeshes[i]], scene);
 	}
 
-	for (size_t i = 0; i < node->mNumChildren; i++)
+	for (size_t i = 0; i < node->mNumChildren; ++i)
 	{
 		LoadNode(node->mChildren[i], scene, localMat);
 	}

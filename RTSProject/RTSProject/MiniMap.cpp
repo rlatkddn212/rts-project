@@ -220,11 +220,11 @@ void MiniMap::Render(std::shared_ptr<Camera> camera)
 	glEnable(GL_DEPTH_TEST);
 }
 
-// https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-plane-and-ray-disk-intersection
 bool MiniMap::RayIntersectPlane(glm::vec3 n, glm::vec3 p0, glm::vec3 org, glm::vec3 dir, float* t)
 {
  	float denom = glm::dot(n, dir);
-	if (fabs(denom) > 1e-6) {
+	if (fabs(denom) > 1e-6) 
+	{
 		glm::vec3 p0l0 = p0 - org;
 		*t = glm::dot(p0l0, n) / denom;
 		return (t >= 0);

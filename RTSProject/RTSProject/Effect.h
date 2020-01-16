@@ -18,6 +18,7 @@ struct Particle
 struct TransformMat
 {
 	void Init(glm::vec3 trans, glm::vec3 rots, glm::vec3 scale) { mTrans = trans; mRot = rots; mScale = scale; }
+	
 	glm::mat4 calc() 
 	{
 		return glm::translate(glm::mat4(1.0f), mTrans) 

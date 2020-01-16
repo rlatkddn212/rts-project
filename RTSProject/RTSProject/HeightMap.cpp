@@ -199,7 +199,7 @@ bool HeightMap::CreateRandomHeightMap(int seed, float noiseSize, float persisten
 
 			float total = 0;
 
-			for (int i = 0; i < octaves; i++)
+			for (int i = 0; i < octaves; ++i)
 			{
 				float freq = pow(2.0f, i);
 				float amp = pow(persistence, i);

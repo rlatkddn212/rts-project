@@ -177,7 +177,7 @@ void EffectFireBall::Render(std::shared_ptr<Camera> camera)
 	TransformMat tranMat;
 	for (int t = 0; t < 5; t++)
 	{
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < 4; ++i)
 		{
 			tranMat.mTrans = positions[t];
 			tranMat.mRot = mTransMat.mRot + rotations[i];
