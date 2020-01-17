@@ -3,7 +3,6 @@
 
 AiPlayer::AiPlayer()
 {
-
 }
 
 AiPlayer::~AiPlayer()

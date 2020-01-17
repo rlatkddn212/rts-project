@@ -58,7 +58,7 @@
     <Filter Include="소스 파일\ObjectPool">
       <UniqueIdentifier>{e99a47cd-db1c-4316-b2d1-4ded252642e6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\Render">
+    <Filter Include="소스 파일\Manager">
       <UniqueIdentifier>{7d2921e8-27b9-4ea8-8266-0d15ba2ca1d7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -222,8 +222,14 @@
     <ClInclude Include="RenderComponent.h">
       <Filter>소스 파일\Unit</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>소스 파일\Render</Filter>
+    <ClInclude Include="RenderManager.h">
+      <Filter>소스 파일\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>소스 파일\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderObject.h">
+      <Filter>소스 파일\Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -389,8 +395,14 @@
     <ClCompile Include="RenderComponent.cpp">
       <Filter>소스 파일\Unit</Filter>
     </ClCompile>
-    <ClCompile Include="Renderer.cpp">
-      <Filter>소스 파일\Render</Filter>
+    <ClCompile Include="RenderManager.cpp">
+      <Filter>소스 파일\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>소스 파일\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderObject.cpp">
+      <Filter>소스 파일\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -221,7 +221,6 @@ void GamePlayer::MouseButton(std::shared_ptr<Camera> camera, int button, int act
 	}
 }
 
-
 void GamePlayer::CommandUnit(std::shared_ptr<Camera> camera)
 {
 	Ray ray;

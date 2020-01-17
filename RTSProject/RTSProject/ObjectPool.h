@@ -4,7 +4,5 @@
 class ObjectPool : public Singleton<ObjectPool>
 {
 	void								Initialize();
-
-
 };
 

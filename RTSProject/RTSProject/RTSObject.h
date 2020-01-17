@@ -35,7 +35,6 @@ public:
 	bool									IsDead() { return mHealth <= 0; }
 
 protected:
-
 	int										mHealth;
 	int										mMaxHealth;
 	double									mAttackSpeed;

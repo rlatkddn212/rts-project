@@ -146,9 +146,11 @@
     <ClInclude Include="ObjectResourcePool.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="RenderComponent.h" />
-    <ClInclude Include="Renderer.h" />
+    <ClInclude Include="RenderManager.h" />
+    <ClInclude Include="RenderObject.h" />
     <ClInclude Include="RTSObject.h" />
     <ClInclude Include="Singleton.h" />
+    <ClInclude Include="SoundManager.h" />
     <ClInclude Include="SpriteUI.h" />
     <ClInclude Include="BoxObject.h" />
     <ClInclude Include="Camera.h" />
@@ -202,9 +204,11 @@
     <ClCompile Include="ObjectResourcePool.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="RenderComponent.cpp" />
-    <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="RenderManager.cpp" />
+    <ClCompile Include="RenderObject.cpp" />
     <ClCompile Include="RTSObject.cpp" />
     <ClCompile Include="Singleton.cpp" />
+    <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="SpriteUI.cpp" />
     <ClCompile Include="BoxObject.cpp" />
     <ClCompile Include="Camera.cpp" />
