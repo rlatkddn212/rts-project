@@ -11,7 +11,10 @@ public:
 	void								Load();
 	void								SetActiveVertex() { mVerts->SetActive(); }
 	void								SetActiveShader() { mShader->SetActive(); }
+
+	std::shared_ptr<VertexArray>		GetVertex() { return mVerts; }
 	std::shared_ptr<Shader>				GetShader() { return mShader; }
+	std::shared_ptr<Texture>			GetTexture() { }
 
 	void								SetActiveTextureRunes() { mRunesTexture->SetActive(); }
 	void								SetActiveTextureCloud() { mCloudTexture->SetActive(); }

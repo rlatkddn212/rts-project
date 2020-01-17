@@ -19,7 +19,7 @@ void GameStage::Initialize(GLFWwindow* window, int w, int h)
 {
 	WindowGroup::Initialize(window, w, h);
 
-	mMoveController = std::make_shared<MoveController>();
+	mMoveController = std::make_shared<MoveComponent>();
 	// ÁöÇü
 	mTerrain = make_shared<Terrain>();
 	mTerrain->Initialize(glm::ivec2(100, 100));
@@ -68,7 +68,8 @@ void GameStage::Update(float deltaTime)
 				vector<shared_ptr<Unit> > unitObj = mPlayers[i]->GetUnit();
 				obj.insert(obj.begin(), unitObj.begin(), unitObj.end());
 			}
-		}
+		} 
+
 		player->SetEnemy(obj);
 		player->Update(deltaTime);
 	}
@@ -93,8 +94,8 @@ void GameStage::Render()
 
 	mMiniMap->Render(mCamera);
 	mMouse->Render(mCamera);
-	WindowGroup::Render();
 
+	WindowGroup::Render();
 }
 
 void GameStage::PressKey(bool* keys)

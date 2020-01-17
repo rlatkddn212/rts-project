@@ -46,8 +46,6 @@ void StaticMesh::RenderModel(std::shared_ptr<Camera> camera)
 {
 	mMeshShader->SetActive();
 	glm::mat4 mat = mPosMat * mRotMat * mScaMat;
-
-
 	glm::vec4 pos = mat * glm::vec4(0.0, 0.0, 0.0, 1.0f);
 	glm::mat4 vp = camera->GetProjectionMatrix() * camera->GetViewMatrix();
 	
@@ -61,7 +59,7 @@ void StaticMesh::RenderModel(std::shared_ptr<Camera> camera)
 		unsigned int materialIndex = mMeshToTex[i];
 		if (materialIndex < mTextureList.size() && mTextureList[materialIndex])
 		{
-			glActiveTexture(GL_TEXTURE0);
+			glActiveTexture(GL_TEXTURE0 + i);
 			mTextureList[materialIndex]->SetActive();
 		}
 

@@ -18,7 +18,7 @@ enum CommandState
 	PressE,
 	PressR,
 };
-
+class Player;
 class GamePlayer : public Player
 {
 public:

@@ -170,13 +170,7 @@ void Unit::SetMove(std::shared_ptr<Terrain> terrain, glm::ivec2 movePos)
 
 void Unit::SetAnimation(int idx)
 {
-	if (mSkinnedMesh->mAnimationIdx != idx) 
-	{ 
-		mSkinnedMesh->SetAnimationEnd(false);
-		mSkinnedMesh->mAnimTime = 0.0f; 
-	} 
-	
-	mSkinnedMesh->mAnimationIdx = idx;
+	mSkinnedMesh->SetAnimation(idx);
 }
 
 void Unit::InitPosOnTerrain(shared_ptr<Terrain> terrain, glm::vec2 p)
@@ -186,7 +180,7 @@ void Unit::InitPosOnTerrain(shared_ptr<Terrain> terrain, glm::vec2 p)
 	SetHeight(terrain);
 }
 
-void Unit::AttachMoveComponent(std::shared_ptr<MoveController> moveControl)
+void Unit::AttachMoveComponent(std::shared_ptr<MoveComponent> moveControl)
 {
 	mMoveComponent = moveControl;
 }

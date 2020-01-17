@@ -277,6 +277,9 @@ void Terrain::CreatePath()
 
 std::vector<glm::ivec2> Terrain::GetPath(glm::ivec2 startPos, glm::ivec2 endPos, bool isObjectCollision)
 {
+	assert(startPos.y >= 0);
+	assert(endPos.y >= 0);
+
 	std::vector<glm::ivec2> ret;
 
 	priority_queue<pair<float, glm::ivec2>, vector<pair<float, glm::ivec2>>, pqComp > pq;
@@ -376,7 +379,7 @@ std::vector<glm::ivec2> Terrain::GetPath(glm::ivec2 startPos, glm::ivec2 endPos,
 	return ret;
 }
 
-bool Terrain::Intersect(Ray & ray, glm::ivec2& ret)
+bool Terrain::Intersect(Ray& ray, glm::ivec2& ret)
 {
 	glm::vec3 pos = ray.org;
 	glm::vec3 dir = ray.dir;
@@ -420,8 +423,8 @@ bool Terrain::Intersect(Ray & ray, glm::ivec2& ret)
 	return false;
 }
 
-bool Terrain::RayTriangleIntersect(const glm::vec3 & orig, const glm::vec3 & dir, 
-		const glm::vec3 & v0, const glm::vec3 & v1, const glm::vec3 & v2, glm::vec3& P)
+bool Terrain::RayTriangleIntersect(const glm::vec3 & orig, const glm::vec3& dir, 
+		const glm::vec3& v0, const glm::vec3& v1, const glm::vec3& v2, glm::vec3& P)
 {
 	glm::vec3 v0v1 = v1 - v0;
 	glm::vec3 v0v2 = v2 - v0;
@@ -522,6 +525,42 @@ void Terrain::InitTileState()
 	}
 }
 
+void Terrain::SetTileState(glm::ivec2 p, TileState type)
+{
+	assert(p.y >= 0);
+	if (mTile[p.y][p.x].mTileState != StaticObject) 
+		mTile[p.y][p.x].mTileState = type;
+}
+
+Tile * Terrain::GetTile(glm::ivec2 p)
+{
+	assert(p.y >= 0);
+	return &(mTile[p.y][p.x]);
+}
+
+TileState Terrain::GetTileState(glm::ivec2 p)
+{
+	assert(p.y >= 0);
+	return mTile[p.y][p.x].mTileState;
+}
+
+bool Terrain::IsObjectOnTile(glm::ivec2 p)
+{
+	assert(p.y >= 0);
+	return (mTile[p.y][p.x].mTileState != TileState::None) ? true : false;
+}
+
+bool Terrain::IsMovableTile(glm::ivec2 p)
+{
+	assert(p.y >= 0);
+	return mTile[p.y][p.x].isMovable;
+}
+
+void Terrain::SetFogTexture(std::shared_ptr<Texture> texture)
+{
+	mFogTexture = texture;
+}
+
 void Terrain::CreatePatches(int numPatches)
 {
 	mPatches.clear();
@@ -617,6 +656,11 @@ void Terrain::Render(std::shared_ptr<Camera> camera)
 		mModelList[i]->Render(camera);
 	}
 	glActiveTexture(GL_TEXTURE0);
+}
+
+std::shared_ptr<Texture> Terrain::GetMapTexture()
+{
+	return mMapTexture;
 }
 
 void Terrain::CreateMapTexture()

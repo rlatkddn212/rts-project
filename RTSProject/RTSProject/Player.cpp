@@ -25,7 +25,7 @@ void Player::Initialize(shared_ptr<Terrain> terrain, int w, int h)
 		mUnits.push_back(mesh);
 		mUnits[i]->InitPosOnTerrain(mTerrain, glm::ivec2(x, y));
 		
-		shared_ptr<MoveController> mMoveComponent = make_shared<MoveController>();
+		shared_ptr<MoveComponent> mMoveComponent = make_shared<MoveComponent>();
 		mMoveComponent->SetTerrain(terrain);
 		mMoveComponent->SetUnit(mUnits[i]);
 		mUnits[i]->AttachMoveComponent(mMoveComponent);

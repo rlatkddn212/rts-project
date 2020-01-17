@@ -9,12 +9,14 @@
 #include "AxisObject.h"
 #include "Unit.h"
 #include "Building.h"
-#include "MoveController.h"
+#include "MoveComponent.h"
 #include "FogOfWar.h"
 #include "MiniMap.h"
 #include "Player.h"
 #include "GamePlayer.h"
 
+class GamePlayer;
+class Player;
 class GameStage : public WindowGroup
 {
 public:
@@ -31,10 +33,11 @@ public:
 	virtual void							MouseButton(int button, int action);
 	virtual void							MouseWheel(double yPos);
 
+private:
 	std::shared_ptr<GamePlayer>				mGamePlayers;
 	std::vector<std::shared_ptr<Player>>	mPlayers;
 
-	std::shared_ptr<MoveController>			mMoveController;
+	std::shared_ptr<MoveComponent>			mMoveController;
 	std::vector<std::shared_ptr<Building>>	mBuildings;
 	std::shared_ptr<HeightMap>				mHeightMap;
 	std::shared_ptr<Terrain>				mTerrain;

@@ -1,29 +1,29 @@
 #include "Precompiled.h"
-#include "MoveController.h"
+#include "MoveComponent.h"
 #include "Math3D.h"
 #include "UnitStateNone.h"
 
 using namespace std;
 
-MoveController::MoveController()
+MoveComponent::MoveComponent()
 {
 }
 
-MoveController::~MoveController()
+MoveComponent::~MoveComponent()
 {
 }
 
-void MoveController::SetTerrain(std::shared_ptr<Terrain> terrain)
+void MoveComponent::SetTerrain(std::shared_ptr<Terrain> terrain)
 {
 	mTerrain = terrain;
 }
 
-void MoveController::SetUnit(std::shared_ptr<Unit> units)
+void MoveComponent::SetUnit(std::shared_ptr<Unit> units)
 {
 	mUnit = units;
 }
 
-void MoveController::Update(float deltaTime)
+void MoveComponent::Update(float deltaTime)
 {
 	shared_ptr<Unit> moveUnit = mUnit.lock();
 	if (moveUnit == nullptr) return;
@@ -86,7 +86,7 @@ void MoveController::Update(float deltaTime)
 	}
 }
 
-glm::vec2 MoveController::MoveUnit(shared_ptr<Unit> unit, float len)
+glm::vec2 MoveComponent::MoveUnit(shared_ptr<Unit> unit, float len)
 {
 	glm::vec3 unitPos = unit->GetPosition();
 	glm::vec2 prev = glm::vec2(unitPos.x, -unitPos.z);
@@ -117,7 +117,7 @@ glm::vec2 MoveController::MoveUnit(shared_ptr<Unit> unit, float len)
 	return glm::vec2(mPath[mPath.size() - 1]);
 }
 
-void MoveController::Arrive()
+void MoveComponent::Arrive()
 {
 	shared_ptr<Unit> moveUnit = mUnit.lock();
 	moveUnit->SetPath(vector<glm::ivec2>());

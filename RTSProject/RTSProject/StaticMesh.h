@@ -39,6 +39,7 @@ public:
 	virtual void							LoadShader();
 	virtual void							SetUniform();
 
+protected:
 	glm::vec3								mPos, mRot, mSca;
 	glm::mat4								mPosMat, mRotMat, mScaMat;
 	std::shared_ptr<Shader>					mMeshShader;

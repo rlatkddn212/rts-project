@@ -7,7 +7,7 @@ SkinnedMesh::SkinnedMesh()
 	mIsAniLoop = true;
 	mIsAniEnd = false;
 	mAnimTime = 0.0f;
-	m_angle = 0.0f;
+	mAngle = 0.0f;
 	mNumBones = 0;
 	mAnimationIdx = 0;
 	mAniSpeed = 1.0f;
@@ -23,21 +23,21 @@ SkinnedMesh::~SkinnedMesh()
 
 void SkinnedMesh::LoadModel(const std::string & fileName)
 {	
-	scene = importer.ReadFile(fileName, 
+	mScene = importer.ReadFile(fileName, 
 		aiProcess_Triangulate |
 		aiProcess_FlipUVs |
 		aiProcess_GenSmoothNormals | 
 		aiProcess_JoinIdenticalVertices
 	);
 
-	if (!scene)
+	if (!mScene)
 	{
 		printf("Model (%s) failed to load: %s", fileName, importer.GetErrorString());
 		return;
 	}
 
-	LoadNode(scene->mRootNode, scene);
-	LoadMaterials(scene);
+	LoadNode(mScene->mRootNode, mScene);
+	LoadMaterials(mScene);
 
 	SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 	SetScale(glm::vec3(1.0f, 1.0f, 1.0f));
@@ -55,7 +55,7 @@ void SkinnedMesh::LoadModel(const std::string & fileName)
 void SkinnedMesh::Update(float deltaTime)
 {
 	mAnimTime += deltaTime;
-	m_angle += deltaTime * 0.5f;
+	mAngle += deltaTime * 0.5f;
 }
 
 void SkinnedMesh::RenderModel(std::shared_ptr<Camera> camera)
@@ -343,7 +343,7 @@ void SkinnedMesh::ReadNodeHeirarchy(const aiAnimation* pAnimation, float animati
 void SkinnedMesh::BoneTransform()
 {
 	glm::mat4 Identity = glm::identity<glm::mat4>();
-	const aiAnimation* pAnimation = scene->mAnimations[mAnimationIdx];
+	const aiAnimation* pAnimation = mScene->mAnimations[mAnimationIdx];
 
 	// 초당 틱의 수
 	float TicksPerSecond = (float)(pAnimation->mTicksPerSecond != 0 ? pAnimation->mTicksPerSecond : 25.0f);
@@ -361,7 +361,19 @@ void SkinnedMesh::BoneTransform()
 	float AnimationTime = fmod(TimeInTicks, (float)pAnimation->mDuration);
 
 	mTransforms.resize(100);
-	ReadNodeHeirarchy(pAnimation, AnimationTime, scene->mRootNode, Identity);
+	ReadNodeHeirarchy(pAnimation, AnimationTime, mScene->mRootNode, Identity);
+}
+
+void SkinnedMesh::SetAnimation(int idx)
+{
+
+	if (mAnimationIdx != idx)
+	{
+		SetAnimationEnd(false);
+		mAnimTime = 0.0f;
+	}
+
+	mAnimationIdx = idx;
 }
 
 // bone의 개수를 4개로 제한

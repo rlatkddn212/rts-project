@@ -239,7 +239,6 @@ bool HeightMap::CreateRandomHeightMap(int seed, float noiseSize, float persisten
 
 void HeightMap::CreateParticles()
 {
-
 	float* vertices = new float[3 * mSize.x * mSize.y];
 
 	for (int i = 0; i < mSize.y; ++i)
@@ -310,4 +309,11 @@ void HeightMap::Render(std::shared_ptr<Camera> camera)
 	mShader->SetMatrixUniform("vpMatrix", mvpMat);
 
 	glDrawArrays(GL_POINTS, 0, mSize.x * mSize.y);
+}
+
+float HeightMap::GetHeight(glm::ivec2 pos)
+{
+	if (pos.y < 0) assert(0);
+	// 100 x 100 크기로 변환
+	return mHeightMap[pos.y * mSize.x + pos.x];
 }

@@ -4,6 +4,7 @@
 #include "Unit.h"
 #include "Camera.h"
 
+class GameStage;
 class Player
 {
 public:

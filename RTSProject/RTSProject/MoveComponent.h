@@ -4,11 +4,11 @@
 #include "Unit.h"
 
 class Unit;
-class MoveController
+class MoveComponent
 {
 public:
-											MoveController();
-										   ~MoveController();
+											MoveComponent();
+										   ~MoveComponent();
 
 	void									SetTerrain(std::shared_ptr<Terrain> terrain);
 	void									SetUnit(std::shared_ptr<Unit> unit);

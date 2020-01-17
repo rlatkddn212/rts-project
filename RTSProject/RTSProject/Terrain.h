@@ -118,18 +118,18 @@ public:
 	bool									GetClosedPosition(glm::ivec2 p1, glm::ivec2* closePos);
 
 	void									InitTileState();
-	void									SetTileState(glm::ivec2 p, TileState type) { if (mTile[p.y][p.x].mTileState != StaticObject) mTile[p.y][p.x].mTileState = type; }
+	void									SetTileState(glm::ivec2 p, TileState type);
 
-	Tile*									GetTile(glm::ivec2 p) { return &(mTile[p.y][p.x]); }
-	TileState								GetTileState(glm::ivec2 p) { return mTile[p.y][p.x].mTileState; };
-	bool									IsObjectOnTile(glm::ivec2 p) { return (mTile[p.y][p.x].mTileState != TileState::None) ? true : false; };
+	Tile*									GetTile(glm::ivec2 p);
+	TileState								GetTileState(glm::ivec2 p);
+	bool									IsObjectOnTile(glm::ivec2 p);
 
-	bool									IsMovableTile(glm::ivec2 p) { return mTile[p.y][p.x].isMovable; };
+	bool									IsMovableTile(glm::ivec2 p);// { return mTile[p.y][p.x].isMovable; };
 
-	void									SetFogTexture(std::shared_ptr<Texture> texture) { mFogTexture = texture; }
+	void									SetFogTexture(std::shared_ptr<Texture> texture);// { mFogTexture = texture; }
 
 	void									CreateMapTexture();
-	std::shared_ptr<Texture>				GetMapTexture() { return mMapTexture; }
+	std::shared_ptr<Texture>				GetMapTexture();// {  }
 	void									PrintScreen(GLuint framebuffer, const std::string& str);
 
 private:

@@ -58,6 +58,9 @@
     <Filter Include="소스 파일\ObjectPool">
       <UniqueIdentifier>{e99a47cd-db1c-4316-b2d1-4ded252642e6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Render">
+      <UniqueIdentifier>{7d2921e8-27b9-4ea8-8266-0d15ba2ca1d7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Font.h">
@@ -156,9 +159,6 @@
     <ClInclude Include="NetPlayer.h">
       <Filter>소스 파일\Player</Filter>
     </ClInclude>
-    <ClInclude Include="MoveController.h">
-      <Filter>소스 파일\Unit</Filter>
-    </ClInclude>
     <ClInclude Include="GroupAI.h">
       <Filter>소스 파일\AI</Filter>
     </ClInclude>
@@ -215,6 +215,15 @@
     </ClInclude>
     <ClInclude Include="ObjectPool.h">
       <Filter>소스 파일\ObjectPool</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveComponent.h">
+      <Filter>소스 파일\Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderComponent.h">
+      <Filter>소스 파일\Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>소스 파일\Render</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -317,9 +326,6 @@
     <ClCompile Include="NetPlayer.cpp">
       <Filter>소스 파일\Player</Filter>
     </ClCompile>
-    <ClCompile Include="MoveController.cpp">
-      <Filter>소스 파일\Unit</Filter>
-    </ClCompile>
     <ClCompile Include="GroupAI.cpp">
       <Filter>소스 파일\AI</Filter>
     </ClCompile>
@@ -376,6 +382,15 @@
     </ClCompile>
     <ClCompile Include="ObjectPool.cpp">
       <Filter>소스 파일\ObjectPool</Filter>
+    </ClCompile>
+    <ClCompile Include="MoveComponent.cpp">
+      <Filter>소스 파일\Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderComponent.cpp">
+      <Filter>소스 파일\Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>소스 파일\Render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -4,13 +4,13 @@
 #include "SkinnedMesh.h"
 #include "BoxObject.h"
 #include "Terrain.h"
-#include "MoveController.h"
+#include "MoveComponent.h"
 #include "RTSObjectInfo.h"
 #include "UnitState.h"
 #include "Effect.h"
 
 class Effect;
-class MoveController;
+class MoveComponent;
 
 enum UnitCommand
 {
@@ -56,15 +56,15 @@ public:
 	void									SetMove(std::shared_ptr<Terrain> terrain, glm::ivec2 movePos);
 	glm::ivec2								GetMove() { return mMovePos; }
 
-	void									SetAnimationSpeed(float speed) { mSkinnedMesh->mAniSpeed = speed; }
+	void									SetAnimationSpeed(float speed) { mSkinnedMesh->SetAniSpeed(speed); }
 	void									SetAnimation(int idx);// {if (mSkinnedMesh->mAnimationIdx != idx) { mSkinnedMesh->mAnimTime = 0.0f; } mSkinnedMesh->mAnimationIdx = idx; };
 	void									InitPosOnTerrain(std::shared_ptr<Terrain> terrain, glm::vec2 p);
-	float									GetSpeed() { return mSpeed; }
+	double									GetSpeed() { return mSpeed; }
 
 	int										GetPathIdx() { return mPathIdx; }
 	void									SetPathIdx(int pathIdx) { mPathIdx = pathIdx; }
 
-	void									AttachMoveComponent(std::shared_ptr<MoveController> moveControl);
+	void									AttachMoveComponent(std::shared_ptr<MoveComponent> moveControl);
 
 	void									AttackObjectCommand(std::shared_ptr<RTSObject> obj);
 	void									SetMoveCommand(std::shared_ptr<Terrain> terrain, glm::ivec2 movePos);
@@ -106,7 +106,7 @@ protected:
 	glm::ivec2								mMovePos;
 	std::shared_ptr<SkinnedMesh>			mSkinnedMesh;
 
-	std::shared_ptr<MoveController>			mMoveComponent;
+	std::shared_ptr<MoveComponent>			mMoveComponent;
 	std::shared_ptr<UnitState>				mUnitState;
 
 	UnitCommand								mUnitCommand;

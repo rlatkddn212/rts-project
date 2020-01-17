@@ -65,6 +65,7 @@ public:
 	glm::mat4								GetRotationMat() { return mRot; }
 	glm::mat4								GetScaleMat() { return mSca; }
 
+	// Box Object
 	glm::vec3								GetMinPos() { return mMinPos; }
 	glm::vec3								GetMaxPos() { return mMaxPos; }
 
@@ -81,10 +82,13 @@ public:
 	void									SetAnimationLoop(bool isLoop) { mIsAniLoop = isLoop; };
 	bool									IsLoop() { return mIsAniLoop; }
 
+	void									SetAnimation(int idx);
+	void									SetAniSpeed(double speed) { mAniSpeed = speed; }
 	void									SetAnimationEnd(bool isEnd) { mIsAniEnd = isEnd; };
 	bool									IsAnimationEnd() { return mIsAniEnd; }
 
-	
+protected:
+	const static int						MAX_BONES = 100;
 
 	glm::vec4								mTeamColor;
 	// box Object
@@ -92,7 +96,9 @@ public:
 	glm::vec3								mMaxPos;
 
 	std::vector<glm::mat4>					mTransforms;
-	glm::mat4								mPos, mRot, mSca;
+	glm::mat4								mPos;
+	glm::mat4								mRot;
+	glm::mat4								mSca;
 
 	std::shared_ptr<Shader>					mMeshShader;
 	std::vector<std::shared_ptr<SkinnedVertexArray> > meshList;
@@ -102,14 +108,16 @@ public:
 	std::vector<Bone>						mBoneInfo;
 	glm::mat4								mGlobalInvBindPoses;
 	
-	const static int						MAX_BONES = 100;
 	GLuint									mBoneLocation[MAX_BONES];
 
 	std::map<std::string, int>				mBoneMapping;
 	int										mNumBones;
+
+	// Assimp 파일 로더
 	Assimp::Importer						importer;
-	const aiScene*							scene;
-	float									m_angle;
+	const aiScene*							mScene;
+	
+	float									mAngle;
 	glm::mat4								perspect;
 	glm::mat4								view;
 	float									mAnimTime;
