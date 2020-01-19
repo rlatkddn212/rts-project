@@ -4,5 +4,5 @@ in vec4 col;
 
 void main()
 {
-		color = col;
+	color = col;
 }

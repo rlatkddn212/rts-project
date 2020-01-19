@@ -121,11 +121,6 @@ void RenderManager::Render()
 		}
 	}
 
-	glDisable(GL_DEPTH_TEST);
-	glEnable(GL_BLEND);
-	glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
-	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ZERO);
-
 	for (int i = 0; i < renderData.size(); ++i)
 	{
 		if (renderData[i]->GetRenderState() == UIRendering)
@@ -134,7 +129,6 @@ void RenderManager::Render()
 			renderData[i]->Render(renderData[i]->mCamera);
 		}
 	}
-	glDisable(GL_BLEND);
 }
 
 void RenderManager::Draw3DScene(unsigned int framebuffer, std::vector<std::shared_ptr<RenderObject>>& renderObj)

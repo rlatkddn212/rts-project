@@ -200,6 +200,7 @@ void MiniMap::Update(float deltaTime, const std::vector<std::shared_ptr<Unit>>& 
 	ray[2].SetRay(camera, mWinX, mWinY);
 	ray[3].SetRay(camera, 0, mWinY);
 
+	mPos.clear();
 	mPos.reserve(4);
 	for (int i = 0; i < 4; ++i)
 	{

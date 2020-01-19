@@ -46,7 +46,7 @@ void GameStage::Initialize(GLFWwindow* window, int w, int h)
 	mFogOfWar = make_shared<FogOfWar>(w, h);
 
 	mMiniMap = make_shared<MiniMap>(w, h, w * 3.0f / 10.0f, h * 3.0f / 10.0f);
-	mMiniMap->SetMapTexture(mTerrain->GetMapTexture());
+	mMiniMap->SetMapTexture(mTerrain->GetMapTexture()); 
 }
 
 void GameStage::Terminate()
