@@ -9,6 +9,7 @@
 #include "EffectResourcePool.h"
 #include "ObjectResourcePool.h"
 #include "UIResourcePool.h"
+#include "RenderManager.h"
 
 using namespace std;
 
@@ -49,13 +50,13 @@ public:
 		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0)
 		{
 			SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
-			return ;
+			return;
 		}
 
 		mGameState = EGameplay;
 		InitGLFW();
 		InitGLEW();
-		
+
 		createCallbacks();
 		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 		//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -69,12 +70,19 @@ public:
 		glEnable(GL_CULL_FACE);
 		glEnable(GL_DEPTH_TEST);
 		
+		EffectResourcePool::GetInstance()->Initialize();
+		RenderManager::GetInstance()->Initialize();
+		ObjectResourcePool::GetInstance()->Initialize();
+		//UIResourcePool::GetInstance()->Initialize();
+
 		group = make_shared<GameStage>();
 		group->Initialize(window, screenW, screenH);
 
-		EffectResourcePool::GetInstance()->Initialize();
-		//ObjectResourcePool::GetInstance()->Initialize();
-		//UIResourcePool::GetInstance()->Initialize();
+	}
+
+	void Terminate()
+	{
+		glfwTerminate();
 	}
 
 	void InitGLFW()
@@ -186,6 +194,11 @@ public:
 	{
 		while (mGameState != EQuit)
 		{
+			static const GLfloat black[] = { 0.0f, 0.0f, 0.0f, 1.0f };
+			static const GLfloat one = 1.0f;
+			glClearBufferfv(GL_COLOR, 0, black);
+			glClearBufferfv(GL_DEPTH, 0, &one);
+
 			ProcessInput();
 			UpdateGame();
 			GenerateOutput();
@@ -218,12 +231,9 @@ public:
 
 	void GenerateOutput()
 	{
-		static const GLfloat black[] = { 0.0f, 0.0f, 0.0f, 1.0f };
-		static const GLfloat one = 1.0f;
-		glClearBufferfv(GL_COLOR, 0, black);
-		glClearBufferfv(GL_DEPTH, 0, &one);
+		group->AddRender();
 
-		group->Render();
+		RenderManager::GetInstance()->Render();
 	}
 };
 
@@ -233,7 +243,8 @@ int main(int argc, char* argv[])
 	game->Initialize();
 
 	game->RunLoop();
-	glfwTerminate();
+
+	game->Terminate();
 
 	return 0;
 }

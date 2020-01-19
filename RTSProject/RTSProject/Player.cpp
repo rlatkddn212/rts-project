@@ -66,21 +66,21 @@ void Player::Update(float deltaTime)
 	}
 }
 
-void Player::Render(std::shared_ptr<Camera> camera)
+void Player::AddRender(std::shared_ptr<Camera> camera)
 {
 	if (mBuildingToPlace)
 	{
-		mBuildingToPlace->Render(camera);
+		mBuildingToPlace->AddRender(camera);
 	}
 
 	for (int i = 0; i < mBuildings.size(); ++i)
 	{
-		mBuildings[i]->Render(camera);
+		mBuildings[i]->AddRender(camera);
 	}
 
 	for (int i = 0; i < mUnits.size(); ++i)
 	{
-		mUnits[i]->Render(camera);
+		mUnits[i]->AddRender(camera);
 	}
 }
 

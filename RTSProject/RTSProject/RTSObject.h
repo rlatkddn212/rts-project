@@ -3,15 +3,19 @@
 #include "Camera.h"
 #include "Texture.h"
 #include "Ray.h"
+#include "RenderObject.h"
+#include "RenderManager.h"
 
-class RTSObject
+class RTSObject : public RenderObject
 {
 public:
 											RTSObject();
 	virtual								   ~RTSObject();
-
-	virtual	void							Update(float deltaTime) = 0;
-	virtual void							Render(std::shared_ptr<Camera> camera) = 0;
+	
+	void									MakeModel() {}
+	virtual	void							Update(float deltaTime) {}
+	virtual void							Render(std::shared_ptr<Camera> camera) {}
+	virtual void							AddRender(std::shared_ptr<Camera> camera) {}
 
 	virtual bool							Intersect(Ray ray) { return false;  }
 

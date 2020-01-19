@@ -29,18 +29,23 @@ class UnitState;
 class Unit : public RTSObject
 {
 public:
+											Unit() {}
 											Unit(std::shared_ptr<RTSObjectInfo> unitInfo);
 										   ~Unit();
 	
-	void									MakeBoxObject();
-	void									SetPosition(glm::vec3 p) { mPos = p;  mSkinnedMesh->SetPosition(p); mBoxObject->SetPosition(p); }
-	void									SetRotation(glm::vec3 r) { mRot = r;  mSkinnedMesh->SetRotation(r); }
-	void									SetScale(glm::vec3 s) { mSca = s; mSkinnedMesh->SetScale(s); }
+	void									MakeModel(std::string& model);
+	std::shared_ptr<SkinnedMesh>			GetMesh() { return mSkinnedMesh; };
+	std::shared_ptr<BoxObject>				GetBoxMesh() { return mBoxObject; };
+
+	void									SetPosition(glm::vec3 p) { mPos = p; }
+	void									SetRotation(glm::vec3 r) { mRot = r; }
+	void									SetScale(glm::vec3 s) { mSca = s; }
 
 	glm::vec3								GetDirection(glm::vec2 p1, glm::vec2 p2);
 	void									SetHeight(std::shared_ptr<Terrain> terrain) { mPos.y = terrain->GetHeight(glm::vec2(mPos.x, mPos.z)); SetPosition(mPos); }
 	void									Update(float deltaTime);
 	void									Render(std::shared_ptr<Camera> camera);
+	void									AddRender(std::shared_ptr<Camera> camera);
 
 	void									Select();
 	void									UnSelect();
@@ -56,8 +61,8 @@ public:
 	void									SetMove(std::shared_ptr<Terrain> terrain, glm::ivec2 movePos);
 	glm::ivec2								GetMove() { return mMovePos; }
 
-	void									SetAnimationSpeed(float speed) { mSkinnedMesh->SetAniSpeed(speed); }
-	void									SetAnimation(int idx);// {if (mSkinnedMesh->mAnimationIdx != idx) { mSkinnedMesh->mAnimTime = 0.0f; } mSkinnedMesh->mAnimationIdx = idx; };
+	void									SetAnimationSpeed(float speed) { mAnimationSpeed = speed; }
+	void									SetAnimation(int idx);
 	void									InitPosOnTerrain(std::shared_ptr<Terrain> terrain, glm::vec2 p);
 	double									GetSpeed() { return mSpeed; }
 
@@ -76,7 +81,7 @@ public:
 	UnitCommand								GetCommand() { return mUnitCommand; }
 	void									SetCommand(UnitCommand command) { mUnitCommand = command; }
 
-	void									SetColor(glm::vec4 color) { mSkinnedMesh->SetColor(color); }
+	void									SetColor(glm::vec4 color) { mColor = color; }
 
 	bool									FindEnemyInRange(std::shared_ptr<Terrain> terrain, std::vector<std::weak_ptr<RTSObject> >& mEnemy);
 
@@ -90,32 +95,33 @@ public:
 
 	virtual void							TakeDamege(double damege);
 	bool									IsDead() { return mHealth <= 0; }
-	bool									IsAnimationEnd() { return mSkinnedMesh->IsAnimationEnd(); }
+	bool									IsAnimationEnd() { return mIsAniEnd; }
 	
 	glm::ivec2								GetAttackPos() { return mAttackPos; }
 
 protected:
 	bool									mIsSelect;
 	std::shared_ptr<BoxObject>				mBoxObject;
-
 	int										mPathIdx;
 	std::vector<glm::ivec2>					mPath;
-
-	std::shared_ptr<RTSObjectInfo>			mUnitInfo;
-
 	glm::ivec2								mMovePos;
-	std::shared_ptr<SkinnedMesh>			mSkinnedMesh;
-
-	std::shared_ptr<MoveComponent>			mMoveComponent;
-	std::shared_ptr<UnitState>				mUnitState;
-
-	UnitCommand								mUnitCommand;
 	glm::ivec2								mAttackPos;
-
+	
+	std::shared_ptr<SkinnedMesh>			mSkinnedMesh;
+	std::shared_ptr<MoveComponent>			mMoveComponent;
+	
+	std::shared_ptr<RTSObjectInfo>			mUnitInfo;
+	std::shared_ptr<UnitState>				mUnitState;
+	UnitCommand								mUnitCommand;
+	
 	int										mPatrolCount;
 	glm::ivec2								mPatrolPos[2];
-
 	std::weak_ptr<RTSObject>				mTargetUnit;
-
 	std::vector<std::shared_ptr<Effect> >	mEffect;
+	glm::vec4								mColor;
+
+	int										mAnimationIdx;
+	double									mAnimationSpeed;
+	bool									mIsAniEnd;
+	float									mAnimTime;
 };

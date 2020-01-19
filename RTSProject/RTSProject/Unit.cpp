@@ -9,11 +9,13 @@
 #include "UnitStateGotoObj.h"
 #include "UnitStateMove.h"
 #include "UnitStateSkill.h"
+#include "ObjectResourcePool.h"
 
 using namespace std;
 
 Unit::Unit(shared_ptr<RTSObjectInfo> unitInfo)
 {
+	SetAnimationSpeed(1.0);
 	mUnitInfo = unitInfo;
 	mIsSelect = false;
 	mHealth = mUnitInfo->GetHealth();
@@ -30,10 +32,12 @@ Unit::Unit(shared_ptr<RTSObjectInfo> unitInfo)
 
 	mUnitCommand = UNITCOMMAND_NONE;
 	mUnitState = std::make_shared<UnitStateNone>();
+	
+	shared_ptr<Unit> sourceUnit = ObjectResourcePool::GetInstance()->GetUnit(mUnitInfo->GetModel());
 
-	mSkinnedMesh = std::make_shared<SkinnedMesh>();
-	mSkinnedMesh->LoadModel(mUnitInfo->GetModel());
-	MakeBoxObject();
+	mSkinnedMesh = sourceUnit->GetMesh();
+	mBoxObject = sourceUnit->GetBoxMesh();
+	SetScale(glm::vec3(0.3f, 0.3f, 0.3f));
 }
 
 Unit::~Unit()
@@ -41,11 +45,14 @@ Unit::~Unit()
 
 }
 
-void Unit::MakeBoxObject()
+void Unit::MakeModel(std::string& model)
 {
+	mSkinnedMesh = std::make_shared<SkinnedMesh>();
+	mSkinnedMesh->LoadModel(model);
+
 	mBoxObject = std::make_shared<BoxObject>(mSkinnedMesh->GetMinPos(), mSkinnedMesh->GetMaxPos());
+	mBoxObject->MakeModel(mSkinnedMesh->GetMinPos(), mSkinnedMesh->GetMaxPos());
 	mBoxObject->SetScale(glm::vec3(0.3f, 0.3f, 0.3f));
-	SetScale(glm::vec3(0.3f, 0.3f, 0.3f));
 }
 
 glm::vec3 Unit::GetDirection(glm::vec2 p1, glm::vec2 p2)
@@ -66,7 +73,13 @@ glm::vec3 Unit::GetDirection(glm::vec2 p1, glm::vec2 p2)
 
 void Unit::Update(float deltaTime)
 {
-	mSkinnedMesh->Update(deltaTime);
+	mAnimTime += deltaTime;
+
+	float aniTime = mSkinnedMesh->GetAnimationTime(mAnimationIdx);
+	if (aniTime / 1000.0 < mAnimTime)
+	{
+		mIsAniEnd = true;
+	}
 	
 	mUnitState->Update(this, deltaTime);
 
@@ -95,12 +108,31 @@ void Unit::Update(float deltaTime)
 
 void Unit::Render(std::shared_ptr<Camera> camera)
 {
+	mSkinnedMesh->SetAniTime(mAnimTime);
+	mSkinnedMesh->SetAnimation(mAnimationIdx);
+	mSkinnedMesh->SetAniSpeed(mAnimationSpeed);
+	if (IsDead())
+	{
+		mSkinnedMesh->SetAnimationLoop(false);
+	}
+	else
+	{
+		mSkinnedMesh->SetAnimationLoop(true);
+	}
+
+	mSkinnedMesh->SetPosition(mPos); 
+	mSkinnedMesh->SetRotation(mRot);
+	mSkinnedMesh->SetScale(mSca);
+
+	mSkinnedMesh->SetColor(mColor);
 	mSkinnedMesh->BoneTransform();
 
 	glActiveTexture(GL_TEXTURE1);
 	mFogTexture->SetActive();
 	mSkinnedMesh->RenderModel(camera);
 
+	mBoxObject->SetVisiable(mIsSelect);
+	mBoxObject->SetPosition(mPos);
 	mBoxObject->Render(camera);
 
 	for (int i = 0; i < mEffect.size(); ++i)
@@ -109,21 +141,26 @@ void Unit::Render(std::shared_ptr<Camera> camera)
 	}
 }
 
+void Unit::AddRender(std::shared_ptr<Camera> camera)
+{
+	std::shared_ptr<Unit> ro = std::make_shared<Unit>(*this);
+	ro->mCamera = camera;
+	RenderManager::GetInstance()->AddQueue(ro);
+}
+
 void Unit::Select()
 {
 	mIsSelect = true;
-	mBoxObject->SetVisiable(true);
 }
 
 void Unit::UnSelect()
 {
 	mIsSelect = false;
-	mBoxObject->SetVisiable(false);
 }
 
 bool Unit::Intersect(Ray ray)
 {
-	glm::mat4 world = mSkinnedMesh->GetPositionMat() * mSkinnedMesh->GetRotationMat() * mSkinnedMesh->GetScaleMat();
+	glm::mat4 world = glm::translate(glm::mat4(1.0f), mPos) * glm::yawPitchRoll(mRot.x, mRot.y, mRot.z) * glm::scale(glm::mat4(1.0f), mSca);
 	glm::mat4 worldInv = glm::inverse(world);
 	glm::vec3 pos = worldInv * glm::vec4(ray.org, 1.0f);
 	glm::vec3 dir = worldInv * glm::vec4(ray.dir, 0.0f);
@@ -139,7 +176,7 @@ bool Unit::Intersect(Ray ray)
 
 glm::vec2 Unit::GetScreenPos(std::shared_ptr<Camera> camera)
 {
-	glm::mat4 mat = camera->GetProjectionMatrix() * camera->GetViewMatrix() * mSkinnedMesh->GetPositionMat();
+	glm::mat4 mat = camera->GetProjectionMatrix() * camera->GetViewMatrix() * glm::translate(glm::mat4(1.0f), mPos);
 	glm::vec4 pos = mat * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
 
 	return glm::vec2(pos.x / pos.w, pos.y / pos.w);
@@ -170,7 +207,13 @@ void Unit::SetMove(std::shared_ptr<Terrain> terrain, glm::ivec2 movePos)
 
 void Unit::SetAnimation(int idx)
 {
-	mSkinnedMesh->SetAnimation(idx);
+	if (mAnimationIdx != idx)
+	{
+		mIsAniEnd = false;
+		mAnimTime = 0.0f;
+	}
+
+	mAnimationIdx = idx;
 }
 
 void Unit::InitPosOnTerrain(shared_ptr<Terrain> terrain, glm::vec2 p)
@@ -260,7 +303,6 @@ void Unit::TakeDamege(double damege)
 	mHealth -= damege;
 	if (IsDead())
 	{
-		mSkinnedMesh->SetAnimationLoop(false);
 		mUnitState = std::make_shared<UnitStateDie>();
 	}
 }

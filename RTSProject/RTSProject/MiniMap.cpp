@@ -1,5 +1,6 @@
 #include "Precompiled.h"
 #include "MiniMap.h"
+#include "ObjectResourcePool.h"
 
 MiniMap::MiniMap(int winSizeX, int winSizeY, int miniX, int miniY)
 {
@@ -8,6 +9,27 @@ MiniMap::MiniMap(int winSizeX, int winSizeY, int miniX, int miniY)
 	mMiniMapX = miniX;
 	mMiniMapY = miniY;
 
+	std::shared_ptr<MiniMap> mini = ObjectResourcePool::GetInstance()->GetMiniMap();
+	mVao = mini->GetVao();
+	mVertexArray = mini->GetVertexArray();
+	mVertexBuffer = mini->GetVertexBuffer();
+
+	mFogTexture = mini->GetFogTexture();
+	mPositionTexture = mini->GetPositionTexture();
+	mUnitTexture = mini->GetUnitTexture();
+	mMapTexture = mini->GetMapTexture();
+
+	mLineShader = mini->GetLineShader();
+	mShader = mini->GetShader();
+}
+
+MiniMap::~MiniMap()
+{
+	glDeleteFramebuffers(1, &mFrameBuffer);
+}
+
+void MiniMap::MakeModel()
+{
 	static const GLfloat vertexBufferData[] =
 	{
 		-1.0f, -1.0f, 0.0f,
@@ -63,20 +85,10 @@ MiniMap::MiniMap(int winSizeX, int winSizeY, int miniX, int miniY)
 	shaderCodies.push_back(make_pair(ReadShaderFile("minimap.frag"), GL_FRAGMENT_SHADER));
 	mShader = std::make_shared<Shader>();
 	mShader->BuildShader(shaderCodies);
-	
+
 	mPositionTexture = std::make_shared<Texture>();
 	mPositionTexture->CreateTexture(100, 100, 0);
-	
-	glGenFramebuffers(1, &mFrameBuffer);
-	glBindFramebuffer(GL_FRAMEBUFFER, mFrameBuffer);
 
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mPositionTexture->GetTextureID(), 0);
-
-	// Frame buffer 완전성 위배
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-	{
-		return;
-	}
 	
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -122,40 +134,19 @@ MiniMap::MiniMap(int winSizeX, int winSizeY, int miniX, int miniY)
 	mLineShader->BuildShader(shaderCodies);
 }
 
-MiniMap::~MiniMap()
+void MiniMap::UpdateModel()
 {
-	glDeleteFramebuffers(1, &mFrameBuffer);
-}
-
-void MiniMap::Update(float deltaTime, std::vector<std::shared_ptr<Unit>> unit, std::shared_ptr<Camera> camera)
-{
-	Ray ray[4];
-	ray[0].SetRay(camera, 0, 0);
-	ray[1].SetRay(camera, mWinX, 0);
-	ray[2].SetRay(camera, mWinX, mWinY);
-	ray[3].SetRay(camera, 0, mWinY);
-
-	std::vector<glm::vec3> pos;
-	for (int i = 0; i < 4; ++i)
-	{
-		float t = 0.0f;
-		if (RayIntersectPlane(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0, 0.0, 0.0), ray[i].org, ray[i].dir, &t))
-		{
-			pos.push_back(ray[i].org + ray[i].dir * t);
-		}
-	}
-
 	std::vector<GLfloat> verts;
-	if (pos.size() >= 4)
+	if (mPos.size() >= 4)
 	{
 		glBindVertexArray(mVertexArray);
 		unsigned vertexSize = 7 * sizeof(float);
 
 		for (int i = 0; i < 4; ++i)
 		{
-			verts.push_back((pos[i].x - 50.0f) / 50.0f);
-			verts.push_back((-pos[i].z - 50.0f) / 50.0f);
-			verts.push_back(pos[i].y);
+			verts.push_back((mPos[i].x - 50.0f) / 50.0f);
+			verts.push_back((-mPos[i].z - 50.0f) / 50.0f);
+			verts.push_back(mPos[i].y);
 			verts.push_back(1.0f);
 			verts.push_back(1.0f);
 			verts.push_back(1.0f);
@@ -166,17 +157,26 @@ void MiniMap::Update(float deltaTime, std::vector<std::shared_ptr<Unit>> unit, s
 		glBufferData(GL_ARRAY_BUFFER, 4 * vertexSize, &verts[0], GL_STATIC_DRAW);
 	}
 
+	glGenFramebuffers(1, &mFrameBuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, mFrameBuffer);
+
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mPositionTexture->GetTextureID(), 0);
+
+	// Frame buffer 완전성 위배
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+	{
+		return;
+	}
+
 	// visible 텍스쳐 생성
 	static const GLfloat black[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 	static const GLfloat green[] = { 0.0f, 1.0f, 0.0f, 1.0f };
 
 	glClearBufferfv(GL_COLOR, 0, black);
 	glEnable(GL_SCISSOR_TEST);
-	for (size_t unitIdx = 0; unitIdx < unit.size(); ++unitIdx)
+	for (size_t unitIdx = 0; unitIdx < mUnit.size(); ++unitIdx)
 	{
-		glm::vec3 pos = unit[unitIdx]->GetPosition();
-
+		glm::vec3 pos = mUnit[unitIdx]->GetPosition();
 		glm::vec2 screen = glm::vec2(pos.x, -pos.z);
 
 		glScissor(screen.x, screen.y, 1, 1);
@@ -184,7 +184,30 @@ void MiniMap::Update(float deltaTime, std::vector<std::shared_ptr<Unit>> unit, s
 	}
 
 	glDisable(GL_SCISSOR_TEST);
+
+	glDeleteFramebuffers(1, &mFrameBuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void MiniMap::Update(float deltaTime, const std::vector<std::shared_ptr<Unit>>& unit, std::shared_ptr<Camera> camera)
+{
+	mUnit = unit;
+
+	Ray ray[4];
+	ray[0].SetRay(camera, 0, 0);
+	ray[1].SetRay(camera, mWinX, 0);
+	ray[2].SetRay(camera, mWinX, mWinY);
+	ray[3].SetRay(camera, 0, mWinY);
+
+	mPos.reserve(4);
+	for (int i = 0; i < 4; ++i)
+	{
+		float t = 0.0f;
+		if (RayIntersectPlane(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0, 0.0, 0.0), ray[i].org, ray[i].dir, &t))
+		{
+			mPos.push_back(ray[i].org + ray[i].dir * t);
+		}
+	}
 }
 
 void MiniMap::Render(std::shared_ptr<Camera> camera)
@@ -218,6 +241,13 @@ void MiniMap::Render(std::shared_ptr<Camera> camera)
 	
 	glDisable(GL_SCISSOR_TEST);
 	glEnable(GL_DEPTH_TEST);
+}
+
+void MiniMap::AddRender(std::shared_ptr<Camera> camera)
+{
+	std::shared_ptr<MiniMap> ro = std::make_shared<MiniMap>(*this);
+	ro->mCamera = camera;
+	RenderManager::GetInstance()->AddQueue(ro);
 }
 
 bool MiniMap::RayIntersectPlane(glm::vec3 n, glm::vec3 p0, glm::vec3 org, glm::vec3 dir, float* t)

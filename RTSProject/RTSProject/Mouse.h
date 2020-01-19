@@ -4,6 +4,8 @@
 #include "Shader.h"
 #include "Camera.h"
 #include "SpriteUI.h"
+#include "RenderObject.h"
+#include "RenderManager.h"
 
 enum RightState
 {
@@ -27,7 +29,7 @@ enum WheelState
 	
 };
 
-class Mouse
+class Mouse : public RenderObject
 {
 public:
 											Mouse(GLFWwindow* window);
@@ -39,6 +41,8 @@ public:
 	void									SetStartXY(double x, double y);
 	void									VisiableDragBox(bool t) { isVisiableDragBox = t;  }
 	void									Render(std::shared_ptr<Camera> camera);
+	void									AddRender(std::shared_ptr<Camera> camera);
+
 	bool									IsDragBoxPos(glm::vec2 p);
 	bool									IsDragBox() { return isVisiableDragBox; }
 

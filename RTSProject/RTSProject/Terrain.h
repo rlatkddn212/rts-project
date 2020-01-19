@@ -7,6 +7,7 @@
 #include "MapObject.h"
 #include "Camera.h"
 #include "Ray.h"
+#include "RenderManager.h"
 
 class pqComp
 {
@@ -88,7 +89,7 @@ struct Patch
 	std::shared_ptr<Shader>					mMeshShader;
 };
 
-class Terrain
+class Terrain : public RenderObject
 {
 public:
 											Terrain();
@@ -96,8 +97,10 @@ public:
 
 	void									Initialize(glm::vec2 _size);
 	void									Release();
+
 	void									Update(float deltaTime);
 	void									Render(std::shared_ptr<Camera> camera);
+	void									AddRender(std::shared_ptr<Camera> camera);
 
 	void									GenerateRandomTerrain(int numPatches);
 	void									CreatePatches(int numPatches);
@@ -124,17 +127,17 @@ public:
 	TileState								GetTileState(glm::ivec2 p);
 	bool									IsObjectOnTile(glm::ivec2 p);
 
-	bool									IsMovableTile(glm::ivec2 p);// { return mTile[p.y][p.x].isMovable; };
+	bool									IsMovableTile(glm::ivec2 p);
 
-	void									SetFogTexture(std::shared_ptr<Texture> texture);// { mFogTexture = texture; }
+	void									SetFogTexture(std::shared_ptr<Texture> texture);
 
 	void									CreateMapTexture();
-	std::shared_ptr<Texture>				GetMapTexture();// {  }
+	std::shared_ptr<Texture>				GetMapTexture();
 	void									PrintScreen(GLuint framebuffer, const std::string& str);
 
 private:
 
-	// 배열 크기는 고정, 조절 필요
+	// TODO 배열 크기는 고정, 조절 필요
 	Tile									mTile[100][100];
 	std::vector<std::pair<int, int> >		mObjectPos;
 	std::shared_ptr<Texture>				alpha;

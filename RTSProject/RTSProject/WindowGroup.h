@@ -17,7 +17,7 @@ public:
 	virtual void							Initialize(GLFWwindow* window, int w, int h);
 	virtual void							Terminate();
 	virtual void							Update(float deltaTime);
-	virtual void							Render();
+	virtual void							AddRender();
 
 	virtual void							PressKey(bool* keys);
 	virtual void							CursorPos(double xPos, double yPos);

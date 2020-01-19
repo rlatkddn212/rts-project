@@ -35,9 +35,9 @@ void GamePlayer::Update(float deltaTime)
 	Player::Update(deltaTime);
 }
 
-void GamePlayer::Render(std::shared_ptr<Camera> camera)
+void GamePlayer::AddRender(std::shared_ptr<Camera> camera)
 {
-	Player::Render(camera);
+	Player::AddRender(camera);
 }
 
 bool GamePlayer::PressUnitCommand(bool * keys)

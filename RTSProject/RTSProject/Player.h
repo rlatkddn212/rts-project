@@ -14,7 +14,7 @@ public:
 	virtual void							Initialize(std::shared_ptr<Terrain> terrain, int w, int h);
 	virtual void							Terminate();
 	virtual void							Update(float deltaTime);
-	virtual void							Render(std::shared_ptr<Camera> camera);
+	virtual void							AddRender(std::shared_ptr<Camera> camera);
 
 	void									AddBuilding(std::shared_ptr<Building> building) { mBuildings.push_back(building); }
 	void									AddUnit(std::shared_ptr<Unit> unit) { mUnits.push_back(unit); }

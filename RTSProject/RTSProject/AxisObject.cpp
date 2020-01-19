@@ -1,13 +1,22 @@
 #include "Precompiled.h"
 #include "AxisObject.h"
+#include "RenderManager.h"
+#include "RenderObject.h"
+#include "ObjectResourcePool.h"
+
+using namespace std;
 
 AxisObject::AxisObject()
 {
 	SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 	SetRotation(glm::vec3(0.0f, 0.0f, 0.0f));
 	SetScale(glm::vec3(1.0f, 1.0f, 1.0f));
-	
-	MakeModel();
+
+	std::shared_ptr<AxisObject> mini = ObjectResourcePool::GetInstance()->GetAxisObject();
+
+	mMeshShader = mini->mMeshShader;
+	mVertexArray = mini->mVertexArray;
+	mVertexBuffer= mini->mVertexBuffer;
 }
 
 AxisObject::~AxisObject()
@@ -69,4 +78,11 @@ void AxisObject::Render(std::shared_ptr<Camera> camera)
 	mMeshShader->SetMatrixUniform("worldMatrix", glm::mat4(1.0f));
 	glLineWidth(2.f);
 	glDrawArrays(GL_LINES, 0, 6);
+}
+
+void AxisObject::AddRender(std::shared_ptr<Camera> camera)
+{
+	shared_ptr<AxisObject> ro = make_shared<AxisObject>(*this);
+	ro->mCamera = camera;
+	RenderManager::GetInstance()->AddQueue(ro);
 }

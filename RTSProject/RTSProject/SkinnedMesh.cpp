@@ -7,7 +7,6 @@ SkinnedMesh::SkinnedMesh()
 	mIsAniLoop = true;
 	mIsAniEnd = false;
 	mAnimTime = 0.0f;
-	mAngle = 0.0f;
 	mNumBones = 0;
 	mAnimationIdx = 0;
 	mAniSpeed = 1.0f;
@@ -21,7 +20,7 @@ SkinnedMesh::~SkinnedMesh()
 {
 }
 
-void SkinnedMesh::LoadModel(const std::string & fileName)
+void SkinnedMesh::LoadModel(const std::string& fileName)
 {	
 	mScene = importer.ReadFile(fileName, 
 		aiProcess_Triangulate |
@@ -54,8 +53,7 @@ void SkinnedMesh::LoadModel(const std::string & fileName)
 
 void SkinnedMesh::Update(float deltaTime)
 {
-	mAnimTime += deltaTime;
-	mAngle += deltaTime * 0.5f;
+
 }
 
 void SkinnedMesh::RenderModel(std::shared_ptr<Camera> camera)
@@ -350,15 +348,14 @@ void SkinnedMesh::BoneTransform()
 	// mAnimTime : 누적 시간
 	// TicksPerSecond : 1초에 25번
 	float mSpeed = 600;
-	float TimeInTicks = mAnimTime * 1000.0f * (float)pAnimation->mDuration / (mAniSpeed * 1000.f);
-	
-	if (! IsLoop() && pAnimation->mDuration < TimeInTicks)
+	double TimeInTicks = mAnimTime * 1000.0 * pAnimation->mDuration / (mAniSpeed * 1000.0);
+
+	if (!IsLoop() && pAnimation->mDuration < TimeInTicks)
 	{
-		mIsAniEnd = true;
-		TimeInTicks = pAnimation->mDuration;
+		TimeInTicks = pAnimation->mDuration - 1.0;
 	}
 
-	float AnimationTime = fmod(TimeInTicks, (float)pAnimation->mDuration);
+	float AnimationTime = fmod(TimeInTicks, pAnimation->mDuration);
 
 	mTransforms.resize(100);
 	ReadNodeHeirarchy(pAnimation, AnimationTime, mScene->mRootNode, Identity);
@@ -366,13 +363,6 @@ void SkinnedMesh::BoneTransform()
 
 void SkinnedMesh::SetAnimation(int idx)
 {
-
-	if (mAnimationIdx != idx)
-	{
-		SetAnimationEnd(false);
-		mAnimTime = 0.0f;
-	}
-
 	mAnimationIdx = idx;
 }
 

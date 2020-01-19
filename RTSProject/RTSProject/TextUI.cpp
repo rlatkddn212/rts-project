@@ -1,10 +1,12 @@
 #include "Precompiled.h"
 #include "TextUI.h"
+#include "RenderManager.h"
 
 using namespace std;
 
-TextUI::TextUI()
+TextUI::TextUI(const std::string& str)
 {
+	mStr = str;
 	mScale = 1.0f;
 	mPosX = 0;
 	mPosY = 0;
@@ -12,19 +14,30 @@ TextUI::TextUI()
 	mFont->Initialize();
 	mTexture = nullptr;
 
-	float vertices[] = 
+	MakeModel();
+}
+
+TextUI::~TextUI()
+{
+}
+
+void TextUI::MakeModel()
+{
+	float vertices[] =
 	{
-	-0.5f, 0.5f, 0.f, 0.f, 0.f, 0.0f, 0.f, 0.f, // top left
-	0.5f, 0.5f, 0.f, 0.f, 0.f, 0.0f, 1.f, 0.f, // top right
-	0.5f,-0.5f, 0.f, 0.f, 0.f, 0.0f, 1.f, 1.f, // bottom right
-	-0.5f,-0.5f, 0.f, 0.f, 0.f, 0.0f, 0.f, 1.f  // bottom left
+		-0.5f, 0.5f, 0.f, 0.f, 0.f, 0.0f, 0.f, 0.f, // top left
+		0.5f, 0.5f, 0.f, 0.f, 0.f, 0.0f, 1.f, 0.f, // top right
+		0.5f,-0.5f, 0.f, 0.f, 0.f, 0.0f, 1.f, 1.f, // bottom right
+		-0.5f,-0.5f, 0.f, 0.f, 0.f, 0.0f, 0.f, 1.f  // bottom left
 	};
 
-	unsigned int indices[] = 
+	unsigned int indices[] =
 	{
 		0, 1, 2,
 		2, 3, 0
 	};
+
+	mTexture = mFont->RenderText(mStr);
 
 	mSpriteVerts = std::make_shared<VertexArray>(vertices, 4, indices, 6);
 
@@ -33,16 +46,6 @@ TextUI::TextUI()
 	shaderCodies.push_back(make_pair(ReadShaderFile("Sprite.vert"), GL_VERTEX_SHADER));
 	shaderCodies.push_back(make_pair(ReadShaderFile("Sprite.frag"), GL_FRAGMENT_SHADER));
 	mSpriteShader->BuildShader(shaderCodies);
-}
-
-
-TextUI::~TextUI()
-{
-}
-
-void TextUI::SetText(const string& str)
-{
-	mTexture = mFont->RenderText(str);
 }
 
 void TextUI::Update()
@@ -85,4 +88,11 @@ void TextUI::Render(std::shared_ptr<Camera> camera)
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
 	glEnable(GL_CULL_FACE);
+}
+
+void TextUI::AddRender(std::shared_ptr<Camera> camera)
+{
+	std::shared_ptr<TextUI> ro = std::make_shared<TextUI>(*this);
+	ro->mCamera = camera;
+	RenderManager::GetInstance()->AddQueue(ro);
 }

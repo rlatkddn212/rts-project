@@ -39,7 +39,7 @@ void StaticMesh::LoadModel(const std::string & fileName)
 
 void StaticMesh::Update(float deltaTime)
 {
-	mAngle += deltaTime * 0.5f;
+
 }
 
 void StaticMesh::RenderModel(std::shared_ptr<Camera> camera)

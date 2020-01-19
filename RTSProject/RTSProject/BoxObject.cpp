@@ -6,7 +6,6 @@ BoxObject::BoxObject(glm::vec3 minV, glm::vec3 maxV)
 	isVisiable = false;
 	mMaxV = maxV;
 	mMinV = minV;
-	MakeModel(minV, maxV);
 	SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 	SetRotation(glm::vec3(0.0f, 0.0f, 0.0f));
 	SetScale(glm::vec3(1.0f, 1.0f, 1.0f));
@@ -85,6 +84,13 @@ void BoxObject::Render(std::shared_ptr<Camera> camera)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		glEnable(GL_CULL_FACE);
 	}
+}
+
+void BoxObject::AddRender(std::shared_ptr<Camera> camera)
+{
+	std::shared_ptr<BoxObject> ro = std::make_shared<BoxObject>(*this);
+	ro->mCamera = camera;
+	RenderManager::GetInstance()->AddQueue(ro);
 }
 
 void BoxObject::SetVisiable(bool t)

@@ -28,7 +28,7 @@ public:
 	virtual void							Initialize(std::shared_ptr<Terrain> terrain, int w, int h);
 	virtual void							Terminate();
 	virtual void							Update(float deltaTime);
-	virtual void							Render(std::shared_ptr<Camera> camera);
+	virtual void							AddRender(std::shared_ptr<Camera> camera);
 
 	virtual void							PressKey(bool* keys);
 	virtual void							CursorPos(std::shared_ptr<Camera> camera, double xPos, double yPos);

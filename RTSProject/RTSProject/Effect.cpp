@@ -28,6 +28,10 @@ void ParticleSystem::Render(std::shared_ptr<Camera> camera)
 	
 }
 
+void ParticleSystem::AddRender(std::shared_ptr<Camera> camera)
+{
+}
+
 bool ParticleSystem::IsDead()
 {
 	return false;
@@ -74,6 +78,10 @@ void EffectSpell::Update(float timeDelta)
 }
 
 void EffectSpell::Render(std::shared_ptr<Camera> camera)
+{
+}
+
+void EffectSpell::AddRender(std::shared_ptr<Camera> camera)
 {
 }
 
@@ -193,6 +201,13 @@ void EffectFireBall::Render(std::shared_ptr<Camera> camera)
 	glEnable(GL_CULL_FACE);
 }
 
+void EffectFireBall::AddRender(std::shared_ptr<Camera> camera)
+{
+	std::shared_ptr<EffectFireBall> ro = std::make_shared<EffectFireBall>(*this);
+	ro->mCamera = camera;
+	RenderManager::GetInstance()->AddQueue(ro);
+}
+
 bool EffectFireBall::IsDead()
 {
 	return mColor.w < 0.0f || mTarget == nullptr;
@@ -216,6 +231,10 @@ void EffectFire::Update(float timeDelta)
 }
 
 void EffectFire::Render(std::shared_ptr<Camera> camera)
+{
+}
+
+void EffectFire::AddRender(std::shared_ptr<Camera> camera)
 {
 }
 

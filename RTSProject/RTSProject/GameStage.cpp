@@ -4,6 +4,8 @@
 #include "FogOfWar.h"
 #include "GamePlayer.h"
 #include "AiPlayer.h"
+#include "RenderManager.h"
+#include <thread>
 
 using namespace std;
 
@@ -18,7 +20,7 @@ GameStage::~GameStage()
 void GameStage::Initialize(GLFWwindow* window, int w, int h)
 {
 	WindowGroup::Initialize(window, w, h);
-
+	
 	mMoveController = std::make_shared<MoveComponent>();
 	// 지형
 	mTerrain = make_shared<Terrain>();
@@ -27,7 +29,7 @@ void GameStage::Initialize(GLFWwindow* window, int w, int h)
 	// 카메라
 	mCamera = make_shared<Camera>();
 	mCamera->Initialize(w, h);
-
+	
 	// 좌표계
 	mAxis = make_shared<AxisObject>();
 
@@ -49,7 +51,7 @@ void GameStage::Initialize(GLFWwindow* window, int w, int h)
 
 void GameStage::Terminate()
 {
-
+	
 }
 
 void GameStage::Update(float deltaTime)
@@ -79,8 +81,9 @@ void GameStage::Update(float deltaTime)
 	mMiniMap->Update(deltaTime, mPlayers[0]->GetUnit(), mCamera);
 }
 
-void GameStage::Render()
+void GameStage::AddRender()
 {
+	/*
 	mAxis->Render(mCamera);
 	shared_ptr<Texture> fog = mFogOfWar->GetFogTexture();
 
@@ -94,8 +97,22 @@ void GameStage::Render()
 
 	mMiniMap->Render(mCamera);
 	mMouse->Render(mCamera);
+	*/
+	mAxis->AddRender(mCamera);
+	shared_ptr<Texture> fog = mFogOfWar->GetFogTexture();
 
-	WindowGroup::Render();
+	mTerrain->SetFogTexture(fog);
+	mTerrain->AddRender(mCamera);
+	for (auto player : mPlayers)
+	{
+		player->SetFogTexture(fog);
+		player->AddRender(mCamera);
+	}
+
+	mMiniMap->AddRender(mCamera);
+	mMouse->AddRender(mCamera);
+
+	WindowGroup::AddRender();
 }
 
 void GameStage::PressKey(bool* keys)

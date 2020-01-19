@@ -1,7 +1,18 @@
 #version 420 core
-out vec4 color;
+
+in vec2 fragTexCoord;
+in vec3 fragNormal;
+in vec3 fragWorldPos;
+
+layout(location = 0) out vec3 outDiffuse;
+layout(location = 1) out vec3 outNormal;
+layout(location = 2) out vec3 outWorldPos;
+
+uniform sampler2D uTexture;
 
 void main()
 {
-	color = vec4(0.0f, 1.0f, 0.0f, 1.0f);
+	outDiffuse = texture(uTexture, fragTexCoord).xyz;
+	outNormal = fragNormal;
+	outWorldPos = fragWorldPos;
 }

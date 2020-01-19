@@ -6,8 +6,8 @@ public:
 											RTSObjectInfo();
 										   ~RTSObjectInfo();
 
-	void									SetType(int t) { type = t;}
-	std::string								GetModel();
+	void									SetType(int t) { mType = t;}
+	int										GetModel();
 	
 	void									SetHealth(int h) { health = h; }
 	void									SetSpeed(double s) { speed = s; }
@@ -26,7 +26,7 @@ public:
 	double									GetSight() { return sight; }
 
 private:
-	int										type;
+	int										mType;
 	int										health;
 	double									attackspeed;
 	double									sight;

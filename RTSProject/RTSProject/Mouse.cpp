@@ -141,6 +141,13 @@ void Mouse::Render(std::shared_ptr<Camera> camera)
 	}
 }
 
+void Mouse::AddRender(std::shared_ptr<Camera> camera)
+{
+	std::shared_ptr<Mouse> ro = std::make_shared<Mouse>(*this);
+	ro->mCamera = camera;
+	RenderManager::GetInstance()->AddQueue(ro);
+}
+
 bool Mouse::IsDragBoxPos(glm::vec2 p)
 {
 	float minX = glm::min(mPrevX, mX);

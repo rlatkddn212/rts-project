@@ -20,9 +20,8 @@ void WindowGroup::Initialize(GLFWwindow* window, int w, int h)
 	mMouseX = w / 2;
 	mMouseY = h / 2;
 
-	mText = std::make_shared<TextUI>();
 	const char* str = "wasd";
-	mText->SetText(str);
+	mText = std::make_shared<TextUI>(str);
 
 	mMouse = std::make_shared<Mouse>(window);
 }
@@ -35,9 +34,9 @@ void WindowGroup::Update(float deltaTime)
 {
 }
 
-void WindowGroup::Render()
+void WindowGroup::AddRender()
 {
-	mText->Render(mCamera);
+	mText->AddRender(mCamera);
 }
 
 void WindowGroup::PressKey(bool* keys)

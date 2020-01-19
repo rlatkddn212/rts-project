@@ -79,11 +79,15 @@ public:
 
 	void									SetColor(glm::vec4 color) { mTeamColor = color; }
 	
+	double									GetAnimationTime(int idx) { return mScene->mAnimations[mAnimationIdx]->mDuration; }
 	void									SetAnimationLoop(bool isLoop) { mIsAniLoop = isLoop; };
 	bool									IsLoop() { return mIsAniLoop; }
 
 	void									SetAnimation(int idx);
 	void									SetAniSpeed(double speed) { mAniSpeed = speed; }
+	void									SetAniTime(double time) { mAnimTime = time; }
+
+	
 	void									SetAnimationEnd(bool isEnd) { mIsAniEnd = isEnd; };
 	bool									IsAnimationEnd() { return mIsAniEnd; }
 
@@ -120,8 +124,8 @@ protected:
 	float									mAngle;
 	glm::mat4								perspect;
 	glm::mat4								view;
-	float									mAnimTime;
-	float									mAniSpeed;
+	double									mAnimTime;
+	double									mAniSpeed;
 
 	int										mAnimationIdx;
 	bool									mIsAniLoop;

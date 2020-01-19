@@ -5,9 +5,17 @@ using namespace std;
 
 Building::Building(int type)
 {
+}
+
+Building::~Building()
+{
+}
+
+void Building::MakeModel(int type)
+{
 	mBuildingMesh = std::make_shared<BuildingMesh>();
 	mType = type;
-	
+
 	if (type == 0)
 	{
 		mBuildingMesh->LoadModel("Assets/Model/barracks.X");
@@ -23,10 +31,6 @@ Building::Building(int type)
 
 	mBuildingMesh->SetScale(glm::vec3(0.1f, 0.1f, 0.1f));
 	SetColor(glm::vec3(1.0f, 1.0f, 1.0f));
-}
-
-Building::~Building()
-{
 }
 
 bool Building::isPossibleBuild(shared_ptr<Terrain> terrain, int x, int y)
@@ -86,4 +90,11 @@ void Building::Update(float deltaTime)
 void Building::Render(std::shared_ptr<Camera> camera)
 {
 	mBuildingMesh->RenderModel(camera);
+}
+
+void Building::AddRender(std::shared_ptr<Camera> camera)
+{
+	shared_ptr<Building> ro = make_shared<Building>(*this);
+	ro->mCamera = camera;
+	RenderManager::GetInstance()->AddQueue(ro);
 }

@@ -40,11 +40,17 @@ public:
 	virtual void							SetUniform();
 
 protected:
-	glm::vec3								mPos, mRot, mSca;
-	glm::mat4								mPosMat, mRotMat, mScaMat;
+	glm::vec3								mPos;
+	glm::vec3								mRot;
+	glm::vec3								mSca;
+
+	glm::mat4								mPosMat;
+	glm::mat4								mRotMat;
+	glm::mat4								mScaMat;
+
 	std::shared_ptr<Shader>					mMeshShader;
 	std::vector<std::shared_ptr<VertexArray> > mMeshList;
-	std::vector< std::shared_ptr<Texture> > mTextureList;
+	std::vector<std::shared_ptr<Texture> >  mTextureList;
 	std::vector<unsigned int>				mMeshToTex;
 
 	float									mAngle;

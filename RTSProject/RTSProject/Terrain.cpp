@@ -658,6 +658,13 @@ void Terrain::Render(std::shared_ptr<Camera> camera)
 	glActiveTexture(GL_TEXTURE0);
 }
 
+void Terrain::AddRender(std::shared_ptr<Camera> camera)
+{
+	std::shared_ptr<Terrain> ro = std::make_shared<Terrain>(*this);
+	ro->mCamera = camera;
+	RenderManager::GetInstance()->AddQueue(ro);
+}
+
 std::shared_ptr<Texture> Terrain::GetMapTexture()
 {
 	return mMapTexture;

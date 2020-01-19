@@ -31,12 +31,6 @@
     <Filter Include="소스 파일\GL">
       <UniqueIdentifier>{4fee5a0e-02cf-4ff5-8334-006404e00770}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\Unit">
-      <UniqueIdentifier>{7e074298-b4c2-406d-bc25-31b0bf8c033b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\Building">
-      <UniqueIdentifier>{da247ce2-91bd-44b8-a36d-ef32dcda5de8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\Common">
       <UniqueIdentifier>{61290f22-4ee1-44ac-a17d-884ad8e41549}</UniqueIdentifier>
     </Filter>
@@ -60,6 +54,9 @@
     </Filter>
     <Filter Include="소스 파일\Manager">
       <UniqueIdentifier>{7d2921e8-27b9-4ea8-8266-0d15ba2ca1d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Component">
+      <UniqueIdentifier>{7e074298-b4c2-406d-bc25-31b0bf8c033b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -105,9 +102,6 @@
     <ClInclude Include="Shader.h">
       <Filter>소스 파일\GL</Filter>
     </ClInclude>
-    <ClInclude Include="Unit.h">
-      <Filter>소스 파일\Unit</Filter>
-    </ClInclude>
     <ClInclude Include="SkinnedVertexArray.h">
       <Filter>소스 파일\GL</Filter>
     </ClInclude>
@@ -125,9 +119,6 @@
     </ClInclude>
     <ClInclude Include="TextUI.h">
       <Filter>소스 파일\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Building.h">
-      <Filter>소스 파일\Building</Filter>
     </ClInclude>
     <ClInclude Include="Math3D.h">
       <Filter>소스 파일\Common</Filter>
@@ -211,16 +202,16 @@
       <Filter>소스 파일\Common</Filter>
     </ClInclude>
     <ClInclude Include="RTSObjectInfo.h">
-      <Filter>소스 파일\Unit</Filter>
+      <Filter>소스 파일\Component</Filter>
     </ClInclude>
     <ClInclude Include="ObjectPool.h">
       <Filter>소스 파일\ObjectPool</Filter>
     </ClInclude>
     <ClInclude Include="MoveComponent.h">
-      <Filter>소스 파일\Unit</Filter>
+      <Filter>소스 파일\Component</Filter>
     </ClInclude>
     <ClInclude Include="RenderComponent.h">
-      <Filter>소스 파일\Unit</Filter>
+      <Filter>소스 파일\Component</Filter>
     </ClInclude>
     <ClInclude Include="RenderManager.h">
       <Filter>소스 파일\Manager</Filter>
@@ -228,8 +219,14 @@
     <ClInclude Include="SoundManager.h">
       <Filter>소스 파일\Manager</Filter>
     </ClInclude>
+    <ClInclude Include="Unit.h">
+      <Filter>소스 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Building.h">
+      <Filter>소스 파일\Object</Filter>
+    </ClInclude>
     <ClInclude Include="RenderObject.h">
-      <Filter>소스 파일\Manager</Filter>
+      <Filter>소스 파일\Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -278,9 +275,6 @@
     <ClCompile Include="Shader.cpp">
       <Filter>소스 파일\GL</Filter>
     </ClCompile>
-    <ClCompile Include="Unit.cpp">
-      <Filter>소스 파일\Unit</Filter>
-    </ClCompile>
     <ClCompile Include="SkinnedVertexArray.cpp">
       <Filter>소스 파일\GL</Filter>
     </ClCompile>
@@ -298,9 +292,6 @@
     </ClCompile>
     <ClCompile Include="TextUI.cpp">
       <Filter>소스 파일\Object</Filter>
-    </ClCompile>
-    <ClCompile Include="Building.cpp">
-      <Filter>소스 파일\Building</Filter>
     </ClCompile>
     <ClCompile Include="Math3D.cpp">
       <Filter>소스 파일\Common</Filter>
@@ -384,16 +375,16 @@
       <Filter>소스 파일\Common</Filter>
     </ClCompile>
     <ClCompile Include="RTSObjectInfo.cpp">
-      <Filter>소스 파일\Unit</Filter>
+      <Filter>소스 파일\Component</Filter>
     </ClCompile>
     <ClCompile Include="ObjectPool.cpp">
       <Filter>소스 파일\ObjectPool</Filter>
     </ClCompile>
     <ClCompile Include="MoveComponent.cpp">
-      <Filter>소스 파일\Unit</Filter>
+      <Filter>소스 파일\Component</Filter>
     </ClCompile>
     <ClCompile Include="RenderComponent.cpp">
-      <Filter>소스 파일\Unit</Filter>
+      <Filter>소스 파일\Component</Filter>
     </ClCompile>
     <ClCompile Include="RenderManager.cpp">
       <Filter>소스 파일\Manager</Filter>
@@ -401,8 +392,14 @@
     <ClCompile Include="SoundManager.cpp">
       <Filter>소스 파일\Manager</Filter>
     </ClCompile>
+    <ClCompile Include="Unit.cpp">
+      <Filter>소스 파일\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Building.cpp">
+      <Filter>소스 파일\Object</Filter>
+    </ClCompile>
     <ClCompile Include="RenderObject.cpp">
-      <Filter>소스 파일\Manager</Filter>
+      <Filter>소스 파일\Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

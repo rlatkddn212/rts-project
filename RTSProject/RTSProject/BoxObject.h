@@ -3,8 +3,10 @@
 #include "Shader.h"
 #include "VertexArray.h"
 #include "Camera.h"
+#include "RenderObject.h"
+#include "RenderManager.h"
 
-class BoxObject
+class BoxObject : public RenderObject
 {
 public:
 											BoxObject(glm::vec3 minV, glm::vec3 maxV);
@@ -12,6 +14,7 @@ public:
 
 	void									MakeModel(glm::vec3 minV, glm::vec3 maxV);
 	void									Render(std::shared_ptr<Camera> camera);
+	void									AddRender(std::shared_ptr<Camera> camera);
 
 	void									SetVisiable(bool t);
 	

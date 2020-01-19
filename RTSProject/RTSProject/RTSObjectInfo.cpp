@@ -3,7 +3,7 @@
 
 RTSObjectInfo::RTSObjectInfo()
 {
-	type = 0;
+	mType = 0;
 	health = 100;
 	attackspeed = 0.6;
 	range = 10.0;
@@ -17,7 +17,7 @@ RTSObjectInfo::~RTSObjectInfo()
 {
 }
 
-std::string RTSObjectInfo::GetModel()
+int RTSObjectInfo::GetModel()
 {
-	return "Assets/Model/magician.X";
+	return mType;
 }

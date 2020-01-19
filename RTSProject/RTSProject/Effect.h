@@ -3,6 +3,8 @@
 #include "RTSObject.h"
 #include "EffectResourcePool.h"
 #include "Unit.h"
+#include "RenderObject.h"
+#include "RenderManager.h"
 
 struct Particle
 {
@@ -31,13 +33,15 @@ struct TransformMat
 	glm::vec3 mScale;
 };
 
-class Effect
+class Effect : public RenderObject
 {
 public:
 											Effect();
 										   ~Effect() {}
 	virtual void							Update(float timeDelta) = 0;
 	virtual void							Render(std::shared_ptr<Camera> camera) = 0;
+	void									AddRender(std::shared_ptr<Camera> camera) {}
+
 	virtual bool							IsDead() = 0;
 
 protected:
@@ -53,6 +57,8 @@ public:
 										   ~ParticleSystem();
 	void									Update(float timeDelta);
 	void									Render(std::shared_ptr<Camera> camera);
+	void									AddRender(std::shared_ptr<Camera> camera);
+
 	bool									IsDead();
 
 	void									RenderBatch(int start, int batchSize);
@@ -92,6 +98,8 @@ public:
 											EffectSpell(glm::vec3 _pos);
 	void									Update(float timeDelta);
 	void									Render(std::shared_ptr<Camera> camera);
+	void									AddRender(std::shared_ptr<Camera> camera);
+
 	bool									IsDead();
 
 private:
@@ -104,6 +112,8 @@ public:
 											EffectFireBall(glm::vec3& bonePos, std::shared_ptr<RTSObject> target, RTSObject* attacker);
 	void									Update(float timeDelta);
 	void									Render(std::shared_ptr<Camera> camera);
+	void									AddRender(std::shared_ptr<Camera> camera);
+
 	bool									IsDead();
 	glm::vec3								GetPosition(float p);
 
@@ -127,6 +137,8 @@ public:
 										   ~EffectFire();
 	void									Update(float timeDelta);
 	void									Render(std::shared_ptr<Camera> camera);
+	void									AddRender(std::shared_ptr<Camera> camera);
+
 	bool									IsDead();
 	void									Kill();
 

@@ -7,12 +7,21 @@ SpriteUI::SpriteUI()
 	mPosY = 0.0f;
 	mScaleX = 0.0f;
 	mScaleY = 0.0f;
+	
+	MakeModel();
+}
 
+SpriteUI::~SpriteUI()
+{
+}
+
+void SpriteUI::MakeModel()
+{
 	float vertices[] = {
-		-1.0f, 1.0f, 0.f, 0.f, 0.f, 0.0f, 0.f, 0.f, // top left
-		1.0f, 1.0f, 0.f, 0.f, 0.f, 0.0f, 1.f, 0.f, // top right
-		1.0f,-1.0f, 0.f, 0.f, 0.f, 0.0f, 1.f, 1.f, // bottom right
-		-1.0f,-1.0f, 0.f, 0.f, 0.f, 0.0f, 0.f, 1.f  // bottom left
+	-1.0f, 1.0f, 0.f, 0.f, 0.f, 0.0f, 0.f, 0.f, // top left
+	1.0f, 1.0f, 0.f, 0.f, 0.f, 0.0f, 1.f, 0.f, // top right
+	1.0f,-1.0f, 0.f, 0.f, 0.f, 0.0f, 1.f, 1.f, // bottom right
+	-1.0f,-1.0f, 0.f, 0.f, 0.f, 0.0f, 0.f, 1.f  // bottom left
 	};
 
 	unsigned int indices[] = {
@@ -30,10 +39,6 @@ SpriteUI::SpriteUI()
 	mSpriteShader->BuildShader(shaderCodies);
 
 	mTexture = std::make_shared<Texture>();
-}
-
-SpriteUI::~SpriteUI()
-{
 }
 
 void SpriteUI::SetTexture(const std::string & name)
@@ -77,6 +82,13 @@ void SpriteUI::Render(std::shared_ptr<Camera> camera)
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
 	glEnable(GL_CULL_FACE);
+}
+
+void SpriteUI::AddRender(std::shared_ptr<Camera> camera)
+{
+	std::shared_ptr<SpriteUI> ro = std::make_shared<SpriteUI>(*this);
+	ro->mCamera = camera;
+	RenderManager::GetInstance()->AddQueue(ro);
 }
 
 void SpriteUI::SetUV(float x1, float y1, float x2, float y2)
