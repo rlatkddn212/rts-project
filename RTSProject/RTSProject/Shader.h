@@ -15,6 +15,7 @@ public:
 	void									SetVectorUniform(const char* name, const glm::vec3& vector);
 	void									SetVector4Uniform(const char* name, const glm::vec4& vector);
 	void									SetFloatUniform(const char* name, float value);
+	void									SetIntUniform(const char* name, int value);
 
 	GLuint									BuildShader(std::vector<std::pair<std::string, int> >& shaderCodies);
 

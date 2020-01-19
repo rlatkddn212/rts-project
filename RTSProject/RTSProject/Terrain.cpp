@@ -112,6 +112,7 @@ void Patch::Update(float deltaTime)
 
 Terrain::Terrain()
 {
+	mRenderState = DeferedRendering;
 	mountain = std::make_shared<Texture>();
 	snow = std::make_shared<Texture>();
 	grass = std::make_shared<Texture>();

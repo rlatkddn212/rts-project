@@ -25,6 +25,8 @@ public:
 
 	void									SetPos(glm::vec2 pos);
 
+	glm::vec3								GetCameraPos() { return mEye; }
+
 	GLfloat									mX;
 	GLfloat									mY;
 

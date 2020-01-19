@@ -7,6 +7,7 @@ using namespace std;
 
 Effect::Effect()
 {
+	mRenderState = EffectRendering;
 	mTime = 0.0f;
 	mColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 }

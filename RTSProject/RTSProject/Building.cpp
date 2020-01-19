@@ -5,6 +5,7 @@ using namespace std;
 
 Building::Building(int type)
 {
+	mRenderState = DeferedRendering;
 }
 
 Building::~Building()
@@ -30,7 +31,7 @@ void Building::MakeModel(int type)
 	}
 
 	mBuildingMesh->SetScale(glm::vec3(0.1f, 0.1f, 0.1f));
-	SetColor(glm::vec3(1.0f, 1.0f, 1.0f));
+	SetColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 }
 
 bool Building::isPossibleBuild(shared_ptr<Terrain> terrain, int x, int y)

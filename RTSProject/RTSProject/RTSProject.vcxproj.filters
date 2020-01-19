@@ -63,9 +63,6 @@
     <ClInclude Include="Font.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Mouse.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Precompiled.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
@@ -228,15 +225,18 @@
     <ClInclude Include="RenderObject.h">
       <Filter>소스 파일\Object</Filter>
     </ClInclude>
+    <ClInclude Include="GBuffer.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Mouse.h">
+      <Filter>소스 파일\Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Font.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Mouse.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Precompiled.cpp">
@@ -399,6 +399,12 @@
       <Filter>소스 파일\Object</Filter>
     </ClCompile>
     <ClCompile Include="RenderObject.cpp">
+      <Filter>소스 파일\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="GBuffer.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Mouse.cpp">
       <Filter>소스 파일\Object</Filter>
     </ClCompile>
   </ItemGroup>

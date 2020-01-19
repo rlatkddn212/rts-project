@@ -6,6 +6,7 @@ using namespace std;
 
 TextUI::TextUI(const std::string& str)
 {
+	mRenderState = UIRendering;
 	mStr = str;
 	mScale = 1.0f;
 	mPosX = 0;

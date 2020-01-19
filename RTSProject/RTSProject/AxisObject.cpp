@@ -8,6 +8,7 @@ using namespace std;
 
 AxisObject::AxisObject()
 {
+	mRenderState = ForwardRendering;
 	SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 	SetRotation(glm::vec3(0.0f, 0.0f, 0.0f));
 	SetScale(glm::vec3(1.0f, 1.0f, 1.0f));
@@ -16,7 +17,7 @@ AxisObject::AxisObject()
 
 	mMeshShader = mini->mMeshShader;
 	mVertexArray = mini->mVertexArray;
-	mVertexBuffer= mini->mVertexBuffer;
+	mVertexBuffer = mini->mVertexBuffer;
 }
 
 AxisObject::~AxisObject()

@@ -46,6 +46,20 @@ bool Texture::Load(const std::string& fileName)
 	return true;
 }
 
+bool Texture::CreateRenderTexture(int w, int h, int format)
+{
+	mWidth = w;
+	mHeight = h;
+	glGenTextures(1, &mTextureID);
+	glBindTexture(GL_TEXTURE_2D, mTextureID);
+	glTexImage2D(GL_TEXTURE_2D, 0, format, mWidth, mHeight, 0, GL_RGB, GL_FLOAT, nullptr);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	return true;
+}
+
 bool Texture::CreateFromRawData(unsigned char* image, int w, int h, int channels)
 {
 	int format = GL_RGB;

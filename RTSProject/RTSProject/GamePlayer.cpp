@@ -142,11 +142,11 @@ void GamePlayer::CursorPos(std::shared_ptr<Camera> camera, double xPos, double y
 		{
 			if (mBuildingToPlace->isPossibleBuild(mTerrain, pos.x, pos.y))
 			{
-				mBuildingToPlace->SetColor(glm::vec3(0.0f, 1.0f, 0.0f));
+				mBuildingToPlace->SetColor(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
 			}
 			else
 			{
-				mBuildingToPlace->SetColor(glm::vec3(1.0f, 0.0f, 0.0f));
+				mBuildingToPlace->SetColor(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
 			}
 
 			mBuildingToPlace->SetPosition(glm::vec3(pos.x, mTerrain->GetHeight(glm::vec2(pos.x, -pos.y)), -pos.y));

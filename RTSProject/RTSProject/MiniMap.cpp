@@ -4,6 +4,7 @@
 
 MiniMap::MiniMap(int winSizeX, int winSizeY, int miniX, int miniY)
 {
+	mRenderState = UIRendering;
 	mWinX = winSizeX;
 	mWinY = winSizeY;
 	mMiniMapX = miniX;

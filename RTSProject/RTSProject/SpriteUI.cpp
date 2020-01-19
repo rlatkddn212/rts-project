@@ -3,6 +3,7 @@
 
 SpriteUI::SpriteUI()
 {
+	mRenderState = UIRendering;
 	mPosX = 0.0f;
 	mPosY = 0.0f;
 	mScaleX = 0.0f;

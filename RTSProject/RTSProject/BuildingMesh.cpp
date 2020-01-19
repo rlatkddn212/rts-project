@@ -12,5 +12,5 @@ void BuildingMesh::LoadShader()
 
 void BuildingMesh::SetUniform()
 {
-	mMeshShader->SetVectorUniform("buildingColor", mColor);
+	mMeshShader->SetVector4Uniform("teamColor", mColor);
 }

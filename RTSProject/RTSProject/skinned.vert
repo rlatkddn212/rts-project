@@ -7,7 +7,8 @@ layout(location = 3) in vec4 inWeights;
 layout(location = 4) in vec2 inTexCoord;
 
 out vec2 fragTexCoord;
-out float shade;
+out vec3 fragNormal;
+out vec3 fragWorldPos;
 
 uniform mat4 gBones[100];
 uniform mat4 vpMatrix;
@@ -21,10 +22,13 @@ void main()
     BoneTransform     += gBones[inBoneIDs[2]] * inWeights[2];
     BoneTransform     += gBones[inBoneIDs[3]] * inWeights[3];
 
+	vec4 skinnedPos = worldMatrix * BoneTransform * vec4(inPosition, 1.0);
+	
+	// Send to fragShader
+	fragWorldPos = skinnedPos.xyz;
+	// normal은 postion이 아니므로 0.0으로 해야한다.
+	fragNormal = ((worldMatrix * BoneTransform * vec4(inNormal, 0.0)).xyz);
 	fragTexCoord = inTexCoord;
-	shade = max(0.0f, dot(normalize(inNormal), lightDir));
-	shade = 0.2f + shade * 0.8f;
 
-	gl_Position = vpMatrix * worldMatrix * BoneTransform * vec4(inPosition, 1.0);
-
+	gl_Position = vpMatrix * skinnedPos;
 }

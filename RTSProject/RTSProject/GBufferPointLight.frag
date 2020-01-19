@@ -1,7 +1,4 @@
 #version 420 core
-
-#version 330
-
 in vec2 fragTexCoord;
 
 layout(location = 0) out vec4 outColor;

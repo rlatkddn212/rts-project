@@ -4,6 +4,7 @@
 
 MapObject::MapObject(int type)
 {
+	mRenderState = DeferedRendering;
 	std::shared_ptr<MapObject> mini = ObjectResourcePool::GetInstance()->GetMapObject(type);
 	mStaticMesh = mini->mStaticMesh;
 }

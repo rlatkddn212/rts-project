@@ -59,7 +59,6 @@ public:
 
 		createCallbacks();
 		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-		//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		glfwSetWindowUserPointer(window, this);
 
 		if (TTF_Init() != 0)

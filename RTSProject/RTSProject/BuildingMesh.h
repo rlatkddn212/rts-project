@@ -8,9 +8,9 @@ public:
 	virtual void							LoadShader();
 	virtual void							SetUniform();
 
-	void									SetColor(glm::vec3 color) { mColor = color; }
+	void									SetColor(glm::vec4 color) { mColor = color; }
 
 private:
-	glm::vec3								mColor;
+	glm::vec4								mColor;
 };
 

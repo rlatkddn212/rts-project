@@ -135,6 +135,7 @@
     <ClInclude Include="EffectResourcePool.h" />
     <ClInclude Include="FogOfWar.h" />
     <ClInclude Include="GamePlayer.h" />
+    <ClInclude Include="GBuffer.h" />
     <ClInclude Include="GroupAI.h" />
     <ClInclude Include="MapObject.h" />
     <ClInclude Include="MasterAI.h" />
@@ -193,6 +194,7 @@
     <ClCompile Include="EffectResourcePool.cpp" />
     <ClCompile Include="FogOfWar.cpp" />
     <ClCompile Include="GamePlayer.cpp" />
+    <ClCompile Include="GBuffer.cpp" />
     <ClCompile Include="GroupAI.cpp" />
     <ClCompile Include="MapObject.cpp" />
     <ClCompile Include="MasterAI.cpp" />

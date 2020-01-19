@@ -7,6 +7,8 @@ layout(location = 3) in vec2 alphaCoord;
 
 out vec2 fragTexCoord;
 out vec2 fragAlphaCoord;
+out vec3 fragNormal;
+out vec3 fragWorldPos;
 
 uniform mat4 vpMatrix;
 
@@ -14,5 +16,7 @@ void main()
 {
 	fragTexCoord = inTexCoord;
 	fragAlphaCoord = alphaCoord;
+	fragNormal = inNormal;
+	fragWorldPos = inPosition;
 	gl_Position = vpMatrix * vec4(inPosition.xyz, 1.0);
 }

@@ -10,7 +10,12 @@ layout (binding = 4) uniform sampler2D image05;
 
 in vec2 fragTexCoord;
 in vec2 fragAlphaCoord;
-out vec4 color;
+in vec3 fragNormal;
+in vec3 fragWorldPos;
+
+layout(location = 0) out vec3 outDiffuse;
+layout(location = 1) out vec3 outNormal;
+layout(location = 2) out vec3 outWorldPos;
 
 void main()
 {
@@ -22,9 +27,11 @@ void main()
 	
 	float inverse = 1.0f / (a.r + a.g + a.b);
 
-	 c1 *= a.r * inverse;
+	c1 *= a.r * inverse;
     c2 *= a.g * inverse;
     c3 *= a.b * inverse;
 
-	color = (c1 + c2 + c3) * c4;
+	outDiffuse = ((c1 + c2 + c3) * c4).xyz;
+	outNormal=  fragNormal;
+	outWorldPos = fragWorldPos;
 }

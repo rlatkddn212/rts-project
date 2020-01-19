@@ -3,6 +3,7 @@
 
 BoxObject::BoxObject(glm::vec3 minV, glm::vec3 maxV)
 {
+	mRenderState = ForwardRendering;
 	isVisiable = false;
 	mMaxV = maxV;
 	mMinV = minV;
@@ -60,7 +61,7 @@ void BoxObject::MakeModel(glm::vec3 minV, glm::vec3 maxV)
 	mMesh = std::make_shared<VertexArray>(vert, numVerts, indices, numIndices);
 
 	std::vector<std::pair<std::string, int> > shaderCodies;
-	shaderCodies.push_back(make_pair(ReadShaderFile("mesh.vert"), GL_VERTEX_SHADER));
+	shaderCodies.push_back(make_pair(ReadShaderFile("line.vert"), GL_VERTEX_SHADER));
 	shaderCodies.push_back(make_pair(ReadShaderFile("line.frag"), GL_FRAGMENT_SHADER));
 	mMeshShader = std::make_shared<Shader>();
 	mMeshShader->BuildShader(shaderCodies);

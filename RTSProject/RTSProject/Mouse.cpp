@@ -3,6 +3,7 @@
 
 Mouse::Mouse(GLFWwindow* window)
 {
+	mRenderState = UIRendering;
 	mWindow = window;
 	isVisiableDragBox = false;
 	lastWheel = 0.0;
