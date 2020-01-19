@@ -123,6 +123,15 @@ void RenderManager::Render()
 
 	for (int i = 0; i < renderData.size(); ++i)
 	{
+		if (renderData[i]->GetRenderState() == EffectRendering)
+		{
+			renderData[i]->UpdateModel();
+			renderData[i]->Render(renderData[i]->mCamera);
+		}
+	}
+
+	for (int i = 0; i < renderData.size(); ++i)
+	{
 		if (renderData[i]->GetRenderState() == UIRendering)
 		{
 			renderData[i]->UpdateModel();

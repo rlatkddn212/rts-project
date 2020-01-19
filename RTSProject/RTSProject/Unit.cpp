@@ -131,15 +131,6 @@ void Unit::Render(std::shared_ptr<Camera> camera)
 	glActiveTexture(GL_TEXTURE1);
 	mFogTexture->SetActive();
 	mSkinnedMesh->RenderModel(camera);
-
-	mBoxObject->SetVisiable(mIsSelect);
-	mBoxObject->SetPosition(mPos);
-	mBoxObject->Render(camera);
-
-	for (int i = 0; i < mEffect.size(); ++i)
-	{
-		mEffect[i]->Render(camera);	
-	}
 }
 
 void Unit::AddRender(std::shared_ptr<Camera> camera)
@@ -147,6 +138,19 @@ void Unit::AddRender(std::shared_ptr<Camera> camera)
 	std::shared_ptr<Unit> ro = std::make_shared<Unit>(*this);
 	ro->mCamera = camera;
 	RenderManager::GetInstance()->AddQueue(ro);
+
+	std::shared_ptr<BoxObject> robox = std::make_shared<BoxObject>(*mBoxObject);
+	robox->SetPosition(mPos);
+	robox->SetVisiable(mIsSelect);
+
+	robox->mCamera = camera;
+	RenderManager::GetInstance()->AddQueue(robox);
+
+	for (int i = 0; i < mEffect.size(); ++i)
+	{
+		mEffect[i]->mCamera = camera;
+		RenderManager::GetInstance()->AddQueue(mEffect[i]);
+	}
 }
 
 void Unit::Select()
