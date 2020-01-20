@@ -231,6 +231,9 @@
     <ClInclude Include="Mouse.h">
       <Filter>소스 파일\Object</Filter>
     </ClInclude>
+    <ClInclude Include="SSAO.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Font.cpp">
@@ -407,6 +410,9 @@
     <ClCompile Include="Mouse.cpp">
       <Filter>소스 파일\Object</Filter>
     </ClCompile>
+    <ClCompile Include="SSAO.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="color.frag">
@@ -494,6 +500,12 @@
       <Filter>소스 파일\Shader</Filter>
     </None>
     <None Include="GBufferPointLight.frag">
+      <Filter>소스 파일\Shader</Filter>
+    </None>
+    <None Include="ssao.frag">
+      <Filter>소스 파일\Shader</Filter>
+    </None>
+    <None Include="ssao_blur.frag">
       <Filter>소스 파일\Shader</Filter>
     </None>
   </ItemGroup>

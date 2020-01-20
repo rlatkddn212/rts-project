@@ -158,6 +158,7 @@
     <ClInclude Include="Font.h" />
     <ClInclude Include="GameStage.h" />
     <ClInclude Include="HeightMap.h" />
+    <ClInclude Include="SSAO.h" />
     <ClInclude Include="StaticMesh.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="Precompiled.h" />
@@ -218,6 +219,7 @@
     <ClCompile Include="GameStage.cpp" />
     <ClCompile Include="HeightMap.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="SSAO.cpp" />
     <ClCompile Include="StaticMesh.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="Precompiled.cpp">
@@ -268,6 +270,8 @@
     <None Include="skinned.vert" />
     <None Include="Sprite.frag" />
     <None Include="Sprite.vert" />
+    <None Include="ssao.frag" />
+    <None Include="ssao_blur.frag" />
     <None Include="st.frag" />
     <None Include="st.vert" />
     <None Include="terrain.frag" />

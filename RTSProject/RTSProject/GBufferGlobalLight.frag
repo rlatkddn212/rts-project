@@ -7,6 +7,7 @@ layout(location = 0) out vec4 outColor;
 uniform sampler2D uGDiffuse;
 uniform sampler2D uGNormal;
 uniform sampler2D uGWorldPos;
+uniform sampler2D uGSsao;
 
 uniform vec3 CameraPos;
 
@@ -19,9 +20,9 @@ uniform vec3 SpecColor;
 // L : Light Dir
 // V : View Dir
 // R : reflect
-vec3 CalcLight(vec3 N, vec3 L, vec3 V, vec3 R)
+vec3 CalcLight(float AmbientOcclusion, vec3 N, vec3 L, vec3 V, vec3 R)
 {
-	vec3 ambientColour = AmbientLight;
+	vec3 ambientColour = AmbientLight * AmbientOcclusion;
 	
 	float diffuseFactor = max(dot(normalize(N), normalize(L)), 0.0f);
 	vec3 diffuseColour =  DiffuseColor * diffuseFactor;
@@ -46,6 +47,8 @@ void main()
 	vec3 gbufferDiffuse = texture(uGDiffuse, fragTexCoord).xyz;
 	vec3 gbufferNorm = texture(uGNormal, fragTexCoord).xyz;
 	vec3 gbufferWorldPos = texture(uGWorldPos, fragTexCoord).xyz;
+	float AmbientOcclusion = texture(uGSsao, fragTexCoord).r;
+
 	//outColor = vec4(gbufferNorm,1.0);
 	
 	vec3 N = normalize(gbufferNorm);
@@ -53,7 +56,7 @@ void main()
 	vec3 V = normalize(CameraPos - gbufferWorldPos);
 	vec3 R = normalize(reflect(-L, N));
 
-	vec3 Phong = CalcLight(N, L, V, R);
+	vec3 Phong = CalcLight(AmbientOcclusion, N, L, V, R);
 
 	outColor = vec4(gbufferDiffuse * Phong, 1.0);
 	

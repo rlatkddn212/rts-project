@@ -50,6 +50,7 @@ protected:
 
 	double									mAttackTime;
 
+	bool									mIsFog;
 	std::shared_ptr<Texture>				mFogTexture;
 	glm::vec3								mPos, mRot, mSca;
 };

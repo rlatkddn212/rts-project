@@ -4,6 +4,7 @@
 
 MapObject::MapObject(int type)
 {
+	mIsFog = true;
 	mRenderState = DeferedRendering;
 	std::shared_ptr<MapObject> mini = ObjectResourcePool::GetInstance()->GetMapObject(type);
 	mStaticMesh = mini->mStaticMesh;
@@ -33,6 +34,12 @@ void MapObject::Update(float deltaTime)
 
 void MapObject::Render(std::shared_ptr<Camera> camera)
 {
+	if (mIsFog && mFogTexture)
+	{
+		glActiveTexture(GL_TEXTURE1);
+		mFogTexture->SetActive();
+	}
+
 	mStaticMesh->RenderModel(camera);
 }
 

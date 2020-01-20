@@ -4,6 +4,7 @@
 
 #include "Precompiled.h"
 #include "RenderManager.h"
+#include <random>
 
 void PrintScreen(GLuint framebuffer, const std::string& str)
 {
@@ -41,6 +42,8 @@ void RenderManager::Initialize()
 	mCount = 0;
 	mGBuffer = std::make_shared<GBuffer>();
 	mGBuffer->Initialize(1024, 768);
+	mSSAO = std::make_shared<SSAO>();
+	mSSAO->Initialize(1024, 768);
 
 	float vertices[] =
 	{
@@ -61,6 +64,9 @@ void RenderManager::Initialize()
 	mLightShader = std::make_shared<Shader>();
 	mPointLightShader = std::make_shared<Shader>();
 
+	mSSAOShader = std::make_shared<Shader>();
+	mSSAOBlurShader = std::make_shared<Shader>();
+
 	std::vector<std::pair<std::string, int> > shaderCodies;
 	shaderCodies.push_back(make_pair(ReadShaderFile("Sprite.vert"), GL_VERTEX_SHADER));
 	shaderCodies.push_back(make_pair(ReadShaderFile("GBufferGlobalLight.frag"), GL_FRAGMENT_SHADER));
@@ -72,6 +78,18 @@ void RenderManager::Initialize()
 	shaderCodies.push_back(make_pair(ReadShaderFile("GBufferPointLight.frag"), GL_FRAGMENT_SHADER));
 	mPointLightShader = std::make_shared<Shader>();
 	mPointLightShader->BuildShader(shaderCodies);
+
+	shaderCodies.clear();
+	shaderCodies.push_back(make_pair(ReadShaderFile("Sprite.vert"), GL_VERTEX_SHADER));
+	shaderCodies.push_back(make_pair(ReadShaderFile("ssao.frag"), GL_FRAGMENT_SHADER));
+	mSSAOShader = std::make_shared<Shader>();
+	mSSAOShader->BuildShader(shaderCodies);
+
+	shaderCodies.clear();
+	shaderCodies.push_back(make_pair(ReadShaderFile("Sprite.vert"), GL_VERTEX_SHADER));
+	shaderCodies.push_back(make_pair(ReadShaderFile("ssao_blur.frag"), GL_FRAGMENT_SHADER));
+	mSSAOBlurShader = std::make_shared<Shader>();
+	mSSAOBlurShader->BuildShader(shaderCodies);
 }
 
 void RenderManager::AddQueue(std::shared_ptr<RenderObject> obj)
@@ -106,9 +124,12 @@ std::vector<std::shared_ptr<RenderObject>> RenderManager::GetQueue()
 void RenderManager::Render()
 {
 	std::vector<std::shared_ptr<RenderObject>> renderData = GetQueue();
-	Draw3DScene(mGBuffer->GetFrameBufferID(), renderData);
+	DrawGBuffer(mGBuffer->GetFrameBufferID(), renderData);
 
+	DrawSSAO(renderData[0]->mCamera);
 	//PrintScreen(mGBuffer->GetFrameBufferID(), "Helloworld.bmp");
+	//PrintScreen(mSSAO->GetSSAOFrameBufferID(), "SSAO.bmp");
+	//PrintScreen(mSSAO->GetBlurFrameBufferID(), "SSAOBlur.bmp");
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	DrawFromGBuffer(renderData[0]->mCamera);
 
@@ -140,7 +161,75 @@ void RenderManager::Render()
 	}
 }
 
-void RenderManager::Draw3DScene(unsigned int framebuffer, std::vector<std::shared_ptr<RenderObject>>& renderObj)
+void RenderManager::DrawSSAO(std::shared_ptr<Camera> camera)
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, mSSAO->GetSSAOFrameBufferID());
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	glDepthMask(GL_TRUE);
+	glDisable(GL_DEPTH_TEST);
+	mVerts->SetActive();
+	mSSAOShader->SetActive();
+	mGBuffer->SetTexturesActive();
+
+	std::uniform_real_distribution<GLfloat> randomFloats(0.0, 1.0);
+	std::default_random_engine generator;
+
+	std::vector<glm::vec3> ssaoKernel;
+	for (unsigned int i = 0; i < 64; ++i)
+	{
+		glm::vec3 sample(randomFloats(generator) * 2.0 - 1.0, randomFloats(generator) * 2.0 - 1.0, randomFloats(generator));
+		sample = glm::normalize(sample);
+		sample *= randomFloats(generator);
+		float scale = float(i) / 64.0;
+
+		scale = glm::lerp(0.1f, 1.0f, scale * scale);
+		sample *= scale;
+		ssaoKernel.push_back(sample);
+	}
+
+	char buf[128] = {};
+	for (unsigned int i = 0; i < 64; ++i)
+	{
+		sprintf(buf, "samples[%d]", i);
+		mSSAOShader->SetVectorUniform(buf, ssaoKernel[i]);
+	}
+
+	glm::mat4 scaleMat = glm::scale(glm::mat4(1.f), glm::vec3(1024.0f, 768.0f, 1.0f));
+
+	glm::mat4 transMat = glm::translate(glm::mat4(1.f),
+		glm::vec3((-camera->mWidth + static_cast<float>(1024.0f)) / 2, (camera->mHeight - static_cast<float>(768.0f)) / 2, 0.0f));
+
+	glm::mat4 m = {
+		{ 2.0f / (float)camera->mWidth, 0.0f, 0.0f, 0.0f },
+		{ 0.0f, 2.0f / (float)camera->mHeight, 0.0f, 0.0f },
+		{ 0.0f, 0.0f, 1.0f, 1.0f },
+		{ 0.0f, 0.0f, 0.0f, 1.0f }
+	};
+
+	glm::mat4 world = transMat * scaleMat;
+	mSSAOShader->SetIntUniform("uGDiffuse", 0);
+	mSSAOShader->SetIntUniform("uGNormal", 1);
+	mSSAOShader->SetIntUniform("uGWorldPos", 2);
+
+	mSSAOShader->SetMatrixUniform("uViewProj", m);
+	mSSAOShader->SetMatrixUniform("uWorldTransform", world);
+	
+	mSSAOShader->SetMatrixUniform("projection", camera->GetProjectionMatrix());
+
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, mSSAO->GetBlurFrameBufferID());
+	glClear(GL_COLOR_BUFFER_BIT);
+	mSSAOBlurShader->SetActive();
+	mSSAO->SetSSAOActive(0);
+	mSSAOBlurShader->SetMatrixUniform("uViewProj", m);
+	mSSAOBlurShader->SetMatrixUniform("uWorldTransform", world);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+}
+
+void RenderManager::DrawGBuffer(unsigned int framebuffer, std::vector<std::shared_ptr<RenderObject>>& renderObj)
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 	// Clear color buffer/depth buffer
@@ -170,6 +259,7 @@ void RenderManager::DrawFromGBuffer(std::shared_ptr<Camera> camera)
 	mLightShader->SetActive();
 	mVerts->SetActive();
 	mGBuffer->SetTexturesActive();
+	mSSAO->SetBlurActive(3);
 
 	glm::mat4 scaleMat = glm::scale(glm::mat4(1.f), glm::vec3(1024.0f, 768.0f, 1.0f));
 
@@ -193,7 +283,7 @@ void RenderManager::DrawFromGBuffer(std::shared_ptr<Camera> camera)
 	mLightShader->SetVectorUniform("CameraPos", camera->GetCameraPos());
 	mLightShader->SetVectorUniform("AmbientLight", glm::vec3(0.6f, 0.6f, 0.6f));
 	mLightShader->SetVectorUniform("Direction", glm::vec3(0.0f, -0.4f, -0.4f));
-	mLightShader->SetVectorUniform("DiffuseColor", glm::vec3(0.8f, 0.9f, 1.0f));
+	mLightShader->SetVectorUniform("DiffuseColor", glm::vec3(1.0f, 1.0f, 1.0f));
 	mLightShader->SetVectorUniform("SpecColor", glm::vec3(1.0f, 1.0f, 1.0f));
 	
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);

@@ -15,6 +15,7 @@ using namespace std;
 
 Unit::Unit(shared_ptr<RTSObjectInfo> unitInfo)
 {
+	mIsFog = false;
 	mRenderState = DeferedRendering;
 	SetAnimationSpeed(1.0);
 	mUnitInfo = unitInfo;
