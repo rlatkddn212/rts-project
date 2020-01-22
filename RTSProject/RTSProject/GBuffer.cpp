@@ -48,6 +48,8 @@ bool GBuffer::Initialize(int width, int height)
 		return false;
 	}
 
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
 	return true;
 }
 

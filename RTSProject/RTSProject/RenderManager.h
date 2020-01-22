@@ -26,6 +26,7 @@ public:
 	std::vector<std::shared_ptr<RenderObject>>	GetQueue();
 	void									Render();
 
+	void									DrawShadowMap();
 	void									DrawSSAO(std::shared_ptr<Camera> camera);
 	void									DrawGBuffer(unsigned int type, std::vector<std::shared_ptr<RenderObject>>& renderObj);
 	void									DrawFromGBuffer(std::shared_ptr<Camera> camera);

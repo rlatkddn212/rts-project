@@ -5,16 +5,8 @@
 class SSAO
 {
 public:
-	enum Type
-	{
-		EDiffuse = 0,
-		ENormal,
-		EWorldPos,
-		NUM_GBUFFER_TEXTURES
-	};
-
-	SSAO();
-	~SSAO();
+										SSAO();
+									   ~SSAO();
 
 	bool								Initialize(int width, int height);
 	void								Terminate();

@@ -58,6 +58,12 @@
     <Filter Include="소스 파일\Component">
       <UniqueIdentifier>{7e074298-b4c2-406d-bc25-31b0bf8c033b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\TextureMap">
+      <UniqueIdentifier>{8397db50-8e61-4299-ab0b-f78d973c72fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Light">
+      <UniqueIdentifier>{3a3b01fc-c58d-463b-829a-d4b3553ec998}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Font.h">
@@ -225,14 +231,23 @@
     <ClInclude Include="RenderObject.h">
       <Filter>소스 파일\Object</Filter>
     </ClInclude>
-    <ClInclude Include="GBuffer.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Mouse.h">
       <Filter>소스 파일\Object</Filter>
     </ClInclude>
+    <ClInclude Include="GBuffer.h">
+      <Filter>소스 파일\TextureMap</Filter>
+    </ClInclude>
     <ClInclude Include="SSAO.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>소스 파일\TextureMap</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowMap.h">
+      <Filter>소스 파일\TextureMap</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>소스 파일\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectionalLight.h">
+      <Filter>소스 파일\Light</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -404,14 +419,23 @@
     <ClCompile Include="RenderObject.cpp">
       <Filter>소스 파일\Object</Filter>
     </ClCompile>
-    <ClCompile Include="GBuffer.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Mouse.cpp">
       <Filter>소스 파일\Object</Filter>
     </ClCompile>
     <ClCompile Include="SSAO.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\TextureMap</Filter>
+    </ClCompile>
+    <ClCompile Include="GBuffer.cpp">
+      <Filter>소스 파일\TextureMap</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowMap.cpp">
+      <Filter>소스 파일\TextureMap</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectionalLight.cpp">
+      <Filter>소스 파일\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>소스 파일\Light</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
