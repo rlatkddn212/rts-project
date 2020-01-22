@@ -258,6 +258,7 @@ bool GamePlayer::CreateBuilding(std::shared_ptr<Camera> camera)
 		if (mBuildingToPlace->isPossibleBuild(mTerrain, pos.x, pos.y))
 		{
 			shared_ptr<Building> building = make_shared<Building>(mBuildingToPlace->GetType());
+			building->SetPosition(mBuildingToPlace->GetPosition());
 			building->BuildOnTerrain(mTerrain, pos.x, pos.y);
 			mBuildings.push_back(building);
 

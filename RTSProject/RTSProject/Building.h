@@ -22,14 +22,13 @@ public:
 	void									BuildOnTerrain(std::shared_ptr<Terrain> terrain, int x, int y);
 	void									SetColor(glm::vec4 color) { mBuildingMesh->SetColor(color); }
 	
-	void									SetPosition(glm::vec3 p) { RTSObject::SetPosition(p); mBuildingMesh->SetPosition(p); }
-	void									SetRotation(glm::vec3 r) { RTSObject::SetRotation(r); mBuildingMesh->SetRotation(r); }
-	void									SetScale(glm::vec3 s) { RTSObject::SetScale(s); mBuildingMesh->SetScale(s); }
+	void									SetPosition(glm::vec3 p) { RTSObject::SetPosition(p); }
+	void									SetRotation(glm::vec3 r) { RTSObject::SetRotation(r); }
+	void									SetScale(glm::vec3 s) { RTSObject::SetScale(s); }
+	std::shared_ptr<BuildingMesh>			GetMesh() { return mBuildingMesh; }
 
 private:
 	glm::vec4								mColor;
 	int										mType;
-
-
 	std::shared_ptr<BuildingMesh>			mBuildingMesh;
 };

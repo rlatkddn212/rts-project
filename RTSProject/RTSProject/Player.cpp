@@ -17,7 +17,7 @@ void Player::Initialize(shared_ptr<Terrain> terrain, int w, int h)
 	mBuildingToPlace = nullptr;
 
 	// À¯´Ö ¹èÄ¡
-	for (int i = 0; i < 5; ++i)
+	for (int i = 0; i < 1; ++i)
 	{
 		int x = rand() % 100;
 		int y = rand() % 100;

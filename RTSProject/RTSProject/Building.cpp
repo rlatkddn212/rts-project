@@ -1,11 +1,16 @@
 #include "Precompiled.h"
 #include "Building.h"
+#include "ObjectResourcePool.h"
 
 using namespace std;
 
 Building::Building(int type)
 {
 	mRenderState = DeferedRendering;
+	shared_ptr<Building> sourceUnit = ObjectResourcePool::GetInstance()->GetBuilding(type);
+
+	mBuildingMesh = sourceUnit->GetMesh();
+	mType = type;
 }
 
 Building::~Building()
@@ -90,6 +95,9 @@ void Building::Update(float deltaTime)
 
 void Building::Render(std::shared_ptr<Camera> camera)
 {
+	mBuildingMesh->SetPosition(mPos);
+	//mBuildingMesh->SetRotation(mRot);
+	//mBuildingMesh->SetScale(mSca);
 	mBuildingMesh->RenderModel(camera);
 }
 
