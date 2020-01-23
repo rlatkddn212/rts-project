@@ -44,6 +44,7 @@ public:
 	glm::vec3								GetDirection(glm::vec2 p1, glm::vec2 p2);
 	void									SetHeight(std::shared_ptr<Terrain> terrain) { mPos.y = terrain->GetHeight(glm::vec2(mPos.x, mPos.z)); SetPosition(mPos); }
 	void									Update(float deltaTime);
+	virtual void							RenderShadow(std::shared_ptr<Camera> camera);
 	void									Render(std::shared_ptr<Camera> camera);
 	void									AddRender(std::shared_ptr<Camera> camera);
 

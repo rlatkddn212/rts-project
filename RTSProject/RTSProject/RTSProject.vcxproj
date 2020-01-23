@@ -271,6 +271,8 @@
     <None Include="mesh.vert" />
     <None Include="minimap.frag" />
     <None Include="minimap.vert" />
+    <None Include="shadow_map.frag" />
+    <None Include="shadow_map.vert" />
     <None Include="sight.frag" />
     <None Include="skinned.frag" />
     <None Include="skinned.vert" />

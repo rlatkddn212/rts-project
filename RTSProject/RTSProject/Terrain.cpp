@@ -627,6 +627,24 @@ void Terrain::Update(float deltaTime)
 		mPatches[i]->Update(deltaTime);
 }
 
+void Terrain::RenderShadow(std::shared_ptr<Camera> camera)
+{
+	glm::mat4 mat = glm::mat4(1.0f);
+	glm::mat4 perspect = camera->GetProjectionMatrix();
+	glm::mat4 view = camera->GetViewMatrix();
+	mat = perspect * view * mat;
+
+	for (int i = 0; i < (int)mPatches.size(); ++i)
+	{
+		mPatches[i]->Render(mat);
+	}
+
+	for (int i = 0; i < mModelList.size(); ++i)
+	{
+		mModelList[i]->Render(camera);
+	}
+}
+
 void Terrain::Render(std::shared_ptr<Camera> camera)
 {
 	glm::mat4 mat = glm::mat4(1.0f);

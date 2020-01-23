@@ -19,6 +19,7 @@ public:
 	void									LoadModel(const std::string& fileName);
 	void									Update(float deltaTime);
 	void									RenderModel(std::shared_ptr<Camera> camera);
+	void									RenderModelShadow(std::shared_ptr<Camera> camera);
 	void									ClearModel();
 
 	void									LoadNode(aiNode *node, const aiScene *scene, const aiMatrix4x4& mat);

@@ -99,6 +99,7 @@ public:
 	void									Release();
 
 	void									Update(float deltaTime);
+	virtual void							RenderShadow(std::shared_ptr<Camera> camera);
 	void									Render(std::shared_ptr<Camera> camera);
 	void									AddRender(std::shared_ptr<Camera> camera);
 

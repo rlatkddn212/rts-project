@@ -108,6 +108,30 @@ void Unit::Update(float deltaTime)
 		mMoveComponent->Update(deltaTime);
 }
 
+void Unit::RenderShadow(std::shared_ptr<Camera> camera)
+{
+	mSkinnedMesh->SetAniTime(mAnimTime);
+	mSkinnedMesh->SetAnimation(mAnimationIdx);
+	mSkinnedMesh->SetAniSpeed(mAnimationSpeed);
+	if (IsDead())
+	{
+		mSkinnedMesh->SetAnimationLoop(false);
+	}
+	else
+	{
+		mSkinnedMesh->SetAnimationLoop(true);
+	}
+
+	mSkinnedMesh->SetPosition(mPos);
+	mSkinnedMesh->SetRotation(mRot);
+	mSkinnedMesh->SetScale(mSca);
+
+	mSkinnedMesh->SetColor(mColor);
+	mSkinnedMesh->BoneTransform();
+
+	mSkinnedMesh->RenderModelShadow(camera);
+}
+
 void Unit::Render(std::shared_ptr<Camera> camera)
 {
 	mSkinnedMesh->SetAniTime(mAnimTime);

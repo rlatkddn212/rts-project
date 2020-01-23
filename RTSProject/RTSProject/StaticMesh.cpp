@@ -68,6 +68,22 @@ void StaticMesh::RenderModel(std::shared_ptr<Camera> camera)
 	}
 }
 
+void StaticMesh::RenderModelShadow(std::shared_ptr<Camera> camera)
+{
+	glm::mat4 mat = mPosMat * mRotMat * mScaMat;
+	glm::vec4 pos = mat * glm::vec4(0.0, 0.0, 0.0, 1.0f);
+	glm::mat4 vp = camera->GetProjectionMatrix() * camera->GetViewMatrix();
+
+	mMeshShader->SetMatrixUniform("worldMatrix", mat);
+	mMeshShader->SetMatrixUniform("vpMatrix", vp);
+
+	for (size_t i = 0; i < mMeshList.size(); ++i)
+	{
+		mMeshList[i]->SetActive();
+		glDrawElements(GL_TRIANGLES, mMeshList[i]->GetNumIndices(), GL_UNSIGNED_INT, nullptr);
+	}
+}
+
 void StaticMesh::ClearModel()
 {
 }

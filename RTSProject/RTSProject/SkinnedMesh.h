@@ -47,6 +47,7 @@ public:
 	// Render Loop
 	void									Update(float deltaTime);
 	void									RenderModel(std::shared_ptr<Camera> camera);
+	void									RenderModelShadow(std::shared_ptr<Camera> camera);
 	
 	void									ClearModel();
 
@@ -104,6 +105,7 @@ protected:
 	glm::mat4								mRot;
 	glm::mat4								mSca;
 
+	std::shared_ptr<Shader>					mShadowShader;
 	std::shared_ptr<Shader>					mMeshShader;
 	std::vector<std::shared_ptr<SkinnedVertexArray> > meshList;
 	std::vector< std::shared_ptr<Texture> > textureList;
