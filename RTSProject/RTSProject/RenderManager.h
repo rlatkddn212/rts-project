@@ -10,6 +10,7 @@
 #include "GBuffer.h"
 #include "Shader.h"
 #include "SSAO.h"
+#include "ShadowMap.h"
 
 struct DirectLight
 {
@@ -26,12 +27,14 @@ public:
 	std::vector<std::shared_ptr<RenderObject>>	GetQueue();
 	void									Render();
 
-	void									DrawShadowMap();
+	void									DrawShadowMap(unsigned int framebuffer, std::vector<std::shared_ptr<RenderObject>>& renderObj);
 	void									DrawSSAO(std::shared_ptr<Camera> camera);
 	void									DrawGBuffer(unsigned int type, std::vector<std::shared_ptr<RenderObject>>& renderObj);
 	void									DrawFromGBuffer(std::shared_ptr<Camera> camera);
 private:
 	std::shared_ptr<VertexArray>			mVerts;
+	
+	std::shared_ptr<ShadowMap>				mShadowMap;
 	std::shared_ptr<GBuffer>				mGBuffer;
 	std::shared_ptr<SSAO>					mSSAO;
 

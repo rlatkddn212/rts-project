@@ -147,6 +147,7 @@
     <ClInclude Include="NetPlayer.h" />
     <ClInclude Include="ObjectPool.h" />
     <ClInclude Include="ObjectResourcePool.h" />
+    <ClInclude Include="OrthoCamera.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="RenderComponent.h" />
     <ClInclude Include="RenderManager.h" />
@@ -210,6 +211,7 @@
     <ClCompile Include="NetPlayer.cpp" />
     <ClCompile Include="ObjectPool.cpp" />
     <ClCompile Include="ObjectResourcePool.cpp" />
+    <ClCompile Include="OrthoCamera.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="RenderComponent.cpp" />
     <ClCompile Include="RenderManager.cpp" />

@@ -5,19 +5,20 @@
 #include "Precompiled.h"
 #include "RenderManager.h"
 #include <random>
+#include "OrthoCamera.h"
 
 void PrintScreen(GLuint framebuffer, const std::string& str)
 {
 	// 1024는 임의의 크기로 수정 가능
-	unsigned char* bytes = new unsigned char[1024 * 1024 * 3];
+	unsigned char* bytes = new unsigned char[1024 * 768 * 3];
 	GLuint drawFrameBuffer;
 	glGenFramebuffers(1, &drawFrameBuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, drawFrameBuffer);
 
 	// create a color attachment texture
 	std::shared_ptr<Texture> textureColorbuffer2 = std::make_shared<Texture>();
-	textureColorbuffer2->CreateTexture(1024, 1024, 0);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer2->GetTextureID(), 0);
+	textureColorbuffer2->CreateTexture(1024, 768, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_BUFFER_BIT, GL_TEXTURE_2D, textureColorbuffer2->GetTextureID(), 0);
 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 	{
@@ -26,11 +27,11 @@ void PrintScreen(GLuint framebuffer, const std::string& str)
 
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, drawFrameBuffer);
-	glBlitFramebuffer(0, 0, 1024, 768, 0, 0, 1024, 1024, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+	glBlitFramebuffer(0, 0, 1024, 768, 0, 0, 1024, 768, GL_COLOR_BUFFER_BIT, GL_LINEAR);
 	glBindFramebuffer(GL_FRAMEBUFFER, drawFrameBuffer);
 	glReadPixels(0, 0, 1024, 768, GL_RGB, GL_UNSIGNED_BYTE, bytes);
 
-	SOIL_save_image(str.c_str(), SOIL_SAVE_TYPE_BMP, 1024, 1024, 3, bytes);
+	SOIL_save_image(str.c_str(), SOIL_SAVE_TYPE_BMP, 1024, 768, 3, bytes);
 
 	delete[] bytes;
 	glDeleteFramebuffers(1, &drawFrameBuffer);
@@ -40,8 +41,14 @@ void RenderManager::Initialize()
 {
 	mSize = 10000;
 	mCount = 0;
+	
+	// frame Buffer 생성
+	mShadowMap = std::make_shared<ShadowMap>();
+	mShadowMap->Initialize(1024, 768);
+
 	mGBuffer = std::make_shared<GBuffer>();
 	mGBuffer->Initialize(1024, 768);
+
 	mSSAO = std::make_shared<SSAO>();
 	mSSAO->Initialize(1024, 768);
 
@@ -124,9 +131,11 @@ std::vector<std::shared_ptr<RenderObject>> RenderManager::GetQueue()
 void RenderManager::Render()
 {
 	std::vector<std::shared_ptr<RenderObject>> renderData = GetQueue();
-	DrawGBuffer(mGBuffer->GetFrameBufferID(), renderData);
 
+	DrawGBuffer(mGBuffer->GetFrameBufferID(), renderData);
+	DrawShadowMap(mShadowMap->GetFrameBufferID(), renderData);
 	DrawSSAO(renderData[0]->mCamera);
+	//PrintScreen(mShadowMap->GetFrameBufferID(), "ShadowMap.bmp");
 	//PrintScreen(mGBuffer->GetFrameBufferID(), "Helloworld.bmp");
 	//PrintScreen(mSSAO->GetSSAOFrameBufferID(), "SSAO.bmp");
 	//PrintScreen(mSSAO->GetBlurFrameBufferID(), "SSAOBlur.bmp");
@@ -157,6 +166,30 @@ void RenderManager::Render()
 		{
 			renderData[i]->UpdateModel();
 			renderData[i]->Render(renderData[i]->mCamera);
+		}
+	}
+}
+
+void RenderManager::DrawShadowMap(unsigned int framebuffer, std::vector<std::shared_ptr<RenderObject>>& renderObj)
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+	// Clear color buffer/depth buffer
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glDepthMask(GL_TRUE);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	glEnable(GL_DEPTH_TEST);
+	glDisable(GL_BLEND);
+
+	std::shared_ptr<Camera> camera = std::make_shared<OrthoCamera>();
+	camera->SetCameraPos(glm::vec3(0.0f, 0.0f, -1.0f));
+	camera->SetFocus(glm::vec3(0.0f, 0.0f, 0.0f));
+
+	for (int i = 0; i < renderObj.size(); ++i)
+	{
+		if (renderObj[i]->GetRenderState() == DeferedRendering)
+		{
+			renderObj[i]->UpdateModel();
+			renderObj[i]->Render(camera);
 		}
 	}
 }

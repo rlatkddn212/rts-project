@@ -249,6 +249,9 @@
     <ClInclude Include="DirectionalLight.h">
       <Filter>소스 파일\Light</Filter>
     </ClInclude>
+    <ClInclude Include="OrthoCamera.h">
+      <Filter>소스 파일\Camera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Font.cpp">
@@ -437,6 +440,9 @@
     <ClCompile Include="Light.cpp">
       <Filter>소스 파일\Light</Filter>
     </ClCompile>
+    <ClCompile Include="OrthoCamera.cpp">
+      <Filter>소스 파일\Camera</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="color.frag">
@@ -530,6 +536,12 @@
       <Filter>소스 파일\Shader</Filter>
     </None>
     <None Include="ssao_blur.frag">
+      <Filter>소스 파일\Shader</Filter>
+    </None>
+    <None Include="shadow_map.vert">
+      <Filter>소스 파일\Shader</Filter>
+    </None>
+    <None Include="shadow_map.frag">
       <Filter>소스 파일\Shader</Filter>
     </None>
   </ItemGroup>

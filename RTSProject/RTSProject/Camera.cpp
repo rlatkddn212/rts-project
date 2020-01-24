@@ -24,8 +24,8 @@ void Camera::Initialize(int w, int h)
 	// 눈이 가르키는 위치
 	mFocus = glm::vec3(0.0f, 0.0f, 0.0f);
 
-	mX = w/2;
-	mY = h/2;
+	mX = w / 2;
+	mY = h / 2;
 	mWheel = 0;
 }
 

@@ -21,10 +21,12 @@ public:
 	void									MouseWheel(int y);
 
 	glm::mat4								GetViewMatrix();
-	glm::mat4								GetProjectionMatrix();
+	virtual glm::mat4						GetProjectionMatrix();
 
 	void									SetPos(glm::vec2 pos);
 
+	void									SetCameraPos(glm::vec3 pos) { mEye = pos; }
+	void									SetFocus(glm::vec3 focus) { mFocus = focus; }
 	glm::vec3								GetCameraPos() { return mEye; }
 
 	GLfloat									mX;
@@ -32,7 +34,6 @@ public:
 
 	double									mWheel;
 	bool*									state;
-
 
 	float									mAlpha, mBeta, mRadius, mFov;
 	glm::vec3								mEye, mFocus, mRight, mLook;
