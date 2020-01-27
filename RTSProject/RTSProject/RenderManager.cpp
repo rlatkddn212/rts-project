@@ -17,8 +17,8 @@ void PrintScreen(GLuint framebuffer, const std::string& str)
 
 	// create a color attachment texture
 	std::shared_ptr<Texture> textureColorbuffer2 = std::make_shared<Texture>();
-	textureColorbuffer2->CreateTexture(1024, 768, 0);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_BUFFER_BIT, GL_TEXTURE_2D, textureColorbuffer2->GetTextureID(), 0);
+	textureColorbuffer2->CreateDepthTexture(1024, 768);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, textureColorbuffer2->GetTextureID(), 0);
 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 	{
@@ -135,7 +135,7 @@ void RenderManager::Render()
 	DrawGBuffer(mGBuffer->GetFrameBufferID(), renderData);
 	DrawShadowMap(mShadowMap->GetFrameBufferID(), renderData);
 	DrawSSAO(renderData[0]->mCamera);
-	//PrintScreen(mShadowMap->GetFrameBufferID(), "ShadowMap.bmp");
+	PrintScreen(mShadowMap->GetFrameBufferID(), "ShadowMap.bmp");
 	//PrintScreen(mGBuffer->GetFrameBufferID(), "Helloworld.bmp");
 	//PrintScreen(mSSAO->GetSSAOFrameBufferID(), "SSAO.bmp");
 	//PrintScreen(mSSAO->GetBlurFrameBufferID(), "SSAOBlur.bmp");
@@ -181,7 +181,7 @@ void RenderManager::DrawShadowMap(unsigned int framebuffer, std::vector<std::sha
 	glDisable(GL_BLEND);
 
 	std::shared_ptr<Camera> camera = std::make_shared<OrthoCamera>();
-	camera->SetCameraPos(glm::vec3(0.0f, 0.0f, -1.0f));
+	camera->SetCameraPos(glm::vec3(0.0f, 0.0f, 1.0f));
 	camera->SetFocus(glm::vec3(0.0f, 0.0f, 0.0f));
 
 	for (int i = 0; i < renderObj.size(); ++i)
