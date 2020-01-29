@@ -79,6 +79,7 @@ struct Patch
 	SDL_FRect								GetRect() { return mRect; }
 
 	void									CreateMesh(HeightMap& hm, SDL_FRect source);
+	virtual void							RenderShadow(glm::mat4& vpMat);
 	void									Render(glm::mat4& vpMat);
 	void									Update(float deltaTime);
 	
@@ -86,6 +87,7 @@ struct Patch
 	glm::mat4								perspect;
 	glm::mat4								view;
 	std::shared_ptr<VertexArrayAlpha>		mVertexArray;
+	std::shared_ptr<Shader>					mShadowShader;
 	std::shared_ptr<Shader>					mMeshShader;
 };
 

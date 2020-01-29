@@ -44,11 +44,11 @@ void StaticMesh::Update(float deltaTime)
 
 void StaticMesh::RenderModel(std::shared_ptr<Camera> camera)
 {
-	mMeshShader->SetActive();
 	glm::mat4 mat = mPosMat * mRotMat * mScaMat;
 	glm::vec4 pos = mat * glm::vec4(0.0, 0.0, 0.0, 1.0f);
 	glm::mat4 vp = camera->GetProjectionMatrix() * camera->GetViewMatrix();
 	
+	mMeshShader->SetActive();
 	SetUniform();
 	mMeshShader->SetMatrixUniform("worldMatrix", mat);
 	mMeshShader->SetMatrixUniform("vpMatrix", vp);
@@ -73,9 +73,9 @@ void StaticMesh::RenderModelShadow(std::shared_ptr<Camera> camera)
 	glm::mat4 mat = mPosMat * mRotMat * mScaMat;
 	glm::vec4 pos = mat * glm::vec4(0.0, 0.0, 0.0, 1.0f);
 	glm::mat4 vp = camera->GetProjectionMatrix() * camera->GetViewMatrix();
-
-	mMeshShader->SetMatrixUniform("worldMatrix", mat);
-	mMeshShader->SetMatrixUniform("vpMatrix", vp);
+	mShadowShader->SetActive();
+	mShadowShader->SetMatrixUniform("worldMatrix", mat);
+	mShadowShader->SetMatrixUniform("vpMatrix", vp);
 
 	for (size_t i = 0; i < mMeshList.size(); ++i)
 	{
@@ -179,4 +179,10 @@ void StaticMesh::LoadShader()
 	shaderCodies.push_back(make_pair(ReadShaderFile("mesh.frag"), GL_FRAGMENT_SHADER));
 	mMeshShader = std::make_shared<Shader>();
 	mMeshShader->BuildShader(shaderCodies);
+
+	shaderCodies.clear();
+	shaderCodies.push_back(make_pair(ReadShaderFile("mesh.vert"), GL_VERTEX_SHADER));
+	shaderCodies.push_back(make_pair(ReadShaderFile("shadow_map.frag"), GL_FRAGMENT_SHADER));
+	mShadowShader = std::make_shared<Shader>();
+	mShadowShader->BuildShader(shaderCodies);
 }

@@ -28,4 +28,3 @@ public:
 	unsigned int							mVertexArray;
 	unsigned int							mVertexBuffer;
 };
-

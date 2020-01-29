@@ -49,6 +49,7 @@ protected:
 	glm::mat4								mRotMat;
 	glm::mat4								mScaMat;
 
+	std::shared_ptr<Shader>					mShadowShader;
 	std::shared_ptr<Shader>					mMeshShader;
 	std::vector<std::shared_ptr<VertexArray> > mMeshList;
 	std::vector<std::shared_ptr<Texture> >  mTextureList;

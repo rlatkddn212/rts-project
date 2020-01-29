@@ -57,7 +57,7 @@ public:
 		InitGLFW();
 		InitGLEW();
 
-		createCallbacks();
+		CreateCallbacks();
 		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 		glfwSetWindowUserPointer(window, this);
 
@@ -76,7 +76,6 @@ public:
 
 		group = make_shared<GameStage>();
 		group->Initialize(window, screenW, screenH);
-
 	}
 
 	void Terminate()
@@ -125,15 +124,15 @@ public:
 		}
 	}
 
-	void createCallbacks()
+	void CreateCallbacks()
 	{
-		glfwSetKeyCallback(window, handleKeys);
-		glfwSetCursorPosCallback(window, handleMouse);
-		glfwSetMouseButtonCallback(window, handleMouseButton);
-		glfwSetScrollCallback(window, handleScrollWheel);
+		glfwSetKeyCallback(window, HandleKeys);
+		glfwSetCursorPosCallback(window, HandleMouse);
+		glfwSetMouseButtonCallback(window, HandleMouseButton);
+		glfwSetScrollCallback(window, HandleScrollWheel);
 	}
 
-	static void handleKeys(GLFWwindow* window, int key, int code, int action, int mode)
+	static void HandleKeys(GLFWwindow* window, int key, int code, int action, int mode)
 	{
 		Game* theWindow = static_cast<Game*>(glfwGetWindowUserPointer(window));
 		if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
@@ -156,7 +155,7 @@ public:
 		theWindow->group->PressKey(theWindow->keys);
 	}
 
-	static void handleMouse(GLFWwindow* window, double xPos, double yPos)
+	static void HandleMouse(GLFWwindow* window, double xPos, double yPos)
 	{
 		Game* theWindow = static_cast<Game*>(glfwGetWindowUserPointer(window));
 		if (theWindow->mouseFirstMoved)
@@ -175,13 +174,13 @@ public:
 		theWindow->group->CursorPos(xPos, yPos);
 	}
 
-	static void handleMouseButton(GLFWwindow* window, int button, int action, int mods)
+	static void HandleMouseButton(GLFWwindow* window, int button, int action, int mods)
 	{
 		Game* theWindow = static_cast<Game*>(glfwGetWindowUserPointer(window));
 		theWindow->group->MouseButton(button, action);
 	}
 
-	static void handleScrollWheel(GLFWwindow* window, double xPos, double yPos)
+	static void HandleScrollWheel(GLFWwindow* window, double xPos, double yPos)
 	{
 		Game* theWindow = static_cast<Game*>(glfwGetWindowUserPointer(window));
 		theWindow->wheel = yPos;

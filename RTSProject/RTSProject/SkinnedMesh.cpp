@@ -48,13 +48,13 @@ void SkinnedMesh::LoadModel(const std::string& fileName)
 	mMeshShader = std::make_shared<Shader>();
 	mMeshShader->BuildShader(shaderCodies);
 
-	/*
+	// depth shadow map shader
 	shaderCodies.clear();
-	shaderCodies.push_back(make_pair(ReadShaderFile(""), GL_VERTEX_SHADER));
-	shaderCodies.push_back(make_pair(ReadShaderFile(""), GL_FRAGMENT_SHADER));
+	shaderCodies.push_back(make_pair(ReadShaderFile("skinned.vert"), GL_VERTEX_SHADER));
+	shaderCodies.push_back(make_pair(ReadShaderFile("shadow_map.frag"), GL_FRAGMENT_SHADER));
 	mShadowShader = std::make_shared<Shader>();
 	mShadowShader->BuildShader(shaderCodies);
-	*/
+	
 	//importer.FreeScene();
 }
 
@@ -102,17 +102,17 @@ void SkinnedMesh::RenderModelShadow(std::shared_ptr<Camera> camera)
 	glm::mat4 model = mPos * mRot * mSca;
 	glm::mat4 mat = camera->GetProjectionMatrix() * camera->GetViewMatrix();
 
-	mMeshShader->SetActive();
+	mShadowShader->SetActive();
 
-	mMeshShader->SetMatrixUniform("vpMatrix", mat);
-	mMeshShader->SetMatrixUniform("worldMatrix", model);
+	mShadowShader->SetMatrixUniform("vpMatrix", mat);
+	mShadowShader->SetMatrixUniform("worldMatrix", model);
 
 	for (int i = 0; i < 100; ++i)
 	{
 		char Name[128];
 		memset(Name, 0, sizeof(Name));
 		snprintf(Name, sizeof(Name), "gBones[%d]", i);
-		mMeshShader->SetMatrixUniform(Name, mTransforms[i]);
+		mShadowShader->SetMatrixUniform(Name, mTransforms[i]);
 	}
 
 	for (size_t i = 0; i < meshList.size(); ++i)

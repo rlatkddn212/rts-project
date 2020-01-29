@@ -27,10 +27,12 @@ public:
 	std::vector<std::shared_ptr<RenderObject>>	GetQueue();
 	void									Render();
 
-	void									DrawShadowMap(unsigned int framebuffer, std::vector<std::shared_ptr<RenderObject>>& renderObj);
+	void									DrawShadowMap(unsigned int framebuffer, std::shared_ptr<Camera> camera, std::vector<std::shared_ptr<RenderObject>>& renderObj);
 	void									DrawSSAO(std::shared_ptr<Camera> camera);
 	void									DrawGBuffer(unsigned int type, std::vector<std::shared_ptr<RenderObject>>& renderObj);
-	void									DrawFromGBuffer(std::shared_ptr<Camera> camera);
+	void									DrawFromGBuffer(std::shared_ptr<Camera> camera, std::shared_ptr<Camera> lightCamera);
+	void									DrawDepthBuffer(std::shared_ptr<Camera> camera);
+
 private:
 	std::shared_ptr<VertexArray>			mVerts;
 	
@@ -43,6 +45,7 @@ private:
 
 	std::shared_ptr<Shader>					mSSAOShader;
 	std::shared_ptr<Shader>					mSSAOBlurShader;
+	std::shared_ptr<Shader>					mTestShader;
 
 	std::condition_variable					cv;
 	std::mutex								mMutex;

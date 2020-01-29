@@ -32,6 +32,11 @@ void MapObject::Update(float deltaTime)
 	mStaticMesh->Update(deltaTime);
 }
 
+void MapObject::RenderShadow(std::shared_ptr<Camera> camera)
+{
+	mStaticMesh->RenderModelShadow(camera);
+}
+
 void MapObject::Render(std::shared_ptr<Camera> camera)
 {
 	if (mIsFog && mFogTexture)

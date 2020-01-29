@@ -13,7 +13,6 @@ out vec3 fragWorldPos;
 uniform mat4 gBones[100];
 uniform mat4 vpMatrix;
 uniform mat4 worldMatrix;
-uniform vec3 lightDir;
 
 void main()
 {

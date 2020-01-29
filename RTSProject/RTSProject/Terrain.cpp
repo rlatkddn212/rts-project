@@ -93,8 +93,23 @@ void Patch::CreateMesh(HeightMap & hm, SDL_FRect source)
 	mMeshShader = std::make_shared<Shader>();
 	mMeshShader->BuildShader(shaderCodies);
 
+	shaderCodies.clear();
+	shaderCodies.push_back(make_pair(ReadShaderFile("terrain.vert"), GL_VERTEX_SHADER));
+	shaderCodies.push_back(make_pair(ReadShaderFile("shadow_map.frag"), GL_FRAGMENT_SHADER));
+	mShadowShader = std::make_shared<Shader>();
+	mShadowShader->BuildShader(shaderCodies);
+
 	delete[] verts;
 	delete[] indices;
+}
+
+void Patch::RenderShadow(glm::mat4 & vpMat)
+{
+	mVertexArray->SetActive();
+	mShadowShader->SetActive();
+	mShadowShader->SetMatrixUniform("vpMatrix", vpMat);
+
+	glDrawElements(GL_TRIANGLES, mVertexArray->GetNumIndices(), GL_UNSIGNED_INT, nullptr);
 }
 
 void Patch::Render(glm::mat4& vpMat)
@@ -636,12 +651,12 @@ void Terrain::RenderShadow(std::shared_ptr<Camera> camera)
 
 	for (int i = 0; i < (int)mPatches.size(); ++i)
 	{
-		mPatches[i]->Render(mat);
+		mPatches[i]->RenderShadow(mat);
 	}
 
 	for (int i = 0; i < mModelList.size(); ++i)
 	{
-		mModelList[i]->Render(camera);
+		mModelList[i]->RenderShadow(camera);
 	}
 }
 

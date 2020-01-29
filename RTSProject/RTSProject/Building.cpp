@@ -88,6 +88,10 @@ void Building::BuildOnTerrain(std::shared_ptr<Terrain> terrain, int x, int y)
 	}
 }
 
+void Building::RenderShadow(std::shared_ptr<Camera> camera)
+{
+}
+
 void Building::Update(float deltaTime)
 {
 	mBuildingMesh->Update(deltaTime);

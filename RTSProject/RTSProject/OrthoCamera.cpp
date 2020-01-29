@@ -13,5 +13,5 @@ OrthoCamera::~OrthoCamera()
 
 glm::mat4 OrthoCamera::GetProjectionMatrix()
 {
-	return glm::ortho(-50.0f, 50.f, -50.0f, 50.0f, -100.0f, 100.0f);
+	return glm::ortho(-100.0f, 100.f, -100.0f, 100.0f, 0.0f, 200.0f);
 }

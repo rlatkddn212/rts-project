@@ -12,6 +12,7 @@ public:
 	
 	void									MakeModel(int type);
 	virtual	void							Update(float deltaTime);
+	virtual void							RenderShadow(std::shared_ptr<Camera> camera);
 	virtual void							Render(std::shared_ptr<Camera> camera);
 	void									AddRender(std::shared_ptr<Camera> camera);
 

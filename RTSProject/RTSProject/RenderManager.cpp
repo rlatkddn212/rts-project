@@ -97,6 +97,13 @@ void RenderManager::Initialize()
 	shaderCodies.push_back(make_pair(ReadShaderFile("ssao_blur.frag"), GL_FRAGMENT_SHADER));
 	mSSAOBlurShader = std::make_shared<Shader>();
 	mSSAOBlurShader->BuildShader(shaderCodies);
+
+
+	shaderCodies.clear();
+	shaderCodies.push_back(make_pair(ReadShaderFile("Sprite.vert"), GL_VERTEX_SHADER));
+	shaderCodies.push_back(make_pair(ReadShaderFile("Sprite.frag"), GL_FRAGMENT_SHADER));
+	mTestShader = std::make_shared<Shader>();
+	mTestShader->BuildShader(shaderCodies);
 }
 
 void RenderManager::AddQueue(std::shared_ptr<RenderObject> obj)
@@ -132,15 +139,20 @@ void RenderManager::Render()
 {
 	std::vector<std::shared_ptr<RenderObject>> renderData = GetQueue();
 
+	std::shared_ptr<Camera> camera = std::make_shared<OrthoCamera>();
+	camera->SetCameraPos(glm::vec3(100.0f, 50.0f, -100.0f));
+	camera->SetFocus(glm::vec3(0.0f, 0.0f, 0.0f));
+
 	DrawGBuffer(mGBuffer->GetFrameBufferID(), renderData);
-	DrawShadowMap(mShadowMap->GetFrameBufferID(), renderData);
+	DrawShadowMap(mShadowMap->GetFrameBufferID(), camera, renderData);
 	DrawSSAO(renderData[0]->mCamera);
-	PrintScreen(mShadowMap->GetFrameBufferID(), "ShadowMap.bmp");
+	//PrintScreen(mShadowMap->GetFrameBufferID(), "ShadowMap.bmp");
 	//PrintScreen(mGBuffer->GetFrameBufferID(), "Helloworld.bmp");
 	//PrintScreen(mSSAO->GetSSAOFrameBufferID(), "SSAO.bmp");
 	//PrintScreen(mSSAO->GetBlurFrameBufferID(), "SSAOBlur.bmp");
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	DrawFromGBuffer(renderData[0]->mCamera);
+	DrawFromGBuffer(renderData[0]->mCamera, camera);
+	//DrawDepthBuffer(renderData[0]->mCamera);
 
 	for (int i = 0; i < renderData.size(); ++i)
 	{
@@ -170,7 +182,7 @@ void RenderManager::Render()
 	}
 }
 
-void RenderManager::DrawShadowMap(unsigned int framebuffer, std::vector<std::shared_ptr<RenderObject>>& renderObj)
+void RenderManager::DrawShadowMap(unsigned int framebuffer, std::shared_ptr<Camera> camera, std::vector<std::shared_ptr<RenderObject>>& renderObj)
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 	// Clear color buffer/depth buffer
@@ -180,16 +192,12 @@ void RenderManager::DrawShadowMap(unsigned int framebuffer, std::vector<std::sha
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
 
-	std::shared_ptr<Camera> camera = std::make_shared<OrthoCamera>();
-	camera->SetCameraPos(glm::vec3(0.0f, 0.0f, 1.0f));
-	camera->SetFocus(glm::vec3(0.0f, 0.0f, 0.0f));
-
 	for (int i = 0; i < renderObj.size(); ++i)
 	{
 		if (renderObj[i]->GetRenderState() == DeferedRendering)
 		{
 			renderObj[i]->UpdateModel();
-			renderObj[i]->Render(camera);
+			renderObj[i]->RenderShadow(camera);
 		}
 	}
 }
@@ -282,7 +290,7 @@ void RenderManager::DrawGBuffer(unsigned int framebuffer, std::vector<std::share
 	}
 }
 
-void RenderManager::DrawFromGBuffer(std::shared_ptr<Camera> camera)
+void RenderManager::DrawFromGBuffer(std::shared_ptr<Camera> camera, std::shared_ptr<Camera> lightCamera)
 {
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -293,9 +301,9 @@ void RenderManager::DrawFromGBuffer(std::shared_ptr<Camera> camera)
 	mVerts->SetActive();
 	mGBuffer->SetTexturesActive();
 	mSSAO->SetBlurActive(3);
+	mShadowMap->SetActive(4);
 
 	glm::mat4 scaleMat = glm::scale(glm::mat4(1.f), glm::vec3(1024.0f, 768.0f, 1.0f));
-
 	glm::mat4 transMat = glm::translate(glm::mat4(1.f),
 		glm::vec3((-camera->mWidth + static_cast<float>(1024.0f)) / 2, (camera->mHeight - static_cast<float>(768.0f)) / 2, 0.0f));
 
@@ -313,18 +321,53 @@ void RenderManager::DrawFromGBuffer(std::shared_ptr<Camera> camera)
 	mLightShader->SetMatrixUniform("uViewProj", m);
 	mLightShader->SetMatrixUniform("uWorldTransform", world);
 
+	// vp mat
+	mLightShader->SetMatrixUniform("cameraMatrix", camera->GetViewMatrix());
+	mLightShader->SetMatrixUniform("projMatrix", camera->GetProjectionMatrix());
+	// ºûÀÇ ¹æÇâ view
+	mLightShader->SetMatrixUniform("worldToLightViewMatrix", lightCamera->GetViewMatrix());
+	mLightShader->SetMatrixUniform("lightViewToProjectionMatrix", lightCamera->GetProjectionMatrix());
+
 	mLightShader->SetVectorUniform("CameraPos", camera->GetCameraPos());
 	mLightShader->SetVectorUniform("AmbientLight", glm::vec3(0.6f, 0.6f, 0.6f));
-	mLightShader->SetVectorUniform("Direction", glm::vec3(0.0f, -0.4f, -0.4f));
+	mLightShader->SetVectorUniform("Direction", glm::vec3(50.0f, -50.0f, 50.0f));
 	mLightShader->SetVectorUniform("DiffuseColor", glm::vec3(1.0f, 1.0f, 1.0f));
 	mLightShader->SetVectorUniform("SpecColor", glm::vec3(1.0f, 1.0f, 1.0f));
 	
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
-	glBindFramebuffer(GL_READ_FRAMEBUFFER, mGBuffer->GetFrameBufferID());
-	int width = static_cast<int>(1024.0);
-	int height = static_cast<int>(768.0);
-	glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+	glEnable(GL_DEPTH_TEST);
+	glDepthMask(GL_FALSE);
+}
+
+void RenderManager::DrawDepthBuffer(std::shared_ptr<Camera> camera)
+{
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glDepthMask(GL_TRUE);
+	glDisable(GL_DEPTH_TEST);
+	mTestShader->SetActive();
+	mVerts->SetActive();
+	mShadowMap->SetActive(0);
+
+	glm::mat4 scaleMat = glm::scale(glm::mat4(1.f), glm::vec3(1024.0f, 768.0f, 1.0f));
+	glm::mat4 transMat = glm::translate(glm::mat4(1.f),
+						glm::vec3((-camera->mWidth + static_cast<float>(1024.0f)) / 2,
+						(camera->mHeight - static_cast<float>(768.0f)) / 2, 0.0f));
+
+	glm::mat4 m = {
+		{ 2.0f / (float)camera->mWidth, 0.0f, 0.0f, 0.0f },
+		{ 0.0f, 2.0f / (float)camera->mHeight, 0.0f, 0.0f },
+		{ 0.0f, 0.0f, 1.0f, 1.0f },
+		{ 0.0f, 0.0f, 0.0f, 1.0f }
+	};
+
+	glm::mat4 world = transMat * scaleMat;
+	mTestShader->SetMatrixUniform("uViewProj", m);
+	mTestShader->SetMatrixUniform("uWorldTransform", world);
+
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthMask(GL_FALSE);
