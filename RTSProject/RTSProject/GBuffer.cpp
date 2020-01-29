@@ -71,3 +71,21 @@ void GBuffer::SetTexturesActive()
 		mTextures[i]->SetActive();
 	}
 }
+
+void GBuffer::SetDiffuseActive(int pos)
+{
+	glActiveTexture(GL_TEXTURE0 + pos);
+	mTextures[0]->SetActive();
+}
+
+void GBuffer::SetNormalActive(int pos)
+{
+	glActiveTexture(GL_TEXTURE0 + pos);
+	mTextures[1]->SetActive();
+}
+
+void GBuffer::SetWorldPosActive(int pos)
+{
+	glActiveTexture(GL_TEXTURE0 + pos);
+	mTextures[2]->SetActive();
+}

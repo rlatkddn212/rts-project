@@ -23,6 +23,10 @@ public:
 	unsigned int						GetFrameBufferID() const { return mFrameBufferID; }
 	void								SetTexturesActive();
 
+	void								SetDiffuseActive(int pos);
+	void								SetNormalActive(int pos);
+	void								SetWorldPosActive(int pos);
+
 private:
 	std::vector<std::shared_ptr<Texture>>	mTextures;
 	unsigned int						mFrameBufferID;

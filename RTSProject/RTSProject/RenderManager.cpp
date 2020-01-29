@@ -68,12 +68,6 @@ void RenderManager::Initialize()
 
 	mVerts = std::make_shared<VertexArray>(vertices, 4, indices, 6);
 
-	mLightShader = std::make_shared<Shader>();
-	mPointLightShader = std::make_shared<Shader>();
-
-	mSSAOShader = std::make_shared<Shader>();
-	mSSAOBlurShader = std::make_shared<Shader>();
-
 	std::vector<std::pair<std::string, int> > shaderCodies;
 	shaderCodies.push_back(make_pair(ReadShaderFile("Sprite.vert"), GL_VERTEX_SHADER));
 	shaderCodies.push_back(make_pair(ReadShaderFile("GBufferGlobalLight.frag"), GL_FRAGMENT_SHADER));
@@ -184,6 +178,7 @@ void RenderManager::Render()
 
 void RenderManager::DrawShadowMap(unsigned int framebuffer, std::shared_ptr<Camera> camera, std::vector<std::shared_ptr<RenderObject>>& renderObj)
 {
+
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 	glViewport(0, 0, 2048 * 4, 2048 * 4);
 	// Clear color buffer/depth buffer
@@ -204,6 +199,11 @@ void RenderManager::DrawShadowMap(unsigned int framebuffer, std::shared_ptr<Came
 	glViewport(0, 0, 1024, 768);
 }
 
+float lerp(float a, float b, float f)
+{
+	return a + f * (b - a);
+}
+
 void RenderManager::DrawSSAO(std::shared_ptr<Camera> camera)
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, mSSAO->GetSSAOFrameBufferID());
@@ -214,30 +214,56 @@ void RenderManager::DrawSSAO(std::shared_ptr<Camera> camera)
 	glDisable(GL_DEPTH_TEST);
 	mVerts->SetActive();
 	mSSAOShader->SetActive();
-	mGBuffer->SetTexturesActive();
+
+	mGBuffer->SetWorldPosActive(0);
+	mGBuffer->SetNormalActive(1);
 
 	std::uniform_real_distribution<GLfloat> randomFloats(0.0, 1.0);
 	std::default_random_engine generator;
 
+	// 샘플 커널 생성
 	std::vector<glm::vec3> ssaoKernel;
 	for (unsigned int i = 0; i < 64; ++i)
 	{
+		// [-1~1], [-1~1], [0~1] 샘플 생성
 		glm::vec3 sample(randomFloats(generator) * 2.0 - 1.0, randomFloats(generator) * 2.0 - 1.0, randomFloats(generator));
+		// 길이를 1로 만들어 반구로 만든다.
 		sample = glm::normalize(sample);
 		sample *= randomFloats(generator);
-		float scale = float(i) / 64.0;
 
-		scale = glm::lerp(0.1f, 1.0f, scale * scale);
+		// 샘플이 원 중심에 많이 생성되도록 위치를 조절한다.
+		float scale = float(i) / 64.0;
+		scale = lerp(0.1f, 1.0f, scale * scale);
 		sample *= scale;
 		ssaoKernel.push_back(sample);
 	}
 
+	// 샘플 uniform 추가
 	char buf[128] = {};
 	for (unsigned int i = 0; i < 64; ++i)
 	{
 		sprintf(buf, "samples[%d]", i);
 		mSSAOShader->SetVectorUniform(buf, ssaoKernel[i]);
 	}
+
+	// 회전에 필요한 4x4 노이즈 텍스쳐 생성
+	std::vector<glm::vec3> ssaoNoise;
+	for (unsigned int i = 0; i < 16; i++)
+	{
+		// z 축 회전이라 z 값은 0
+		glm::vec3 noise(randomFloats(generator) * 2.0 - 1.0, randomFloats(generator) * 2.0 - 1.0, 0.0f);
+		ssaoNoise.push_back(noise);
+	}
+
+	unsigned int noiseTexture; 
+	glActiveTexture(GL_TEXTURE2);
+	glGenTextures(1, &noiseTexture);
+	glBindTexture(GL_TEXTURE_2D, noiseTexture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F, 4, 4, 0, GL_RGB, GL_FLOAT, &ssaoNoise[0]);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 	glm::mat4 scaleMat = glm::scale(glm::mat4(1.f), glm::vec3(1024.0f, 768.0f, 1.0f));
 
@@ -252,14 +278,12 @@ void RenderManager::DrawSSAO(std::shared_ptr<Camera> camera)
 	};
 
 	glm::mat4 world = transMat * scaleMat;
-	mSSAOShader->SetIntUniform("uGDiffuse", 0);
-	mSSAOShader->SetIntUniform("uGNormal", 1);
-	mSSAOShader->SetIntUniform("uGWorldPos", 2);
 
 	mSSAOShader->SetMatrixUniform("uViewProj", m);
 	mSSAOShader->SetMatrixUniform("uWorldTransform", world);
 	
 	mSSAOShader->SetMatrixUniform("projection", camera->GetProjectionMatrix());
+	mSSAOShader->SetMatrixUniform("uViewMat", camera->GetViewMatrix());
 
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 

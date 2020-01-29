@@ -42,11 +42,27 @@ float ReadShadowMap(vec3 eyeDir)
 	// [0.0~1.0] 사이 좌표로 변환
 	lightPos = lightPos * 0.5 + 0.5;
 
-	
 	const float bias = 0.001;
+	/*
 	float depthValue = texture2D(uGShadowMap, lightPos.xy).r + bias;
-	// shadow map에 depth보다 멀리있다면 그림자가 생김
+	
 	return (lightPos.z > depthValue) ? 1.0 : 0.0;
+	*/
+
+	float shadow = 0.0;
+	vec2 texelSize = 1.0 / textureSize(uGShadowMap, 0);
+	for(int x = -1; x <= 1; ++x)
+	{
+		for(int y = -1; y <= 1; ++y)
+		{
+			float pcfDepth = texture2D(uGShadowMap, lightPos.xy + vec2(x, y) * texelSize).r; 
+			// shadow map에 depth보다 멀리있다면 그림자가 생김
+			shadow += (lightPos.z > pcfDepth + bias) ? 1.0 : 0.0;        
+		}    
+	}
+	shadow /= 9.0;
+
+	return shadow;
 }
 
 // N : Vertex Normal
@@ -73,7 +89,7 @@ vec3 CalcLight(float AmbientOcclusion, vec3 P, vec3 N, vec3 L, vec3 V, vec3 R)
 	}
 
 	float shadow = ReadShadowMap(P);
-	return (ambientColour + (diffuseColour + specularColour) * (1.0 - shadow));
+	return (ambientColour + (diffuseColour + specularColour) *  (1.0 - shadow));
 }
 
 void main()
@@ -92,7 +108,8 @@ void main()
 
 	vec3 Phong = CalcLight(AmbientOcclusion, gbufferWorldPos, N, L, V, R);
 	float gamma = 2.2;
-    outColor = vec4(pow(gbufferDiffuse * Phong, vec3(1.0/gamma)) , 1.0);
-	//outColor = vec4(gbufferDiffuse * Phong, 1.0);
+    
+	outColor = vec4(AmbientOcclusion);
+	//outColor = vec4(pow(gbufferDiffuse * Phong, vec3(1.0/gamma)) , 1.0);
 }
 
