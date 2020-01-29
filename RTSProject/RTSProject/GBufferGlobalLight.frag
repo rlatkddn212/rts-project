@@ -109,7 +109,7 @@ void main()
 	vec3 Phong = CalcLight(AmbientOcclusion, gbufferWorldPos, N, L, V, R);
 	float gamma = 2.2;
     
-	outColor = vec4(AmbientOcclusion);
-	//outColor = vec4(pow(gbufferDiffuse * Phong, vec3(1.0/gamma)) , 1.0);
+	//outColor = vec4(AmbientOcclusion);
+	outColor = vec4(pow(gbufferDiffuse * Phong, vec3(1.0/gamma)) , 1.0);
 }
 
