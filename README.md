@@ -80,10 +80,12 @@
 
 2. ShadowMap 적용
 
-- 현재 구조로 안타깝게도 Shadow Map 적용이 어려워 보인다.
+- 현재 구조로 안타깝게도 Shadow Map 적용이 어려워 보인다. (완)
 
 - 현재 각 Object가 Camera를 받아 랜더링 된다. 각 오브젝트에 대해 ShadowMap 생성 함수를 추가하거나, Object Rendering을 하기전 Shader를 설정 하는 방법이 있겠다.
 - 현재 각 오브젝트마다 shader 설정, vao 설정, Texture 설정을 하기 때문에 OpenGL Call이 많다. Object Rendering을 하기전 Shader 설정하는 방법이 좋긴한데, 그렇게 일반화 시켜버리면 나중에 각 오브젝트마다 셰이더를 따로 설정하고 싶을 때 수정하기 힘들지 않을지
+- shadow map 적용 완료했지만 fog of war가 model 단위에서 light를 처리하고 있기 때문에 매우 어색하게 보여지고 있다.
+- fog of war를 defered shader에 포함시키거나 fog of war에 색상을 어둡게 처리해야 할 것 같다.
 
 3. JSON, XML 적용
 
