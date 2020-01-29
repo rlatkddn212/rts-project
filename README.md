@@ -8,7 +8,7 @@
 카메라 : wasd, 방향키, 마우스 휠로 조정
 
 
-다음 개발 : AI, ssao, bloom, 멀티쓰레드 랜더링, 그림자 매핑
+다음 개발 : AI, ssao, bloom, 멀티쓰레드 랜더링
 
 ![rtsimage](https://github.com/rlatkddn212/rts-project/blob/master/RTS.png)
 
@@ -22,6 +22,7 @@
 6. 미니맵
 7. 디퍼드 랜더링
 8. 퐁세이딩
+9. 그림자 매핑
 
 
 
