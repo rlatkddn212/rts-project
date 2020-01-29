@@ -18,6 +18,9 @@
 
 ![rtsimage](https://github.com/rlatkddn212/rts-project/blob/master/RTS.png)
 
+#### SSAO
+![rtsimage](https://github.com/rlatkddn212/rts-project/blob/master/SSAO.png)
+
 ### 지금까지 구현한 주요 기술
 
 1. height map, alpha map 사용하여 지형 생성
@@ -29,6 +32,7 @@
 7. 디퍼드 랜더링
 8. 퐁세이딩
 9. 그림자 매핑
+10. SSAO
 
 
 
@@ -56,7 +60,7 @@
 | 스킬                 | 0%     | 4         |
 | 네트워크             | 0%     | 3         |
 | text 랜더링          | 80%    | 1         |
-| 그림자               | 0%     | 3         |
+| 그림자               | 100%     | 3         |
 | 라이팅               | 80%     | 3         |
 | 전투 시스템          | 40%     | 2         |
 | xml 파서             | 0%     | 4         |
@@ -127,3 +131,4 @@
 
 10. ssao
 - 구현이 일부 오류가 있나보다. 아마도 ssao 쉐이더 부분에 오류가 있거나 uniform 설정이 잘못된 것 같다.
+- 완료 : view 좌표계로 계산되어하는데 world 좌표계로 계산되는 문제가 있었다.
