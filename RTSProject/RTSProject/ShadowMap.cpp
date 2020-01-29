@@ -45,6 +45,6 @@ void ShadowMap::Terminate()
 
 void ShadowMap::SetActive(int pos)
 {
-	glActiveTexture(pos);
+	glActiveTexture(GL_TEXTURE0 + pos);
 	mShadowTextures->SetActive();
 }

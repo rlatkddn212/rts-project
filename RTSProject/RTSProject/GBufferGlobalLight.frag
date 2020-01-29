@@ -30,20 +30,21 @@ uniform mat4 projMatrix;
 float ReadShadowMap(vec3 eyeDir)
 {
 	// 월드 좌표로 변환
-	mat4 cameraViewToWorldMatrix = inverse(cameraMatrix) * inverse(projMatrix);
-	vec4 worldPos = cameraViewToWorldMatrix * vec4(eyeDir, 1.0);
-	worldPos = worldPos / worldPos.w;
+	//mat4 cameraViewToWorldMatrix = inverse(cameraMatrix) * inverse(projMatrix);
+	//vec4 worldPos = cameraViewToWorldMatrix * vec4(eyeDir, 1.0);
+	//worldPos = worldPos / worldPos.w;
 
 	// light 좌표로 변환
 	mat4 cameraViewToProjectedLightSpace = lightViewToProjectionMatrix * worldToLightViewMatrix;
-	vec4 lightPos = cameraViewToProjectedLightSpace * vec4(worldPos.xyz, 1.0);
+	vec4 lightPos = cameraViewToProjectedLightSpace * vec4(eyeDir.xyz, 1.0);
 	lightPos = lightPos / lightPos.w;
 
 	// [0.0~1.0] 사이 좌표로 변환
 	lightPos = lightPos * 0.5 + 0.5;
 
-	const float bias = 0.0001;
-	float depthValue = texture2D(uGShadowMap, lightPos.xy).r - bias;
+	
+	const float bias = 0.001;
+	float depthValue = texture2D(uGShadowMap, lightPos.xy).r + bias;
 	// shadow map에 depth보다 멀리있다면 그림자가 생김
 	return (lightPos.z > depthValue) ? 1.0 : 0.0;
 }
@@ -72,7 +73,7 @@ vec3 CalcLight(float AmbientOcclusion, vec3 P, vec3 N, vec3 L, vec3 V, vec3 R)
 	}
 
 	float shadow = ReadShadowMap(P);
-	return (ambientColour + (diffuseColour + specularColour));//* (1.0 - shadow));
+	return (ambientColour + (diffuseColour + specularColour) * (1.0 - shadow));
 }
 
 void main()

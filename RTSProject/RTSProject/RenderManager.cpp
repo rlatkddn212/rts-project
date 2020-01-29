@@ -44,7 +44,7 @@ void RenderManager::Initialize()
 	
 	// frame Buffer »ý¼º
 	mShadowMap = std::make_shared<ShadowMap>();
-	mShadowMap->Initialize(1024, 768);
+	mShadowMap->Initialize(2048 * 4, 2048 * 4);
 
 	mGBuffer = std::make_shared<GBuffer>();
 	mGBuffer->Initialize(1024, 768);
@@ -185,6 +185,7 @@ void RenderManager::Render()
 void RenderManager::DrawShadowMap(unsigned int framebuffer, std::shared_ptr<Camera> camera, std::vector<std::shared_ptr<RenderObject>>& renderObj)
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+	glViewport(0, 0, 2048 * 4, 2048 * 4);
 	// Clear color buffer/depth buffer
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glDepthMask(GL_TRUE);
@@ -200,6 +201,7 @@ void RenderManager::DrawShadowMap(unsigned int framebuffer, std::shared_ptr<Came
 			renderObj[i]->RenderShadow(camera);
 		}
 	}
+	glViewport(0, 0, 1024, 768);
 }
 
 void RenderManager::DrawSSAO(std::shared_ptr<Camera> camera)
@@ -330,7 +332,7 @@ void RenderManager::DrawFromGBuffer(std::shared_ptr<Camera> camera, std::shared_
 
 	mLightShader->SetVectorUniform("CameraPos", camera->GetCameraPos());
 	mLightShader->SetVectorUniform("AmbientLight", glm::vec3(0.6f, 0.6f, 0.6f));
-	mLightShader->SetVectorUniform("Direction", glm::vec3(50.0f, -50.0f, 50.0f));
+	mLightShader->SetVectorUniform("Direction", glm::vec3(0.5f, -0.5f, -0.5f));
 	mLightShader->SetVectorUniform("DiffuseColor", glm::vec3(1.0f, 1.0f, 1.0f));
 	mLightShader->SetVectorUniform("SpecColor", glm::vec3(1.0f, 1.0f, 1.0f));
 	
