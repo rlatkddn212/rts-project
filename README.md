@@ -18,6 +18,9 @@
 
 ![rtsimage](https://github.com/rlatkddn212/rts-project/blob/master/RTS.png)
 
+#### SSAO
+![rtsimage](https://github.com/rlatkddn212/rts-project/blob/master/SSAO.png)
+
 ### 지금까지 구현한 주요 기술
 
 1. height map, alpha map 사용하여 지형 생성
