@@ -16,6 +16,10 @@
 
 다음 개발 : AI, ssao, bloom, 멀티쓰레드 랜더링
 
+### 영상
+https://www.youtube.com/watch?v=eS7U9AOfL_A
+### 
+
 ![rtsimage](https://github.com/rlatkddn212/rts-project/blob/master/RTS.png)
 
 #### SSAO
