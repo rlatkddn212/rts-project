@@ -43,9 +43,9 @@ bool Building::isPossibleBuild(shared_ptr<Terrain> terrain, int x, int y)
 {
 	glm::vec2 size = terrain->GetSize();
 	// 건물마다 다르겠지만 우선 3x3 칸을 사용
-	for (int i = 0; i < 3; ++i)
+	for (size_t i = 0; i < 3; ++i)
 	{
-		for (int j = 0; j < 3; ++j)
+		for (size_t j = 0; j < 3; ++j)
 		{
 			int nx = x + i - 1;
 			int ny = y + j - 1;
@@ -76,9 +76,9 @@ void Building::BuildOnTerrain(std::shared_ptr<Terrain> terrain, int x, int y)
 {
 	mBuildingMesh->SetPosition(glm::vec3(x, terrain->GetHeight(glm::vec2(x, -y)), -y));
 
-	for (int i = 0; i < 3; ++i)
+	for (size_t i = 0; i < 3; ++i)
 	{
-		for (int j = 0; j < 3; ++j)
+		for (size_t j = 0; j < 3; ++j)
 		{
 			int nx = x + i - 1;
 			int ny = y + j - 1;

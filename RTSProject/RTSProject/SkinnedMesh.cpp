@@ -75,7 +75,7 @@ void SkinnedMesh::RenderModel(std::shared_ptr<Camera> camera)
 	mMeshShader->SetMatrixUniform("vpMatrix", mat);
 	mMeshShader->SetMatrixUniform("worldMatrix", model);
 
-	for (int i = 0; i < 100; ++i)
+	for (size_t i = 0; i < 100; ++i)
 	{
 		char Name[128];
 		memset(Name, 0, sizeof(Name));
@@ -107,7 +107,7 @@ void SkinnedMesh::RenderModelShadow(std::shared_ptr<Camera> camera)
 	mShadowShader->SetMatrixUniform("vpMatrix", mat);
 	mShadowShader->SetMatrixUniform("worldMatrix", model);
 
-	for (int i = 0; i < 100; ++i)
+	for (size_t i = 0; i < 100; ++i)
 	{
 		char Name[128];
 		memset(Name, 0, sizeof(Name));

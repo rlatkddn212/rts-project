@@ -98,7 +98,7 @@ glm::vec2 MoveComponent::MoveUnit(shared_ptr<Unit> unit, float len)
 	}
 
 	int pathIdx = unit->GetPathIdx();
-	for (int i = pathIdx; i < mPath.size(); ++i)
+	for (size_t i = pathIdx; i < mPath.size(); ++i)
 	{
 		float d = glm::distance(prev, glm::vec2(mPath[i]));
 		len -= d;

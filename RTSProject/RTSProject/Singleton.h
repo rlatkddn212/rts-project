@@ -6,7 +6,7 @@ class Singleton
 private:
 										Singleton(const Singleton&);
 protected:
-	Singleton() {}
+										Singleton() {}
 public:
 
 	static T* GetInstance() 

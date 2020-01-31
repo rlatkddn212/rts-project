@@ -63,7 +63,7 @@ void GameStage::Update(float deltaTime)
 	for (auto player : mPlayers)
 	{
 		vector<shared_ptr<RTSObject> > obj;
-		for (int i = 0; i < mPlayers.size(); ++i)
+		for (size_t i = 0; i < mPlayers.size(); ++i)
 		{
 			if (player != mPlayers[i])
 			{

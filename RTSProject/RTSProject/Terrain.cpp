@@ -340,7 +340,7 @@ std::vector<glm::ivec2> Terrain::GetPath(glm::ivec2 startPos, glm::ivec2 endPos,
 			break;
 		}
 
-		for (int i = 0; i < 8; ++i)
+		for (size_t i = 0; i < 8; ++i)
 		{
 			if (nowTile.neigbors[i] != nullptr)
 			{
@@ -490,7 +490,7 @@ bool Terrain::GetClosedPosition(glm::ivec2 p1, glm::ivec2* closePos)
 	{
 		if (0 <= ny && ny < mSize.y)
 		{
-			for (int i = 0; i < n; ++i)
+			for (size_t i = 0; i < n; ++i)
 			{
 				nx = nx + d;
 				if (0 <= nx && nx < mSize.x)
@@ -507,7 +507,7 @@ bool Terrain::GetClosedPosition(glm::ivec2 p1, glm::ivec2* closePos)
 		}
 		if (0 <= nx && nx < mSize.x)
 		{
-			for (int i = 0; i < n; ++i)
+			for (size_t i = 0; i < n; ++i)
 			{
 				ny = ny + d;
 				if (0 <= ny && ny < mSize.y)
@@ -532,9 +532,9 @@ bool Terrain::GetClosedPosition(glm::ivec2 p1, glm::ivec2* closePos)
 
 void Terrain::InitTileState()
 {
-	for (int i = 0; i < 100; ++i)
+	for (size_t i = 0; i < 100; ++i)
 	{
-		for (int j = 0; j < 100; ++j)
+		for (size_t j = 0; j < 100; ++j)
 		{
 			mTile[i][j].mTileState = TileState::None;
 		}
@@ -607,11 +607,11 @@ void Terrain::CreateAlphaMaps()
 	float min_range[] = { 0.0f, 1.0f, 15.0f };
 	float max_range[] = { 2.0f, 16.0f, 21.0f };
 
-	for (int i = 0; i < 3; ++i)
+	for (size_t i = 0; i < 3; ++i)
 	{
-		for (int y = 0; y < 128; ++y)
+		for (size_t y = 0; y < 128; ++y)
 		{
-			for (int x = 0; x < 128; ++x)
+			for (size_t x = 0; x < 128; ++x)
 			{
 				int hm_x = (int)(mHeightMap->mSize.x * (x / (float)(128)));
 				int hm_y = (int)(mHeightMap->mSize.y * (y / (float)(128)));
@@ -638,7 +638,7 @@ void Terrain::CreateAlphaMaps()
 
 void Terrain::Update(float deltaTime)
 {
-	for (int i = 0; i < (int)mPatches.size(); ++i)
+	for (size_t i = 0; i < mPatches.size(); ++i)
 		mPatches[i]->Update(deltaTime);
 }
 
@@ -649,12 +649,12 @@ void Terrain::RenderShadow(std::shared_ptr<Camera> camera)
 	glm::mat4 view = camera->GetViewMatrix();
 	mat = perspect * view * mat;
 
-	for (int i = 0; i < (int)mPatches.size(); ++i)
+	for (size_t i = 0; i < mPatches.size(); ++i)
 	{
 		mPatches[i]->RenderShadow(mat);
 	}
 
-	for (int i = 0; i < mModelList.size(); ++i)
+	for (size_t i = 0; i < mModelList.size(); ++i)
 	{
 		mModelList[i]->RenderShadow(camera);
 	}
@@ -678,14 +678,14 @@ void Terrain::Render(std::shared_ptr<Camera> camera)
 	glActiveTexture(GL_TEXTURE4);
 	mFogTexture->SetActive();
 
-	for (int i = 0; i < (int)mPatches.size(); ++i)
+	for (size_t i = 0; i < mPatches.size(); ++i)
 	{
 		mPatches[i]->Render(mat);
 	}
 
 	glActiveTexture(GL_TEXTURE1);
 	mFogTexture->SetActive();
-	for (int i = 0; i < mModelList.size(); ++i)
+	for (size_t i = 0; i < mModelList.size(); ++i)
 	{
 		mModelList[i]->Render(camera);
 	}
@@ -744,7 +744,7 @@ void Terrain::CreateMapTexture()
 	voidTexture->CreateTexture(100, 100, 255);
 	voidTexture->SetActive();
 	
-	for (int i = 0; i < (int)mPatches.size(); ++i)
+	for (size_t i = 0; i < mPatches.size(); ++i)
 	{
 		mPatches[i]->Render(mat);
 	}

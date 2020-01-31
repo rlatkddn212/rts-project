@@ -16,7 +16,7 @@ void GamePlayer::Initialize(shared_ptr<Terrain> terrain, int w, int h)
 {
 	Player::Initialize(terrain, w, h);
 
-	for (int i = 0; i < mUnits.size(); ++i)
+	for (size_t i = 0; i < mUnits.size(); ++i)
 	{
 		mUnits[i]->SetColor(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
 	}
@@ -50,7 +50,7 @@ bool GamePlayer::PressUnitCommand(bool * keys)
 	}
 	else if (keys[GLFW_KEY_S] == true)
 	{
-		for (int i = 0; i < mSelectedUnit.size(); ++i)
+		for (size_t i = 0; i < mSelectedUnit.size(); ++i)
 		{
 			mSelectedUnit[i]->SetStopCommand();
 		}
@@ -59,7 +59,7 @@ bool GamePlayer::PressUnitCommand(bool * keys)
 	}
 	else if (keys[GLFW_KEY_H] == true)
 	{
-		for (int i = 0; i < mSelectedUnit.size(); ++i)
+		for (size_t i = 0; i < mSelectedUnit.size(); ++i)
 		{
 			mSelectedUnit[i]->SetHoldCommand();
 		}
@@ -166,7 +166,7 @@ void GamePlayer::MouseButton(std::shared_ptr<Camera> camera, int button, int act
 		glm::ivec2 pos;
 		if (mTerrain->Intersect(ray, pos))
 		{
-			for (int i = 0; i < mUnits.size(); ++i)
+			for (size_t i = 0; i < mUnits.size(); ++i)
 			{
 				if (mUnits[i]->IsSelected())
 				{
@@ -229,7 +229,7 @@ void GamePlayer::CommandUnit(std::shared_ptr<Camera> camera)
 	
 	if (mTerrain->Intersect(ray, pos))
 	{
-		for (int i = 0; i < mSelectedUnit.size(); ++i)
+		for (size_t i = 0; i < mSelectedUnit.size(); ++i)
 		{
 			if (mCommandState == PressA)
 			{
@@ -271,7 +271,7 @@ bool GamePlayer::CreateBuilding(std::shared_ptr<Camera> camera)
 
 void GamePlayer::SelectUnitInRect(std::shared_ptr<Camera> camera)
 {
-	for (int i = 0; i < mUnits.size(); ++i)
+	for (size_t i = 0; i < mUnits.size(); ++i)
 	{
 		glm::vec2 p = mUnits[i]->GetScreenPos(camera);
 		p.x = p.x * (mWidth / 2) + mWidth / 2;
@@ -290,13 +290,13 @@ bool GamePlayer::IsSelectUnit(std::shared_ptr<Camera> camera)
 {
 	Ray ray;
 	ray.SetRay(camera, mMouseX, mMouseY);
-	for (int i = 0; i < mUnits.size(); ++i)
+	for (size_t i = 0; i < mUnits.size(); ++i)
 	{
 		mUnits[i]->UnSelect();
 		mSelectedUnit.clear();
 	}
 
-	for (int i = 0; i < mUnits.size(); ++i)
+	for (size_t i = 0; i < mUnits.size(); ++i)
 	{
 		if (mUnits[i]->Intersect(ray))
 		{
@@ -314,7 +314,7 @@ std::shared_ptr<RTSObject> GamePlayer::IsSelectEmeryUnit(std::shared_ptr<Camera>
 {
 	Ray ray;
 	ray.SetRay(camera, mMouseX, mMouseY);
-	for (int i = 0; i < mEmeryUnits.size(); ++i)
+	for (size_t i = 0; i < mEmeryUnits.size(); ++i)
 	{
 		shared_ptr<RTSObject> unit = mEmeryUnits[i].lock();
 		if (unit != nullptr && unit->Intersect(ray))
@@ -328,7 +328,7 @@ std::shared_ptr<RTSObject> GamePlayer::IsSelectEmeryUnit(std::shared_ptr<Camera>
 
 void GamePlayer::BuildingToPlace(int type)
 {
-	for (int i = 0; i < mUnits.size(); ++i)
+	for (size_t i = 0; i < mUnits.size(); ++i)
 	{
 		mUnits[i]->UnSelect();
 	}

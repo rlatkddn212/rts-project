@@ -1,6 +1,6 @@
 #version 430 core
-out float FragColor;
 
+out float FragColor;
 in vec2 fragTexCoord;
 
 layout(binding = 0) uniform sampler2D uGWorldPos;
@@ -15,7 +15,7 @@ float bias = 0.025;
 
 const vec2 noiseScale = vec2(1024.0/4.0, 768.0/4.0); 
 
-uniform mat4 projection;
+uniform mat4 uProjectionMat;
 uniform mat4 uViewMat;
 
 void main()
@@ -41,7 +41,7 @@ void main()
         
 		// 텍스쳐 좌표를 얻기 위해 스크린 좌표로 투영
         vec4 offset = vec4(samplePos, 1.0);
-		offset = projection * offset;
+		offset = uProjectionMat * offset;
         offset.xyz /= offset.w;
         offset.xyz = offset.xyz * 0.5 + 0.5;
         

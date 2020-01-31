@@ -70,13 +70,13 @@ void RenderManager::Initialize()
 
 	std::vector<std::pair<std::string, int> > shaderCodies;
 	shaderCodies.push_back(make_pair(ReadShaderFile("Sprite.vert"), GL_VERTEX_SHADER));
-	shaderCodies.push_back(make_pair(ReadShaderFile("GBufferGlobalLight.frag"), GL_FRAGMENT_SHADER));
+	shaderCodies.push_back(make_pair(ReadShaderFile("gbuffer_global_light.frag"), GL_FRAGMENT_SHADER));
 	mLightShader = std::make_shared<Shader>();
 	mLightShader->BuildShader(shaderCodies);
 	
 	shaderCodies.clear();
 	shaderCodies.push_back(make_pair(ReadShaderFile("Sprite.vert"), GL_VERTEX_SHADER));
-	shaderCodies.push_back(make_pair(ReadShaderFile("GBufferPointLight.frag"), GL_FRAGMENT_SHADER));
+	shaderCodies.push_back(make_pair(ReadShaderFile("gbuffer_point_light.frag"), GL_FRAGMENT_SHADER));
 	mPointLightShader = std::make_shared<Shader>();
 	mPointLightShader->BuildShader(shaderCodies);
 
@@ -103,28 +103,29 @@ void RenderManager::Initialize()
 void RenderManager::AddQueue(std::shared_ptr<RenderObject> obj)
 {
 	std::unique_lock<std::mutex> lk(mMutex);
-	cv.wait(lk, [&]() { return mCount < mSize; });
-	q.push(obj);
-	mCount++;
+	mCV.wait(lk, [&]() { return mCount < mSize; });
+	mQueue.push(obj);
+	++mCount;
+
 	lk.unlock();
-	cv.notify_one();
+	mCV.notify_one();
 }
 
 std::vector<std::shared_ptr<RenderObject>> RenderManager::GetQueue()
 {
 	std::vector<std::shared_ptr<RenderObject>> ret;
 	std::unique_lock<std::mutex> lk(mMutex);
-	cv.wait(lk, [&]() { return mCount != 0; });
+	mCV.wait(lk, [&]() { return mCount != 0; });
 	
-	while (!q.empty())
+	while (!mQueue.empty())
 	{
-		ret.push_back(q.front());
-		q.pop();
+		ret.push_back(mQueue.front());
+		mQueue.pop();
 		mCount--;
 	}
 
 	lk.unlock();
-	cv.notify_one();
+	mCV.notify_one();
 
 	return ret;
 }
@@ -148,7 +149,7 @@ void RenderManager::Render()
 	DrawFromGBuffer(renderData[0]->mCamera, camera);
 	//DrawDepthBuffer(renderData[0]->mCamera);
 
-	for (int i = 0; i < renderData.size(); ++i)
+	for (size_t i = 0; i < renderData.size(); ++i)
 	{
 		if (renderData[i]->GetRenderState() == ForwardRendering)
 		{
@@ -157,7 +158,7 @@ void RenderManager::Render()
 		}
 	}
 
-	for (int i = 0; i < renderData.size(); ++i)
+	for (size_t i = 0; i < renderData.size(); ++i)
 	{
 		if (renderData[i]->GetRenderState() == EffectRendering)
 		{
@@ -166,7 +167,7 @@ void RenderManager::Render()
 		}
 	}
 
-	for (int i = 0; i < renderData.size(); ++i)
+	for (size_t i = 0; i < renderData.size(); ++i)
 	{
 		if (renderData[i]->GetRenderState() == UIRendering)
 		{
@@ -188,7 +189,7 @@ void RenderManager::DrawShadowMap(unsigned int framebuffer, std::shared_ptr<Came
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
 
-	for (int i = 0; i < renderObj.size(); ++i)
+	for (size_t i = 0; i < renderObj.size(); ++i)
 	{
 		if (renderObj[i]->GetRenderState() == DeferedRendering)
 		{
@@ -223,7 +224,7 @@ void RenderManager::DrawSSAO(std::shared_ptr<Camera> camera)
 
 	// 샘플 커널 생성
 	std::vector<glm::vec3> ssaoKernel;
-	for (unsigned int i = 0; i < 64; ++i)
+	for (size_t i = 0; i < 64; ++i)
 	{
 		// [-1~1], [-1~1], [0~1] 샘플 생성
 		glm::vec3 sample(randomFloats(generator) * 2.0 - 1.0, randomFloats(generator) * 2.0 - 1.0, randomFloats(generator));
@@ -240,7 +241,7 @@ void RenderManager::DrawSSAO(std::shared_ptr<Camera> camera)
 
 	// 샘플 uniform 추가
 	char buf[128] = {};
-	for (unsigned int i = 0; i < 64; ++i)
+	for (size_t i = 0; i < 64; ++i)
 	{
 		sprintf(buf, "samples[%d]", i);
 		mSSAOShader->SetVectorUniform(buf, ssaoKernel[i]);
@@ -248,7 +249,7 @@ void RenderManager::DrawSSAO(std::shared_ptr<Camera> camera)
 
 	// 회전에 필요한 4x4 노이즈 텍스쳐 생성
 	std::vector<glm::vec3> ssaoNoise;
-	for (unsigned int i = 0; i < 16; i++)
+	for (size_t i = 0; i < 16; i++)
 	{
 		// z 축 회전이라 z 값은 0
 		glm::vec3 noise(randomFloats(generator) * 2.0 - 1.0, randomFloats(generator) * 2.0 - 1.0, 0.0f);
@@ -282,7 +283,7 @@ void RenderManager::DrawSSAO(std::shared_ptr<Camera> camera)
 	mSSAOShader->SetMatrixUniform("uViewProj", m);
 	mSSAOShader->SetMatrixUniform("uWorldTransform", world);
 	
-	mSSAOShader->SetMatrixUniform("projection", camera->GetProjectionMatrix());
+	mSSAOShader->SetMatrixUniform("uProjectionMat", camera->GetProjectionMatrix());
 	mSSAOShader->SetMatrixUniform("uViewMat", camera->GetViewMatrix());
 
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
@@ -306,7 +307,7 @@ void RenderManager::DrawGBuffer(unsigned int framebuffer, std::vector<std::share
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
 
-	for (int i = 0; i < renderObj.size(); ++i)
+	for (size_t i = 0; i < renderObj.size(); ++i)
 	{
 		if (renderObj[i]->GetRenderState() == DeferedRendering)
 		{

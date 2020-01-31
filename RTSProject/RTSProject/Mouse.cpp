@@ -172,9 +172,9 @@ void Mouse::UseGLFWCursor()
 	int width;
 	unsigned char* cursorImage = SOIL_load_image("Cursor/cursor.dds", &width, &height, &channels, SOIL_LOAD_AUTO);
 
-	for (int i = 0; i < 20; ++i)
+	for (size_t i = 0; i < 20; ++i)
 	{
-		for (int j = 0; j < 20; ++j)
+		for (size_t j = 0; j < 20; ++j)
 		{
 			mPixel[0][i * 20 * channels + j * channels + 0] = cursorImage[i * width * channels + j * channels + 0];
 			mPixel[0][i * 20 * channels + j * channels + 1] = cursorImage[i * width * channels + j * channels + 1];
@@ -183,14 +183,14 @@ void Mouse::UseGLFWCursor()
 		}
 	}
 
-	for (int k = 0; k < 4; ++k)
+	for (size_t k = 0; k < 4; ++k)
 	{
 		int x = k / 2;
 		int y = k % 2 + 1;
 
-		for (int i = 0; i < 20; ++i)
+		for (size_t i = 0; i < 20; ++i)
 		{
-			for (int j = 0; j < 20; ++j)
+			for (size_t j = 0; j < 20; ++j)
 			{
 				mPixel[k + 1][i * 20 * channels + j * channels + 0] = cursorImage[(i + 20 * y) * width  * channels + j * channels + 0 + channels * 20 * x];
 				mPixel[k + 1][i * 20 * channels + j * channels + 1] = cursorImage[(i + 20 * y) * width  * channels + j * channels + 1 + channels * 20 * x];

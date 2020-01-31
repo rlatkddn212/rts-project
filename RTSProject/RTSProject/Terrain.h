@@ -63,7 +63,7 @@ struct Tile
 		f = 0.0f;
 		g = 0.0f;
 		parent = nullptr;
-		for (int i = 0; i < 8; ++i)
+		for (size_t i = 0; i < 8; ++i)
 		{
 			neigbors[i] = nullptr;
 		}

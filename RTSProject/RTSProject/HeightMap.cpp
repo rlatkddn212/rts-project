@@ -71,28 +71,14 @@ bool HeightMap::LoadFromFile(const std::string& fileName)
 	// 버텍스들을 OpenGL로
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(
-		0,                  // 0번째 속성(attribute).
-		3,                  // 크기(size)
-		GL_FLOAT,           // 타입(type)
-		GL_FALSE,           // 정규화(normalized)?
-		0,                  // 다음 요소 까지 간격(stride)
-		(void*)0            // 배열 버퍼의 오프셋(offset; 옮기는 값)
-	);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 	glGenBuffers(1, &mUvBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, mUvBuffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(uv_buffer_data), uv_buffer_data, GL_STATIC_DRAW);
 	
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(
-		1,					// 1번째 속성(attribute).
-		2,                  // 크기(size)
-		GL_FLOAT,           // 타입(type)
-		GL_FALSE,           // normalized
-		0,                  // 다음 요소 까지 간격
-		(void*)0            // 배열 버퍼의 오프셋
-	);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 	int mWidth;
 	int mHeight;
@@ -101,7 +87,6 @@ bool HeightMap::LoadFromFile(const std::string& fileName)
 	unsigned char* image = SOIL_load_image(fileName.c_str(),
 		&mWidth, &mHeight, &channels, SOIL_LOAD_AUTO);
 
-	
 	glGenTextures(1, &mTexture);
 	glBindTexture(GL_TEXTURE_2D, mTexture);
 
@@ -127,7 +112,8 @@ bool HeightMap::LoadFromFile(const std::string& fileName)
 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 	{
-		printf("no");
+		assert(0);
+		printf("프래임 버퍼 완전성 위배");
 	}
 
 	//랜더링
@@ -161,7 +147,8 @@ bool HeightMap::LoadFromFile(const std::string& fileName)
 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 	{
-		printf("no");
+		assert(0);
+		printf("프래임 버퍼 완전성 위배");
 	}
 
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
@@ -172,21 +159,21 @@ bool HeightMap::LoadFromFile(const std::string& fileName)
 
 	SOIL_save_image("hello.bmp", SOIL_SAVE_TYPE_BMP, 100, 100, 3, bytes);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	for (int i = 0; i < mSize.y; ++i)
+	for (size_t i = 0; i < mSize.y; ++i)
 	{
-		for (int j = 0; j < mSize.x; ++j)
+		for (size_t j = 0; j < mSize.x; ++j)
 		{
 			unsigned char *b = bytes + i * mSize.x * 3 + j * 3;
 			mHeightMap[j + i * mSize.x] = ((float)*b / 255.0f) * 15.0f;
 		}
 	}
 
+	SOIL_free_image_data(image);
 	delete[] bytes;
 
 	return true;
 }
 
-// 해설좀 보자
 bool HeightMap::CreateRandomHeightMap(int seed, float noiseSize, float persistence, int octaves)
 {
 	for (int y = 0; y < mSize.y; y++)
@@ -199,7 +186,7 @@ bool HeightMap::CreateRandomHeightMap(int seed, float noiseSize, float persisten
 
 			float total = 0;
 
-			for (int i = 0; i < octaves; ++i)
+			for (size_t i = 0; i < octaves; ++i)
 			{
 				float freq = pow(2.0f, i);
 				float amp = pow(persistence, i);
@@ -226,8 +213,8 @@ bool HeightMap::CreateRandomHeightMap(int seed, float noiseSize, float persisten
 			}
 
 			int b = (int)(128 + total * 128.0f);
-			if (b < 0)b = 0;
-			if (b > 255)b = 255;
+			if (b < 0) b = 0;
+			if (b > 255) b = 255;
 
 			//Save to heightMap
 			mHeightMap[x + y * mSize.x] = ((float)b / 255.0f) * mMaxHeight;
@@ -261,14 +248,7 @@ void HeightMap::CreateParticles()
 	// 버텍스들을 OpenGL로
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 3 * mSize.x * mSize.y, vertices, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(
-		0,                  // 0번째 속성(attribute).
-		3,                  // 크기(size)
-		GL_FLOAT,           // 타입(type)
-		GL_FALSE,           // 정규화(normalized)?
-		0,                  // 다음 요소 까지 간격(stride)
-		(void*)0            // 배열 버퍼의 오프셋(offset; 옮기는 값)
-	);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 	// 색상을 변경 시킨다.
 	GLfloat color[] = { 1.0f, 0.5f, 0.0, 1.0 };

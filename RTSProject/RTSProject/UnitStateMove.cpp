@@ -18,7 +18,7 @@ bool UnitStateMove::FindEnemyInRange(Unit * ownUnit, std::shared_ptr<Terrain> te
 		float minSight = 100.0f;
 		glm::vec3 pos2 = ownUnit->GetPosition();
 
-		for (int i = 0; i < mEnemy.size(); ++i)
+		for (size_t i = 0; i < mEnemy.size(); ++i)
 		{
 			shared_ptr<RTSObject> enemyUnit = mEnemy[i].lock();
 			if (enemyUnit)

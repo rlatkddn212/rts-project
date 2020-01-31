@@ -99,7 +99,7 @@ void Unit::Update(float deltaTime)
 		}
 	}
 
-	for (int i = 0; i < mEffect.size(); ++i)
+	for (size_t i = 0; i < mEffect.size(); ++i)
 	{
 		mEffect[i]->Update(deltaTime);
 	}
@@ -171,7 +171,7 @@ void Unit::AddRender(std::shared_ptr<Camera> camera)
 	robox->mCamera = camera;
 	RenderManager::GetInstance()->AddQueue(robox);
 
-	for (int i = 0; i < mEffect.size(); ++i)
+	for (size_t i = 0; i < mEffect.size(); ++i)
 	{
 		mEffect[i]->mCamera = camera;
 		RenderManager::GetInstance()->AddQueue(mEffect[i]);

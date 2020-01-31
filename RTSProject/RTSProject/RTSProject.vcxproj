@@ -149,7 +149,7 @@
     <ClInclude Include="ObjectResourcePool.h" />
     <ClInclude Include="OrthoCamera.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="RenderComponent.h" />
+    <ClInclude Include="PointLight.h" />
     <ClInclude Include="RenderManager.h" />
     <ClInclude Include="RenderObject.h" />
     <ClInclude Include="RTSObject.h" />
@@ -213,7 +213,7 @@
     <ClCompile Include="ObjectResourcePool.cpp" />
     <ClCompile Include="OrthoCamera.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="RenderComponent.cpp" />
+    <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="RenderManager.cpp" />
     <ClCompile Include="RenderObject.cpp" />
     <ClCompile Include="RTSObject.cpp" />
@@ -263,9 +263,8 @@
     <None Include="color.frag" />
     <None Include="color.vert" />
     <None Include="fog.frag" />
-    <None Include="GBufferGlobalLight.frag" />
-    <None Include="GBufferPointLight.frag" />
-    <None Include="GBufferWrite.frag" />
+    <None Include="gbuffer_global_light.frag" />
+    <None Include="gbuffer_point_light.frag" />
     <None Include="height.frag" />
     <None Include="height.vert" />
     <None Include="line.frag" />
@@ -274,7 +273,6 @@
     <None Include="minimap.frag" />
     <None Include="minimap.vert" />
     <None Include="shadow_map.frag" />
-    <None Include="shadow_map.vert" />
     <None Include="sight.frag" />
     <None Include="skinned.frag" />
     <None Include="skinned.vert" />

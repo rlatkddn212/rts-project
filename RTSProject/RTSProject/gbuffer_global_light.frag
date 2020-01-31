@@ -51,9 +51,9 @@ float ReadShadowMap(vec3 eyeDir)
 
 	float shadow = 0.0;
 	vec2 texelSize = 1.0 / textureSize(uGShadowMap, 0);
-	for(int x = -1; x <= 1; ++x)
+	for (int x = -1; x <= 1; ++x)
 	{
-		for(int y = -1; y <= 1; ++y)
+		for (int y = -1; y <= 1; ++y)
 		{
 			float pcfDepth = texture2D(uGShadowMap, lightPos.xy + vec2(x, y) * texelSize).r; 
 			// shadow map에 depth보다 멀리있다면 그림자가 생김
@@ -81,7 +81,7 @@ vec3 CalcLight(float AmbientOcclusion, vec3 P, vec3 N, vec3 L, vec3 V, vec3 R)
 	if (diffuseFactor > 0.0f)
 	{
 		float specularFactor = dot(V, R);
-		if(specularFactor > 0.0f)
+		if (specularFactor > 0.0f)
 		{
 			specularFactor = pow(specularFactor, 2.0);
 			specularColour = SpecColor * specularFactor;

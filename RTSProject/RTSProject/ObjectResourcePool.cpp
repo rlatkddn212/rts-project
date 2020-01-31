@@ -6,19 +6,19 @@ void ObjectResourcePool::Initialize()
 {
 	std::string s = "Assets/Model/magician.X";
 
-	for (int i = 0; i < 3; ++i)
+	for (size_t i = 0; i < 3; ++i)
 	{
 		mUnits.push_back(make_shared<Unit>());
 		mUnits[i]->MakeModel(s);
 	}
 
-	for (int i = 0; i < 3; ++i)
+	for (size_t i = 0; i < 3; ++i)
 	{
 		mBuildings.push_back(make_shared<Building>());
 		mBuildings[i]->MakeModel(i);
 	}
 	
-	for (int i = 0; i < 2; ++i)
+	for (size_t i = 0; i < 2; ++i)
 	{
 		mMapObjects.push_back(make_shared<MapObject>());
 		mMapObjects[i]->MakeModel(i);

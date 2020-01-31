@@ -12,13 +12,6 @@
 #include "SSAO.h"
 #include "ShadowMap.h"
 
-struct DirectLight
-{
-	glm::vec3 dir;
-	glm::vec3 diffuseColor;
-	glm::vec3 specularColor;
-};
-
 class RenderManager : public Singleton<RenderManager>
 {
 public:
@@ -47,9 +40,9 @@ private:
 	std::shared_ptr<Shader>					mSSAOBlurShader;
 	std::shared_ptr<Shader>					mTestShader;
 
-	std::condition_variable					cv;
+	std::condition_variable					mCV;
 	std::mutex								mMutex;
-	std::queue<std::shared_ptr<RenderObject>> q;
+	std::queue<std::shared_ptr<RenderObject>> mQueue;
 
 	int										mSize;
 	int										mCount;

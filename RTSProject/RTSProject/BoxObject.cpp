@@ -51,7 +51,7 @@ void BoxObject::MakeModel(glm::vec3 minV, glm::vec3 maxV)
 	v.push_back(glm::vec3(minV.x, maxV.y, maxV.z));
 	v.push_back(maxV);
 
-	for (int i = 0; i < v.size(); ++i)
+	for (size_t i = 0; i < v.size(); ++i)
 	{
 		vert[i * 8] = v[i].x;
 		vert[i * 8 + 1] = v[i].y;
@@ -131,7 +131,7 @@ bool BoxObject::RayBoxIntersect(const glm::vec3 & orig, const glm::vec3 & dir)
 	v.push_back(glm::vec3(mMinV.x, mMaxV.y, mMaxV.z));
 	v.push_back(mMaxV);
 
-	for (int i = 0; i < 12; ++i)
+	for (size_t i = 0; i < 12; ++i)
 	{
 		if (RayTriangleIntersect(orig, dir, v[indices[i * 3]], v[indices[i * 3 + 1]], v[indices[i * 3 + 2]]))
 		{

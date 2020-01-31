@@ -213,9 +213,6 @@
     <ClInclude Include="MoveComponent.h">
       <Filter>소스 파일\Component</Filter>
     </ClInclude>
-    <ClInclude Include="RenderComponent.h">
-      <Filter>소스 파일\Component</Filter>
-    </ClInclude>
     <ClInclude Include="RenderManager.h">
       <Filter>소스 파일\Manager</Filter>
     </ClInclude>
@@ -251,6 +248,9 @@
     </ClInclude>
     <ClInclude Include="OrthoCamera.h">
       <Filter>소스 파일\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="PointLight.h">
+      <Filter>소스 파일\Light</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -404,9 +404,6 @@
     <ClCompile Include="MoveComponent.cpp">
       <Filter>소스 파일\Component</Filter>
     </ClCompile>
-    <ClCompile Include="RenderComponent.cpp">
-      <Filter>소스 파일\Component</Filter>
-    </ClCompile>
     <ClCompile Include="RenderManager.cpp">
       <Filter>소스 파일\Manager</Filter>
     </ClCompile>
@@ -442,6 +439,9 @@
     </ClCompile>
     <ClCompile Include="OrthoCamera.cpp">
       <Filter>소스 파일\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="PointLight.cpp">
+      <Filter>소스 파일\Light</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -523,25 +523,19 @@
     <None Include="minimap.vert">
       <Filter>소스 파일\Shader</Filter>
     </None>
-    <None Include="GBufferWrite.frag">
-      <Filter>소스 파일\Shader</Filter>
-    </None>
-    <None Include="GBufferGlobalLight.frag">
-      <Filter>소스 파일\Shader</Filter>
-    </None>
-    <None Include="GBufferPointLight.frag">
-      <Filter>소스 파일\Shader</Filter>
-    </None>
     <None Include="ssao.frag">
       <Filter>소스 파일\Shader</Filter>
     </None>
     <None Include="ssao_blur.frag">
       <Filter>소스 파일\Shader</Filter>
     </None>
-    <None Include="shadow_map.vert">
+    <None Include="shadow_map.frag">
       <Filter>소스 파일\Shader</Filter>
     </None>
-    <None Include="shadow_map.frag">
+    <None Include="gbuffer_global_light.frag">
+      <Filter>소스 파일\Shader</Filter>
+    </None>
+    <None Include="gbuffer_point_light.frag">
       <Filter>소스 파일\Shader</Filter>
     </None>
   </ItemGroup>

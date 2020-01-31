@@ -34,14 +34,7 @@ FogOfWar::FogOfWar(int w, int h)
 	// 버텍스들을 OpenGL로
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexBufferData), vertexBufferData, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(
-		0,                  // 0번째 속성(attribute).
-		3,                  // 크기(size)
-		GL_FLOAT,           // 타입(type)
-		GL_FALSE,           // 정규화(normalized)?
-		0,                  // 다음 요소 까지 간격(stride)
-		(void*)0            // 배열 버퍼의 오프셋(offset; 옮기는 값)
-	);
+	glVertexAttribPointer(0, 3,	GL_FLOAT, GL_FALSE,	0, (void*)0);
 
 	GLuint uvbuffer;
 	glGenBuffers(1, &uvbuffer);
@@ -49,14 +42,7 @@ FogOfWar::FogOfWar(int w, int h)
 	glBufferData(GL_ARRAY_BUFFER, sizeof(uvBufferData), uvBufferData, GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(
-		1,					// 1번째 속성(attribute).
-		2,                  // 크기(size)
-		GL_FLOAT,           // 타입(type)
-		GL_FALSE,           // normalized
-		0,                  // 다음 요소 까지 간격
-		(void*)0            // 배열 버퍼의 오프셋
-	);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 	GLuint framebuffer;
 	glGenFramebuffers(1, &framebuffer);
@@ -69,6 +55,7 @@ FogOfWar::FogOfWar(int w, int h)
 	// Frame buffer 완전성 위배
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 	{
+		assert(0);
 		return;
 	}
 
@@ -137,6 +124,7 @@ void FogOfWar::Update(float deltaTime, std::vector<std::shared_ptr<Unit>> unit)
 
 	glm::mat4 proj = glm::ortho(-50.0f, 50.f, -50.0f, 50.0f, -1000.0f, 1000.0f);
 	glm::mat4 view = glm::lookAt(glm::vec3(50.0f, -100.0f, 50.0f), glm::vec3(50.0f, 0.0f, 50.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	
 	// visible 유닛 위치
 	{
 		glBindVertexArray(mVao);
@@ -154,7 +142,7 @@ void FogOfWar::Update(float deltaTime, std::vector<std::shared_ptr<Unit>> unit)
 		}
 
 		std::vector<float> posData(unit.size() * 3);
-		for (int i = 0; i < unit.size(); ++i)
+		for (size_t i = 0; i < unit.size(); ++i)
 		{
 			glm::vec3 pos = unit[i]->GetPosition();
 			posData[i * 3] = pos.x;
@@ -171,14 +159,7 @@ void FogOfWar::Update(float deltaTime, std::vector<std::shared_ptr<Unit>> unit)
 		glEnableVertexAttribArray(2);
 		glBindBuffer(GL_ARRAY_BUFFER, unitPosBuffer);
 
-		glVertexAttribPointer(
-			2,                  // 0번째 속성(attribute).
-			3,                  // 크기(size)
-			GL_FLOAT,           // 타입(type)
-			GL_FALSE,           // 정규화(normalized)?
-			0,                  // 다음 요소 까지 간격(stride)
-			(void*)0            // 배열 버퍼의 오프셋(offset; 옮기는 값)
-		);
+		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 		glVertexAttribDivisor(2, 1);
 

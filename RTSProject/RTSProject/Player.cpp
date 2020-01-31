@@ -17,7 +17,7 @@ void Player::Initialize(shared_ptr<Terrain> terrain, int w, int h)
 	mBuildingToPlace = nullptr;
 
 	// À¯´Ö ¹èÄ¡
-	for (int i = 0; i < 5; ++i)
+	for (size_t i = 0; i < 5; ++i)
 	{
 		int x = rand() % 100;
 		int y = rand() % 100;
@@ -52,7 +52,7 @@ void Player::Update(float deltaTime)
 		}
 	}
 
-	for (int i = 0; i < mUnits.size(); ++i)
+	for (size_t i = 0; i < mUnits.size(); ++i)
 	{
 		if (mUnits[i]->FindEnemyInRange(mTerrain, mEmeryUnits))
 		{
@@ -60,7 +60,7 @@ void Player::Update(float deltaTime)
 		}
 	}
 
-	for (int i = 0; i < mUnits.size(); ++i)
+	for (size_t i = 0; i < mUnits.size(); ++i)
 	{
 		mUnits[i]->Update(deltaTime);
 	}
@@ -73,12 +73,12 @@ void Player::AddRender(std::shared_ptr<Camera> camera)
 		mBuildingToPlace->AddRender(camera);
 	}
 
-	for (int i = 0; i < mBuildings.size(); ++i)
+	for (size_t i = 0; i < mBuildings.size(); ++i)
 	{
 		mBuildings[i]->AddRender(camera);
 	}
 
-	for (int i = 0; i < mUnits.size(); ++i)
+	for (size_t i = 0; i < mUnits.size(); ++i)
 	{
 		mUnits[i]->AddRender(camera);
 	}
@@ -86,7 +86,7 @@ void Player::AddRender(std::shared_ptr<Camera> camera)
 
 void Player::SetPosOnTerrain(shared_ptr<Texture> fog)
 {
-	for (int i = 0; i < mUnits.size(); ++i)
+	for (size_t i = 0; i < mUnits.size(); ++i)
 	{
 		mUnits[i]->SetFogTexture(fog);
 	}
@@ -94,7 +94,7 @@ void Player::SetPosOnTerrain(shared_ptr<Texture> fog)
 
 void Player::SetFogTexture(std::shared_ptr<Texture> fog)
 {
-	for (int i = 0; i < mUnits.size(); ++i)
+	for (size_t i = 0; i < mUnits.size(); ++i)
 	{
 		mUnits[i]->SetFogTexture(fog);
 	}
@@ -104,7 +104,7 @@ void Player::SetEnemy(std::vector<std::shared_ptr<RTSObject>>& enemy)
 {
 	mEmeryUnits.clear();
 	mEmeryUnits.reserve(enemy.size());
-	for (int i = 0; i < enemy.size(); ++i)
+	for (size_t i = 0; i < enemy.size(); ++i)
 	{
 		mEmeryUnits.push_back(enemy[i]);
 	}

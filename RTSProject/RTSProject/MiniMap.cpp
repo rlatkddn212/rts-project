@@ -57,14 +57,7 @@ void MiniMap::MakeModel()
 	// 버텍스들을 OpenGL로
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexBufferData), vertexBufferData, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(
-		0,                  // 0번째 속성(attribute).
-		3,                  // 크기(size)
-		GL_FLOAT,           // 타입(type)
-		GL_FALSE,           // 정규화(normalized)?
-		0,                  // 다음 요소 까지 간격(stride)
-		(void*)0            // 배열 버퍼의 오프셋(offset; 옮기는 값)
-	);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 	GLuint uvbuffer;
 	glGenBuffers(1, &uvbuffer);
@@ -72,14 +65,7 @@ void MiniMap::MakeModel()
 	glBufferData(GL_ARRAY_BUFFER, sizeof(uvBufferData), uvBufferData, GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(
-		1,					// 1번째 속성(attribute).
-		2,                  // 크기(size)
-		GL_FLOAT,           // 타입(type)
-		GL_FALSE,           // normalized
-		0,                  // 다음 요소 까지 간격
-		(void*)0            // 배열 버퍼의 오프셋
-	);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 	std::vector<std::pair<std::string, int> > shaderCodies;
 	shaderCodies.push_back(make_pair(ReadShaderFile("minimap.vert"), GL_VERTEX_SHADER));
@@ -143,7 +129,7 @@ void MiniMap::UpdateModel()
 		glBindVertexArray(mVertexArray);
 		unsigned vertexSize = 7 * sizeof(float);
 
-		for (int i = 0; i < 4; ++i)
+		for (size_t i = 0; i < 4; ++i)
 		{
 			verts.push_back((mPos[i].x - 50.0f) / 50.0f);
 			verts.push_back((-mPos[i].z - 50.0f) / 50.0f);
@@ -202,7 +188,7 @@ void MiniMap::Update(float deltaTime, const std::vector<std::shared_ptr<Unit>>& 
 
 	mPos.clear();
 	mPos.reserve(4);
-	for (int i = 0; i < 4; ++i)
+	for (size_t i = 0; i < 4; ++i)
 	{
 		float t = 0.0f;
 		if (RayIntersectPlane(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0, 0.0, 0.0), ray[i].org, ray[i].dir, &t))

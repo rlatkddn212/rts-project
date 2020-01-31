@@ -26,7 +26,7 @@ bool GBuffer::Initialize(int width, int height)
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBuffer);
 
 	// 출력 포트를 여러 사용한다.
-	for (int i = 0; i < NUM_GBUFFER_TEXTURES; ++i)
+	for (size_t i = 0; i < NUM_GBUFFER_TEXTURES; ++i)
 	{
 		shared_ptr<Texture> tex = std::make_shared<Texture>();
 		tex->CreateRenderTexture(width, height, GL_RGB32F);
@@ -35,7 +35,7 @@ bool GBuffer::Initialize(int width, int height)
 	}
 
 	std::vector<GLenum> attachments;
-	for (int i = 0; i < NUM_GBUFFER_TEXTURES; ++i)
+	for (size_t i = 0; i < NUM_GBUFFER_TEXTURES; ++i)
 	{
 		attachments.emplace_back(GL_COLOR_ATTACHMENT0 + i);
 	}
@@ -65,7 +65,7 @@ std::shared_ptr<Texture> GBuffer::GetTexture(Type type)
 
 void GBuffer::SetTexturesActive()
 {
-	for (int i = 0; i < NUM_GBUFFER_TEXTURES; ++i)
+	for (size_t i = 0; i < NUM_GBUFFER_TEXTURES; ++i)
 	{
 		glActiveTexture(GL_TEXTURE0 + i);
 		mTextures[i]->SetActive();

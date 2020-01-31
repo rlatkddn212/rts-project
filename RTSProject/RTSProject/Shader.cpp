@@ -16,9 +16,7 @@ GLuint Shader::BuildShader(std::vector<std::pair<std::string, int> >& shaderCodi
 	int InfoLogLength;
 
 	std::vector<int> shaderIdVec;
-	// 버텍스 쉐이더를 컴파일
-	printf("Compiling shader\n");
-	for (int i = 0; i < shaderCodies.size(); ++i)
+	for (size_t i = 0; i < shaderCodies.size(); ++i)
 	{
 		GLuint shaderID = glCreateShader(shaderCodies[i].second);
 
@@ -55,7 +53,7 @@ GLuint Shader::BuildShader(std::vector<std::pair<std::string, int> >& shaderCodi
 		printf("%s\n", &ProgramErrorMessage[0]);
 	}
 
-	for (int i = 0; i < shaderIdVec.size(); ++i)
+	for (size_t i = 0; i < shaderIdVec.size(); ++i)
 	{
 		glDetachShader(mProgramID, shaderIdVec[i]);
 		glDeleteShader(shaderIdVec[i]);
