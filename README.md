@@ -71,7 +71,7 @@ https://www.youtube.com/watch?v=eS7U9AOfL_A
 | 부대 지정            | 0%     | 5         |
 | 논 타겟 스킬(충돌)   | 0%     | 4         |
 | pve (AI)             | 0%     | 4         |
-| UI                   | 0%     | 4         |
+| UI                   | 10%     | 4         |
 | 음악                 | 0%     | 5         |
 
 
