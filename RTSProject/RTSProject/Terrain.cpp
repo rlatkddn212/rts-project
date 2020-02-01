@@ -750,7 +750,8 @@ void Terrain::CreateMapTexture()
 	}
 
 	glActiveTexture(GL_TEXTURE0);
-	PrintScreen(frameBuffer, "Maptexture.bmp");
+	
+	//PrintScreen(frameBuffer, "Maptexture.bmp");
 	glDeleteFramebuffers(1, &frameBuffer);
 }
 
