@@ -1,3 +1,8 @@
+/**
+ * RenderManager
+ * 게임에 Rendering 처리 클래스
+ */
+
 #pragma once
 #include "Singleton.h"
 #include "RenderObject.h"
@@ -11,7 +16,10 @@
 #include "Shader.h"
 #include "SSAO.h"
 #include "ShadowMap.h"
+#include "FogOfWar.h"
+#include "RTSObject.h"
 
+class FogOfWar;
 class RenderManager : public Singleton<RenderManager>
 {
 public:
@@ -25,10 +33,12 @@ public:
 	void									DrawGBuffer(unsigned int type, std::vector<std::shared_ptr<RenderObject>>& renderObj);
 	void									DrawFromGBuffer(std::shared_ptr<Camera> camera, std::shared_ptr<Camera> lightCamera);
 	void									DrawDepthBuffer(std::shared_ptr<Camera> camera);
-
+	
+	unsigned								GetFrame() { return mFrame; }
 private:
 	std::shared_ptr<VertexArray>			mVerts;
-	
+
+	std::shared_ptr<FogOfWar>				mFogOfWar;
 	std::shared_ptr<ShadowMap>				mShadowMap;
 	std::shared_ptr<GBuffer>				mGBuffer;
 	std::shared_ptr<SSAO>					mSSAO;
@@ -46,4 +56,5 @@ private:
 
 	int										mSize;
 	int										mCount;
+	unsigned								mFrame;
 };

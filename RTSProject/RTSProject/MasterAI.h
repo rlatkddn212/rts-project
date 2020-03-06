@@ -1,3 +1,8 @@
+/**
+ * MasterAI
+ * 마스터 AI 그룹 AI를 관리한다.
+ */
+
 #pragma once
 #include <vector>
 #include "GroupAI.h"

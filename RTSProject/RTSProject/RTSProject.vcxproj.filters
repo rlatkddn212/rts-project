@@ -72,9 +72,6 @@
     <ClInclude Include="Precompiled.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Ray.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
     <ClInclude Include="AxisObject.h">
       <Filter>소스 파일\Object</Filter>
     </ClInclude>
@@ -252,6 +249,9 @@
     <ClInclude Include="PointLight.h">
       <Filter>소스 파일\Light</Filter>
     </ClInclude>
+    <ClInclude Include="CameraRay.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Font.cpp">
@@ -261,9 +261,6 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Precompiled.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Ray.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="AxisObject.cpp">
@@ -442,6 +439,9 @@
     </ClCompile>
     <ClCompile Include="PointLight.cpp">
       <Filter>소스 파일\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraRay.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

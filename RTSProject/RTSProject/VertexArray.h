@@ -1,3 +1,6 @@
+/**
+ * VertexArray
+ */
 #pragma once
 class VertexArray
 {

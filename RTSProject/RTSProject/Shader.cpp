@@ -67,6 +67,9 @@ void Shader::SetActive()
 	glUseProgram(mProgramID);
 }
 
+/**
+ * TODO : glGetUniformLocation에서 반환 받은 loc 값을 따로 저장하고 있어야한다.
+ */
 void Shader::SetMatrixUniform(const char* name, const glm::mat4& matrix)
 {
 	GLuint loc = glGetUniformLocation(mProgramID, name);

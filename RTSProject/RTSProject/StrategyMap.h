@@ -1,3 +1,8 @@
+/**
+ * StrategyMap
+ * 맵 영역에 적들의 위치, 동맹의 위치 값들을 저장해 두고 AI가 사용할 수 있게 한다.
+ */
+
 #pragma once
 #include "Precompiled.h"
 #include <vector>

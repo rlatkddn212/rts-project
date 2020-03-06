@@ -1,15 +1,14 @@
 #pragma once
 
-#include "Precompiled.h"
 #include "Texture.h"
-#include "Unit.h"
-
+#include "RTSObject.h"
+class RTSObject;
 class FogOfWar
 {
 public:
 											FogOfWar(int w, int h);
 
-	virtual	void							Update(float deltaTime, std::vector<std::shared_ptr<Unit> > unit);
+	virtual	void							MakeFogTexture(const std::vector<std::shared_ptr<RTSObject> >& renderobj);
 	virtual void							Render();
 	
 	void									PrintScreen(GLuint framebuffer, const std::string& str);

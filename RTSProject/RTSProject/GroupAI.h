@@ -1,3 +1,8 @@
+/**
+ * GroupAI
+ * 유닛단위의 AI와 Action들을 관리한다.
+ */
+
 #pragma once
 
 #include <vector>

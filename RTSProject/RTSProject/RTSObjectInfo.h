@@ -1,3 +1,8 @@
+/**
+ * RTSObjectInfo
+ * Object에 대한 다양한 정보들이 저장됨
+ */
+
 #pragma once
 
 class RTSObjectInfo

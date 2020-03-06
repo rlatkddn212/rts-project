@@ -90,7 +90,6 @@ FogOfWar::FogOfWar(int w, int h)
 	mFogTexture = std::make_shared<Texture>();
 	mFogTexture->CreateTexture(mWidth, mHeight, 0);
 
-
 	// 유닛 시야
 	std::vector<std::pair<std::string, int> > visibleCodies;
 	
@@ -116,7 +115,7 @@ FogOfWar::FogOfWar(int w, int h)
 	mFogShader.BuildShader(fogCodies);
 }
 
-void FogOfWar::Update(float deltaTime, std::vector<std::shared_ptr<Unit>> unit)
+void FogOfWar::MakeFogTexture(const std::vector<std::shared_ptr<RTSObject> >& renderobj)
 {
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_DEPTH_TEST);
@@ -141,10 +140,10 @@ void FogOfWar::Update(float deltaTime, std::vector<std::shared_ptr<Unit>> unit)
 			return;
 		}
 
-		std::vector<float> posData(unit.size() * 3);
-		for (size_t i = 0; i < unit.size(); ++i)
+		std::vector<float> posData(renderobj.size() * 3);
+		for (size_t i = 0; i < renderobj.size(); ++i)
 		{
-			glm::vec3 pos = unit[i]->GetPosition();
+			glm::vec3 pos = renderobj[i]->GetPosition();
 			posData[i * 3] = pos.x;
 			posData[i * 3 + 1] = pos.y;
 			posData[i * 3 + 2] = -pos.z;
@@ -174,7 +173,7 @@ void FogOfWar::Update(float deltaTime, std::vector<std::shared_ptr<Unit>> unit)
 		mSightTexture->SetActive();
 
 		glBlendFunc(GL_ONE, GL_ONE);
-		glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, unit.size());
+		glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, renderobj.size());
 		
 		//PrintScreen(framebuffer, "visiable.bmp");
 		glDeleteBuffers(1, &unitPosBuffer);
@@ -252,7 +251,6 @@ void FogOfWar::Update(float deltaTime, std::vector<std::shared_ptr<Unit>> unit)
 
 void FogOfWar::Render()
 {
-	// 만들어진 Fog Texture는 Terrain이나 Unit에 Texture로 활용됨
 }
 
 void FogOfWar::PrintScreen(GLuint framebuffer, const std::string& str)

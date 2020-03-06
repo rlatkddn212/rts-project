@@ -41,6 +41,7 @@ void RenderManager::Initialize()
 {
 	mSize = 10000;
 	mCount = 0;
+	mFrame = 1;
 	
 	// frame Buffer 생성
 	mShadowMap = std::make_shared<ShadowMap>();
@@ -51,6 +52,8 @@ void RenderManager::Initialize()
 
 	mSSAO = std::make_shared<SSAO>();
 	mSSAO->Initialize(1024, 768);
+
+	mFogOfWar = std::make_shared<FogOfWar>(1024, 768);
 
 	float vertices[] =
 	{
@@ -100,9 +103,14 @@ void RenderManager::Initialize()
 	mTestShader->BuildShader(shaderCodies);
 }
 
+/**
+ * PreRendering Thead에서 랜더링될 오브젝트를 Queue에 추가
+ * @param obj : 랜더링될 오브젝트
+ */
 void RenderManager::AddQueue(std::shared_ptr<RenderObject> obj)
 {
 	std::unique_lock<std::mutex> lk(mMutex);
+	// 카운터가 초과하면 기다린다.
 	mCV.wait(lk, [&]() { return mCount < mSize; });
 	mQueue.push(obj);
 	++mCount;
@@ -111,6 +119,10 @@ void RenderManager::AddQueue(std::shared_ptr<RenderObject> obj)
 	mCV.notify_one();
 }
 
+/**
+ * Rendering Thread에서 Queue에 저장된 오브젝트를 가져간다.
+ * @return : RenderObject의 벡터
+ */
 std::vector<std::shared_ptr<RenderObject>> RenderManager::GetQueue()
 {
 	std::vector<std::shared_ptr<RenderObject>> ret;
@@ -126,13 +138,32 @@ std::vector<std::shared_ptr<RenderObject>> RenderManager::GetQueue()
 
 	lk.unlock();
 	mCV.notify_one();
-
+	
+	mFrame++;
 	return ret;
 }
 
 void RenderManager::Render()
 {
 	std::vector<std::shared_ptr<RenderObject>> renderData = GetQueue();
+	
+	std::vector<std::shared_ptr<RTSObject>> rtsObjectVec;
+	for (size_t i = 0; i < renderData.size(); ++i)
+	{
+		std::shared_ptr<RTSObject> rtsobj = std::dynamic_pointer_cast<RTSObject>(renderData[i]);
+		if (rtsobj != nullptr)
+		{
+			rtsObjectVec.push_back(rtsobj);
+		}
+	}
+
+	mFogOfWar->MakeFogTexture(rtsObjectVec);
+	
+	std::shared_ptr<Texture> fog = mFogOfWar->GetFogTexture();
+	for (size_t i = 0; i < renderData.size(); ++i)
+	{
+		renderData[i]->SetFogTexture(fog);
+	}
 
 	std::shared_ptr<Camera> camera = std::make_shared<OrthoCamera>();
 	camera->SetCameraPos(glm::vec3(100.0f, 50.0f, -100.0f));
@@ -243,7 +274,7 @@ void RenderManager::DrawSSAO(std::shared_ptr<Camera> camera)
 	char buf[128] = {};
 	for (size_t i = 0; i < 64; ++i)
 	{
-		sprintf(buf, "samples[%d]", i);
+		sprintf_s(buf, "samples[%d]", i);
 		mSSAOShader->SetVectorUniform(buf, ssaoKernel[i]);
 	}
 

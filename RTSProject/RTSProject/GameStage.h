@@ -10,7 +10,6 @@
 #include "Unit.h"
 #include "Building.h"
 #include "MoveComponent.h"
-#include "FogOfWar.h"
 #include "MiniMap.h"
 #include "Player.h"
 #include "GamePlayer.h"
@@ -42,7 +41,6 @@ private:
 	std::shared_ptr<HeightMap>				mHeightMap;
 	std::shared_ptr<Terrain>				mTerrain;
 	std::shared_ptr<AxisObject>				mAxis;
-	std::shared_ptr<FogOfWar>				mFogOfWar;
 	std::shared_ptr<MiniMap>				mMiniMap;
 
 	bool									mIsLeftPress;

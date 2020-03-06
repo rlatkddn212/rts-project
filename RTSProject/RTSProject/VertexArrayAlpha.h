@@ -1,3 +1,7 @@
+/**
+ * VertexArrayAlpha
+ * 지형에 알파 처리를 위한 클래스
+ */
 #pragma once
 class VertexArrayAlpha
 {

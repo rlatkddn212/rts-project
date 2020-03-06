@@ -1,12 +1,11 @@
 #pragma once
-#include "Precompiled.h"
 #include "HeightMap.h"
 #include "Shader.h"
 #include "VertexArrayAlpha.h"
 #include "Texture.h"
 #include "MapObject.h"
 #include "Camera.h"
-#include "Ray.h"
+#include "CameraRay.h"
 #include "RenderManager.h"
 
 class pqComp
@@ -27,7 +26,6 @@ public:
 private:
 	bool reverse;
 };
-
 
 enum TileState
 {
@@ -116,7 +114,7 @@ public:
 	float									GetHeight(glm::vec2 p);
 	glm::vec2								GetSize() { return mSize; }
 
-	bool									Intersect(Ray& ray, glm::ivec2& ret);
+	bool									Intersect(CameraRay& ray, glm::ivec2& ret);
 	bool									RayTriangleIntersect(
 												const glm::vec3& orig, const glm::vec3& dir,
 												const glm::vec3& v0, const glm::vec3& v1, const glm::vec3& v2, glm::vec3& P);
@@ -132,23 +130,19 @@ public:
 
 	bool									IsMovableTile(glm::ivec2 p);
 
-	void									SetFogTexture(std::shared_ptr<Texture> texture);
-
 	void									CreateMapTexture();
 	std::shared_ptr<Texture>				GetMapTexture();
 	void									PrintScreen(GLuint framebuffer, const std::string& str);
 
 private:
 
-	// TODO 배열 크기는 고정, 조절 필요
+	// TODO : 배열 크기는 고정, 조절 필요
 	Tile									mTile[100][100];
 	std::vector<std::pair<int, int> >		mObjectPos;
 	std::shared_ptr<Texture>				alpha;
 	std::shared_ptr<Texture>				mountain;
 	std::shared_ptr<Texture>				snow;
 	std::shared_ptr<Texture>				grass;
-
-	std::shared_ptr<Texture>				mFogTexture;
 
 	glm::vec2								mSize;
 	std::shared_ptr<HeightMap>				mHeightMap;

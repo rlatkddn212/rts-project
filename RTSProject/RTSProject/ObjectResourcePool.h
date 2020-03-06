@@ -1,3 +1,8 @@
+/**
+ * ObjectResourcePool
+ * 싱글턴 클래스로 Game을 시작할 때 모델 파일들을 읽고 저장해둔다.
+ */
+
 #pragma once
 
 #include "Singleton.h"

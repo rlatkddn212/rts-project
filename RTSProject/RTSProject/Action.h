@@ -1,3 +1,8 @@
+/**
+ * AIAction
+ * 유닛들의 명령들을 처리하는 AI
+ */
+
 #pragma once
 
 #include <vector>

@@ -134,7 +134,7 @@ void GamePlayer::CursorPos(std::shared_ptr<Camera> camera, double xPos, double y
 	
 	if (mPlayerState == PLAYER_BUILDING)
 	{
-		Ray ray;
+		CameraRay ray;
 		ray.SetRay(camera, mMouseX, mMouseY);
 		glm::ivec2 pos;
 
@@ -161,7 +161,7 @@ void GamePlayer::MouseButton(std::shared_ptr<Camera> camera, int button, int act
 	{
 		mMouse->SetCursorImage(2);
 
-		Ray ray;
+		CameraRay ray;
 		ray.SetRay(camera, mMouseX, mMouseY);
 		glm::ivec2 pos;
 		if (mTerrain->Intersect(ray, pos))
@@ -223,7 +223,7 @@ void GamePlayer::MouseButton(std::shared_ptr<Camera> camera, int button, int act
 
 void GamePlayer::CommandUnit(std::shared_ptr<Camera> camera)
 {
-	Ray ray;
+	CameraRay ray;
 	ray.SetRay(camera, mMouseX, mMouseY);
 	glm::ivec2 pos;
 	
@@ -249,7 +249,7 @@ void GamePlayer::MouseWheel(std::shared_ptr<Camera> camera, double yPos)
 
 bool GamePlayer::CreateBuilding(std::shared_ptr<Camera> camera)
 {
-	Ray ray;
+	CameraRay ray;
 	ray.SetRay(camera, mMouseX, mMouseY);
 	glm::ivec2 pos;
 	if (mTerrain->Intersect(ray, pos))
@@ -288,7 +288,7 @@ void GamePlayer::SelectUnitInRect(std::shared_ptr<Camera> camera)
 
 bool GamePlayer::IsSelectUnit(std::shared_ptr<Camera> camera)
 {
-	Ray ray;
+	CameraRay ray;
 	ray.SetRay(camera, mMouseX, mMouseY);
 	for (size_t i = 0; i < mUnits.size(); ++i)
 	{
@@ -312,7 +312,7 @@ bool GamePlayer::IsSelectUnit(std::shared_ptr<Camera> camera)
 
 std::shared_ptr<RTSObject> GamePlayer::IsSelectEmeryUnit(std::shared_ptr<Camera> camera)
 {
-	Ray ray;
+	CameraRay ray;
 	ray.SetRay(camera, mMouseX, mMouseY);
 	for (size_t i = 0; i < mEmeryUnits.size(); ++i)
 	{

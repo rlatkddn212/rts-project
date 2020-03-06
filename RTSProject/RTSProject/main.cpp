@@ -5,7 +5,7 @@
 #include "GameStage.h"
 #include "SkinnedMesh.h"
 #include "AxisObject.h"
-#include "Ray.h"
+#include "CameraRay.h"
 #include "EffectResourcePool.h"
 #include "ObjectResourcePool.h"
 #include "UIResourcePool.h"
@@ -197,8 +197,7 @@ public:
 			glClearBufferfv(GL_COLOR, 0, black);
 			glClearBufferfv(GL_DEPTH, 0, &one);
 
-			ProcessInput();
-			UpdateGame();
+			
 			GenerateOutput();
 
 			// swap buffer
@@ -211,26 +210,36 @@ public:
 	{
 
 	}
-
+	atomic<unsigned> updateFrame = 0;
 	void UpdateGame()
 	{
 		//printf("FPS : %f\n", 1000.0f / (float)(SDL_GetTicks() - mTicksCount));
 		//while (!SDL_TICKS_PASSED(SDL_GetTicks(), mTicksCount + 16))
 			;
+		while (mGameState != EQuit)
+		{
+			while (updateFrame == RenderManager::GetInstance()->GetFrame())
+			{
+				;
+			}
 
-		float deltaTime = (SDL_GetTicks() - mTicksCount) / 1000.0f;
-		mTicksCount = SDL_GetTicks();
+			float deltaTime = (SDL_GetTicks() - mTicksCount) / 1000.0f;
+			mTicksCount = SDL_GetTicks();
 
-		//if (deltaTime > 0.05f)
-		//	deltaTime = 0.05f;
-		
-		group->Update(deltaTime);
+			//if (deltaTime > 0.05f)
+			//	deltaTime = 0.05f;
+
+			group->Update(deltaTime);
+			group->AddRender();
+
+			updateFrame++;
+		}
 	}
 
 	void GenerateOutput()
 	{
-		group->AddRender();
-
+		while (updateFrame != RenderManager::GetInstance()->GetFrame())
+			;
 		RenderManager::GetInstance()->Render();
 	}
 };
@@ -240,8 +249,9 @@ int main(int argc, char* argv[])
 	shared_ptr<Game> game = make_shared<Game>();
 	game->Initialize();
 
+	thread update(&Game::UpdateGame, game);
 	game->RunLoop();
-
+	update.join();
 	game->Terminate();
 
 	return 0;

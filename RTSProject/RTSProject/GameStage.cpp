@@ -43,8 +43,6 @@ void GameStage::Initialize(GLFWwindow* window, int w, int h)
 	aiPlayer->Initialize(mTerrain, w, h);
 	mPlayers.push_back(aiPlayer);
 
-	mFogOfWar = make_shared<FogOfWar>(w, h);
-
 	mMiniMap = make_shared<MiniMap>(w, h, w * 3.0f / 10.0f, h * 3.0f / 10.0f);
 	mMiniMap->SetMapTexture(mTerrain->GetMapTexture()); 
 }
@@ -76,8 +74,6 @@ void GameStage::Update(float deltaTime)
 		player->Update(deltaTime);
 	}
 
-	mFogOfWar->Update(deltaTime, mPlayers[0]->GetUnit());
-	mMiniMap->SetFogTexture(mFogOfWar->GetFogTexture());
 	mMiniMap->Update(deltaTime, mPlayers[0]->GetUnit(), mCamera);
 }
 
@@ -98,14 +94,13 @@ void GameStage::AddRender()
 	mMiniMap->Render(mCamera);
 	mMouse->Render(mCamera);
 	*/
-	mAxis->AddRender(mCamera);
-	shared_ptr<Texture> fog = mFogOfWar->GetFogTexture();
+ 	//mAxis->AddRender(mCamera);
 
-	mTerrain->SetFogTexture(fog);
+	//mTerrain->SetFogTexture(fog);
 	mTerrain->AddRender(mCamera);
 	for (auto player : mPlayers)
 	{
-		player->SetFogTexture(fog);
+		//player->SetFogTexture(fog);
 		player->AddRender(mCamera);
 	}
 

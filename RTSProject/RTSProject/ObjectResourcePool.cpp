@@ -2,6 +2,10 @@
 #include "ObjectResourcePool.h"
 
 using namespace std;
+
+/**
+ * ObjectResourcePool √ ±‚»≠
+ */
 void ObjectResourcePool::Initialize()
 {
 	std::string s = "Assets/Model/magician.X";

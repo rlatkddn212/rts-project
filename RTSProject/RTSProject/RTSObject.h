@@ -1,11 +1,10 @@
 #pragma once
-
+#include "CameraRay.h"
 #include "Camera.h"
 #include "Texture.h"
-#include "Ray.h"
 #include "RenderObject.h"
 #include "RenderManager.h"
-
+class CameraRay;
 class RTSObject : public RenderObject
 {
 public:
@@ -17,13 +16,12 @@ public:
 	virtual void							Render(std::shared_ptr<Camera> camera) {}
 	virtual void							AddRender(std::shared_ptr<Camera> camera) {}
 
-	virtual bool							Intersect(Ray ray) { return false;  }
+	virtual bool							Intersect(CameraRay ray);
 
 	void									SetPosition(glm::vec3 p) { mPos = p; }
 	glm::vec3 								GetPosition() { return mPos; }
 	void									SetRotation(glm::vec3 r) { mRot = r; }
 	void									SetScale(glm::vec3 s) { mSca = s; }
-	void									SetFogTexture(std::shared_ptr<Texture> texture) { mFogTexture = texture; }
 
 	double									GetRange() { return mRange; }
 	double									GetSight() { return mSight; }
@@ -51,7 +49,6 @@ protected:
 	double									mAttackTime;
 
 	bool									mIsFog;
-	std::shared_ptr<Texture>				mFogTexture;
 	glm::vec3								mPos, mRot, mSca;
 };
 

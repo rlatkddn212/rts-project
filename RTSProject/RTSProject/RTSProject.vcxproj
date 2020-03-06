@@ -166,7 +166,7 @@
     <ClInclude Include="StaticMesh.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="Precompiled.h" />
-    <ClInclude Include="Ray.h" />
+    <ClInclude Include="CameraRay.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="SkinnedMesh.h" />
     <ClInclude Include="SkinnedVertexArray.h" />
@@ -233,8 +233,9 @@
     <ClCompile Include="Precompiled.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Precompiled.h</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Ray.cpp" />
+    <ClCompile Include="CameraRay.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="SkinnedMesh.cpp" />
     <ClCompile Include="SkinnedVertexArray.cpp" />

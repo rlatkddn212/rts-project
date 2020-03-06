@@ -1,3 +1,8 @@
+/**
+ * SkinnedVertexArray
+ * 애니메이션 Vertex Array Buffer 클래스
+ */
+
 #pragma once
 
 class SkinnedVertexArray

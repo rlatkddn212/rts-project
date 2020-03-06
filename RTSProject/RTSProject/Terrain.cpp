@@ -395,7 +395,7 @@ std::vector<glm::ivec2> Terrain::GetPath(glm::ivec2 startPos, glm::ivec2 endPos,
 	return ret;
 }
 
-bool Terrain::Intersect(Ray& ray, glm::ivec2& ret)
+bool Terrain::Intersect(CameraRay& ray, glm::ivec2& ret)
 {
 	glm::vec3 pos = ray.org;
 	glm::vec3 dir = ray.dir;
@@ -570,11 +570,6 @@ bool Terrain::IsMovableTile(glm::ivec2 p)
 {
 	assert(p.y >= 0);
 	return mTile[p.y][p.x].isMovable;
-}
-
-void Terrain::SetFogTexture(std::shared_ptr<Texture> texture)
-{
-	mFogTexture = texture;
 }
 
 void Terrain::CreatePatches(int numPatches)

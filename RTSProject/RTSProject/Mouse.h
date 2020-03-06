@@ -1,10 +1,9 @@
 #pragma once
-#include "Precompiled.h"
 #include "Texture.h"
 #include "Shader.h"
 #include "Camera.h"
-#include "SpriteUI.h"
 #include "RenderObject.h"
+#include "SpriteUI.h"
 #include "RenderManager.h"
 
 enum RightState
@@ -29,6 +28,7 @@ enum WheelState
 	
 };
 
+class SpriteUI;
 class Mouse : public RenderObject
 {
 public:

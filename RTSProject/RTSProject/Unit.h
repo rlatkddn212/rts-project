@@ -24,8 +24,8 @@ enum UnitCommand
 	UNITCOMMAND_SKILL,
 	UNITCOMMAND_BUILD
 };
-class UnitState;
 
+class UnitState;
 class Unit : public RTSObject
 {
 public:
@@ -51,7 +51,7 @@ public:
 	void									Select();
 	void									UnSelect();
 
-	bool									Intersect(Ray ray);
+	virtual bool							Intersect(CameraRay ray);
 	glm::vec2								GetScreenPos(std::shared_ptr<Camera> camera);
 	
 	bool									IsSelected() { return mIsSelect; }

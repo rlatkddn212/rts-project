@@ -31,6 +31,7 @@
 #include <assimp\postprocess.h>
 #include <SOIL/SOIL.h>
 #include <memory>
+#include <thread>
 
 #undef main
 

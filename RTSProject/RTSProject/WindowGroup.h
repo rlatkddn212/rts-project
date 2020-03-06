@@ -5,7 +5,7 @@
 #include "VertexArray.h"
 #include "TextUI.h"
 #include "Camera.h"
-#include "Ray.h"
+#include "CameraRay.h"
 #include "Mouse.h"
 
 class WindowGroup

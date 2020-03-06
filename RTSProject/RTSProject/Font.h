@@ -1,5 +1,4 @@
 #pragma once
-#include "Precompiled.h"
 #include <string>
 #include <unordered_map>
 #include "Texture.h"

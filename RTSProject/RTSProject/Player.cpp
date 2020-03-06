@@ -84,14 +84,6 @@ void Player::AddRender(std::shared_ptr<Camera> camera)
 	}
 }
 
-void Player::SetPosOnTerrain(shared_ptr<Texture> fog)
-{
-	for (size_t i = 0; i < mUnits.size(); ++i)
-	{
-		mUnits[i]->SetFogTexture(fog);
-	}
-}
-
 void Player::SetFogTexture(std::shared_ptr<Texture> fog)
 {
 	for (size_t i = 0; i < mUnits.size(); ++i)

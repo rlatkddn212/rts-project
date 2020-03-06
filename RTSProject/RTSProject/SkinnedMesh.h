@@ -1,3 +1,6 @@
+/**
+ * 애니메이션 모델
+ */
 #pragma once
 
 #include <vector>
@@ -10,7 +13,7 @@
 #include "Shader.h"
 #include <map>
 #include "Camera.h"
-#include "Ray.h"
+#include "CameraRay.h"
 
 struct Bone
 {

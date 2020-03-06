@@ -1,4 +1,5 @@
 #pragma once
+
 #include "RTSObject.h"
 #include "StaticMesh.h"
 #include "RenderManager.h"

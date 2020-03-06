@@ -1,10 +1,9 @@
-#pragma once
-
 /**
  * 미니맵에 왼쪽 하단이 지도에서 0, 0 좌표를 가진다.
  */
 
-#include "Precompiled.h"
+#pragma once
+
 #include "Texture.h"
 #include "Camera.h"
 #include "Shader.h"
@@ -27,7 +26,6 @@ public:
 	virtual void							AddRender(std::shared_ptr<Camera> camera);
 
 	void									SetMapTexture(std::shared_ptr<Texture> texture) { mMapTexture = texture; }
-	void									SetFogTexture(std::shared_ptr<Texture> texture) { mFogTexture = texture; }
 	
 	// UnitTexture 생성
 	void									SetUnitTexture() {}
@@ -67,7 +65,6 @@ private:
 
 	std::shared_ptr<Texture>				mPositionTexture;
 	std::shared_ptr<Texture>				mMapTexture;
-	std::shared_ptr<Texture>				mFogTexture;
 	std::shared_ptr<Texture>				mUnitTexture;
 };
 

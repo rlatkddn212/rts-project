@@ -15,7 +15,6 @@ MiniMap::MiniMap(int winSizeX, int winSizeY, int miniX, int miniY)
 	mVertexArray = mini->GetVertexArray();
 	mVertexBuffer = mini->GetVertexBuffer();
 
-	mFogTexture = mini->GetFogTexture();
 	mPositionTexture = mini->GetPositionTexture();
 	mUnitTexture = mini->GetUnitTexture();
 	mMapTexture = mini->GetMapTexture();
@@ -180,7 +179,7 @@ void MiniMap::Update(float deltaTime, const std::vector<std::shared_ptr<Unit>>& 
 {
 	mUnit = unit;
 
-	Ray ray[4];
+	CameraRay ray[4];
 	ray[0].SetRay(camera, 0, 0);
 	ray[1].SetRay(camera, mWinX, 0);
 	ray[2].SetRay(camera, mWinX, mWinY);

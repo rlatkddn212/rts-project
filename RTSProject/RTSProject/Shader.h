@@ -1,5 +1,9 @@
+/**
+ * Shader
+ * 쉐이더 클래스
+ */
+
 #pragma once
-#include "Precompiled.h"
 #include <vector>
 #include <map>
 

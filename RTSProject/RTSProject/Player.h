@@ -20,7 +20,6 @@ public:
 	void									AddUnit(std::shared_ptr<Unit> unit) { mUnits.push_back(unit); }
 	std::vector<std::shared_ptr<Building>>	GetBuilding() { return mBuildings; }
 	std::vector<std::shared_ptr<Unit> >		GetUnit() { return mUnits; }
-	void									SetPosOnTerrain(std::shared_ptr<Texture> fog);
 	void									SetFogTexture(std::shared_ptr<Texture> fog);
 
 	void									SetEnemy(std::vector<std::shared_ptr<RTSObject> >& enemy);

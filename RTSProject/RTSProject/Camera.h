@@ -1,5 +1,9 @@
+/**
+ * Camera
+ * 일반 카메라 클래스, 현재 카메라 위치를 계산해준다.
+ */
+
 #pragma once
-#include "Precompiled.h"
 
 class Camera
 {

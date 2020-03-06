@@ -2,6 +2,7 @@
 #include "MoveComponent.h"
 #include "Math3D.h"
 #include "UnitStateNone.h"
+#include "Terrain.h"
 
 using namespace std;
 

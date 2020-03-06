@@ -1,5 +1,8 @@
+/**
+ * MoveComponent
+ * 이동가능한 Object에 대한 컴포넌트
+ */
 #pragma once
-#include "Precompiled.h"
 #include "Terrain.h"
 #include "Unit.h"
 

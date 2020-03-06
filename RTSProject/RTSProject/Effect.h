@@ -1,9 +1,10 @@
 #pragma once
+
 #include "Texture.h"
-#include "RTSObject.h"
 #include "EffectResourcePool.h"
 #include "Unit.h"
 #include "RenderObject.h"
+#include "RTSObject.h"
 #include "RenderManager.h"
 
 struct Particle

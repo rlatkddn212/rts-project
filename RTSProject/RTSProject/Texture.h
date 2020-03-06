@@ -1,6 +1,9 @@
+/**
+ * Texture
+ * Texture 속성들을 저장하는 클래스
+ */
+
 #pragma once
-#include "Precompiled.h"
-#include <string>
 
 class Texture
 {

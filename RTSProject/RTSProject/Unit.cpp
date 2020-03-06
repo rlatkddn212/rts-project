@@ -188,9 +188,10 @@ void Unit::UnSelect()
 	mIsSelect = false;
 }
 
-bool Unit::Intersect(Ray ray)
+bool Unit::Intersect(CameraRay ray)
 {
-	glm::mat4 world = glm::translate(glm::mat4(1.0f), mPos) * glm::yawPitchRoll(mRot.x, mRot.y, mRot.z) * glm::scale(glm::mat4(1.0f), mSca);
+	glm::mat4 world = glm::translate(glm::mat4(1.0f), mPos) 
+		* glm::yawPitchRoll(mRot.x, mRot.y, mRot.z) * glm::scale(glm::mat4(1.0f), mSca);
 	glm::mat4 worldInv = glm::inverse(world);
 	glm::vec3 pos = worldInv * glm::vec4(ray.org, 1.0f);
 	glm::vec3 dir = worldInv * glm::vec4(ray.dir, 0.0f);
@@ -206,7 +207,8 @@ bool Unit::Intersect(Ray ray)
 
 glm::vec2 Unit::GetScreenPos(std::shared_ptr<Camera> camera)
 {
-	glm::mat4 mat = camera->GetProjectionMatrix() * camera->GetViewMatrix() * glm::translate(glm::mat4(1.0f), mPos);
+	glm::mat4 mat = camera->GetProjectionMatrix() * camera->GetViewMatrix()
+		* glm::translate(glm::mat4(1.0f), mPos);
 	glm::vec4 pos = mat * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
 
 	return glm::vec2(pos.x / pos.w, pos.y / pos.w);

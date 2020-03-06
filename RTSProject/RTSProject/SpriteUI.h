@@ -4,7 +4,6 @@
 #include "Shader.h"
 #include "Texture.h"
 #include "Camera.h"
-#include <string>
 #include "RenderObject.h"
 #include "RenderManager.h"
 
