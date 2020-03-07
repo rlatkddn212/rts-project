@@ -14,7 +14,7 @@
 - a키로 공격
 - 우클릭으로 이동
 
-다음 개발 : AI, ssao, bloom, 멀티쓰레드 랜더링
+다음 개발 : bloom, 클래스 구조 리펙토링, 길찾기 개선(내비게이션 메시, Crowd Pathfinding), 자원 추가, 건물 건설, 유닛 생산
 
 ### 영상
 https://www.youtube.com/watch?v=eS7U9AOfL_A
@@ -37,7 +37,7 @@ https://www.youtube.com/watch?v=eS7U9AOfL_A
 8. 퐁세이딩
 9. 그림자 매핑
 10. SSAO
-
+11. 멀티 쓰레드 랜더링
 
 
 ### 프로젝트 진행
