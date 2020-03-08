@@ -170,7 +170,7 @@ void RenderManager::Render()
 	camera->SetFocus(glm::vec3(0.0f, 0.0f, 0.0f));
 
 	DrawGBuffer(mGBuffer->GetFrameBufferID(), renderData);
-	//DrawShadowMap(mShadowMap->GetFrameBufferID(), camera, renderData);
+	DrawShadowMap(mShadowMap->GetFrameBufferID(), camera, renderData);
 	DrawSSAO(renderData[0]->mCamera);
 	//PrintScreen(mShadowMap->GetFrameBufferID(), "ShadowMap.bmp");
 	//PrintScreen(mGBuffer->GetFrameBufferID(), "Helloworld.bmp");

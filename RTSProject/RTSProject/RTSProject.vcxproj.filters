@@ -250,7 +250,7 @@
       <Filter>소스 파일\Light</Filter>
     </ClInclude>
     <ClInclude Include="CameraRay.h">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\Camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -441,7 +441,7 @@
       <Filter>소스 파일\Light</Filter>
     </ClCompile>
     <ClCompile Include="CameraRay.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
