@@ -238,7 +238,6 @@ void FogOfWar::MakeFogTexture(const std::vector<std::shared_ptr<RTSObject> >& re
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
 		//PrintScreen(framebuffer, "Fog.bmp");
-
 		glDeleteFramebuffers(1, &framebuffer);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}

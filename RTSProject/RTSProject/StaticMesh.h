@@ -34,8 +34,8 @@ public:
 	void									SetRotation(glm::vec3 r) { mRotMat = glm::yawPitchRoll(r.x, r.y, r.z); mRot = r; }
 
 	glm::vec3								GetPosition() { return mPos; }
-	glm::vec3								GetScale(glm::vec3 s) { return mSca; }
-	glm::vec3								GetRotation(glm::vec3 r) { return mRot; }
+	glm::vec3								GetScale() { return mSca; }
+	glm::vec3								GetRotation() { return mRot; }
 
 	void									SetPerspect(glm::mat4 p) { mPerspect = p; }
 	void									SetView(glm::mat4 v) { mView = v; }

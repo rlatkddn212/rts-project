@@ -93,7 +93,12 @@ bool EffectSpell::IsDead()
 
 EffectFireBall::EffectFireBall(glm::vec3& bonePos, std::shared_ptr<RTSObject> target, RTSObject* attacker)
 {
-	mSrcBone = bonePos + glm::vec3(0.0f, 1.0f, 0.0f);;
+	mSrcBone = bonePos + glm::vec3(0.0f, 1.0f, 0.0f);
+
+	if (0.0f > mSrcBone.x || 100.0f < mSrcBone.x || 0.0f > mSrcBone.y || 100.0f < mSrcBone.y)
+	{
+		printf("error\n");
+	}
 	mTarget = target;
 	mAttacker = attacker;
 	mColor.w = 0.0f;
@@ -105,6 +110,10 @@ EffectFireBall::EffectFireBall(glm::vec3& bonePos, std::shared_ptr<RTSObject> ta
 	if (mTarget != nullptr)
 	{
 		mDest = mTarget->GetPosition() + glm::vec3(0.0f, 1.0f, 0.0f);
+	}
+	else
+	{
+		printf("Erorr\n");
 	}
 
 	mTransMat.Init(mSrcBone, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
@@ -121,8 +130,9 @@ void EffectFireBall::Update(float timeDelta)
 		mTransMat.mScale = glm::vec3(1.0f, 1.0f, 1.0f) * mTime;
 		mColor.w = mTime;
 
-		if (mTime > 1.0f)
+		if (mTime >= 1.0f)
 		{
+			mPrc = 0.0f;
 			mColor.w = mTime * 0.5f;
 			mSource = mTransMat.mTrans;
 			mLength = glm::distance(mSource, mDest);
@@ -130,12 +140,16 @@ void EffectFireBall::Update(float timeDelta)
 	}
 	else if (mPrc < 1.0f)
 	{
+		if (mLength == 0.0)
+		{
+			printf("Effect Error\n");
+			assert(0);
+		}
 		mPrc += (mSpeed * timeDelta) / mLength;
 		mTransMat.mTrans = mSource;
 		// mTransMat.mScale += glm::vec3(1.0f, 1.0f, 1.0f) * timeDelta;
 		if (mPrc >= 1.0f && mTarget != nullptr)
 		{
-			
 			mTarget->TakeDamege(mAttacker->GetDamege());
 			// 공격 받음
 		}
@@ -216,6 +230,10 @@ bool EffectFireBall::IsDead()
 
 glm::vec3 EffectFireBall::GetPosition(float p)
 {
+	if (p < 0.0f) 
+	{
+		p = 0.0f;
+	}
 	return (1.0f - p) * mTransMat.mTrans + p * mDest;
 }
 

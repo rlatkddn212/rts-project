@@ -32,6 +32,7 @@
 #include <SOIL/SOIL.h>
 #include <memory>
 #include <thread>
+#include <cassert>
 
 #undef main
 

@@ -15,23 +15,24 @@ Patch::~Patch()
 {
 }
 
-void Patch::CreateMesh(HeightMap & hm, SDL_FRect source)
+void Patch::CreateMesh(HeightMap& hm, SDL_FRect source)
 {
 	int width = source.w;
 	int height = source.h;
 	int nrVert = (width + 1) * (height + 1);
-	int nrTri = width * height * 2;
 
 	float* verts = new float[10 * nrVert];
-	unsigned int numVerts = nrVert;
+	unsigned int numVerts = 0;
 
 	unsigned int* indices = new unsigned int[6 * nrVert];
 	unsigned int numIndices = 0;
 
-	for (int z = source.y, z0 = 0; z <= source.y + source.h; z++, z0++)
+	for (int z0 = 0; z0 <= source.h;++ z0)
 	{
-		for (int x = source.x, x0 = 0; x <= source.x + source.w; x++, x0++)
+		for (int x0 = 0; x0 <= source.w; ++x0)
 		{
+			int x = (x0 + source.x);
+			int z = (source.y + z0);
 			//Calculate vertex color
 			float prc = hm.mHeightMap[x + z * hm.mSize.x] / hm.mMaxHeight;
 			int red = (int)(255 * prc);
@@ -60,6 +61,7 @@ void Patch::CreateMesh(HeightMap & hm, SDL_FRect source)
 			// ¾ËÆÄ
 			verts[(z0 * (width + 1) + x0) * 10 + 8] = auv.x;
 			verts[(z0 * (width + 1) + x0) * 10 + 9] = auv.y;
+			numVerts++;
 		}
 	}
 

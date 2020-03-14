@@ -138,7 +138,6 @@ private:
 
 	// TODO : 배열 크기는 고정, 조절 필요
 	Tile									mTile[100][100];
-	std::vector<std::pair<int, int> >		mObjectPos;
 	std::shared_ptr<Texture>				alpha;
 	std::shared_ptr<Texture>				mountain;
 	std::shared_ptr<Texture>				snow;

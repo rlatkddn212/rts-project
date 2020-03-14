@@ -39,6 +39,8 @@ Unit::Unit(shared_ptr<RTSObjectInfo> unitInfo)
 
 	mSkinnedMesh = sourceUnit->GetMesh();
 	mBoxObject = sourceUnit->GetBoxMesh();
+	
+	SetRotation(GetDirection(glm::vec2(0.0, 0.0), glm::vec2(0.0, 1.0)));
 	SetScale(glm::vec3(0.3f, 0.3f, 0.3f));
 }
 

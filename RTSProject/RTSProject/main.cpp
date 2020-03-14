@@ -197,7 +197,6 @@ public:
 			glClearBufferfv(GL_COLOR, 0, black);
 			glClearBufferfv(GL_DEPTH, 0, &one);
 
-			
 			GenerateOutput();
 
 			// swap buffer
