@@ -5,6 +5,14 @@
 
 사용 라이브러리 : assimp, glm, glfw, SDL, SOIL
 
+
+
+### 빌드 방법
+
+visual studio 2017, 64비트 debug or release
+
+
+
 #### 카메라 조절 방법
 - 숫자패드4568
 - 방향키
